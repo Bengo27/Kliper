@@ -17,8 +17,13 @@ HYPE = {
     "ez": 1.0, "clutch": 1.5, "insane": 1.4, "holy": 1.2, "sheesh": 1.2,
     "dead": 1.1, "💀": 1.4, "😂": 1.2, "🤣": 1.2, "aware": 0.8, "copium": 1.0,
     "ratio": 0.8, "goated": 1.3, "cracked": 1.3, "scream": 1.2, "jumpscare": 1.5,
+    # Klipon: Hebrew chat (Kick / Twitch / YouTube)
+    "וואו": 1.4, "מטורף": 1.4, "פסיכי": 1.4, "הזוי": 1.3, "מלך": 1.2, "אגדה": 1.3, "גאון": 1.2,
+    "תותח": 1.3, "אש": 1.0, "🔥": 1.1, "יאללה": 0.8, "וואלה": 0.8, "אחי": 0.5, "באסה": 1.0,
+    "ווווו": 1.2, "אוי": 1.0, "חחח": 1.3, "ד": 0.4, "גג": 1.0, "איזי": 1.0,
 }
-CLIP_WORDS = re.compile(r"\bclip\s*(it|that|this)?\b|\bclipped\b", re.I)
+CLIP_WORDS = re.compile(r"\bclip\s*(it|that|this)?\b|\bclipped\b|[ות]?קלפו|[ות]?תקלפו|קליפ|קלפתי", re.I)
+HE_LAUGH = re.compile(r"(ח[חה]){2,}|(הא){3,}|(?:^|\s)ה{4,}")
 TS = re.compile(r"^\s*\[?(?:(\d+):)?(\d{1,2}):(\d{2})(?:\.\d+)?\]?")
 
 
@@ -69,7 +74,9 @@ def message_weight(text):
     hype = 0.0
     for tok in toks:
         hype = max(hype, HYPE.get(tok, 0.0))
-    if "no way" in t or "noway" in t:
+    if "no way" in t or "noway" in t or "אין מצב" in t or "אין סיכוי" in t:
+        hype = max(hype, 1.4)
+    if HE_LAUGH.search(t):
         hype = max(hype, 1.4)
     w += hype
     if text.isupper() and len(text) > 3:
@@ -110,10 +117,10 @@ def chat_curve(msgs, duration, hop=0.5, lag=6.0):
 # ---------- smarter chat reading (v2.2) ----------
 # Research: chat reacts 5-20 s after the moment; what matters is velocity vs a rolling
 # baseline, and WHICH emotes are spammed (laugh emotes = funny clip, pog emotes = hype clip).
-FUNNY_TOK = {"kekw", "lul", "lol", "lmao", "lmfao", "omegalul", "icant", "kekl", "pepelaugh", "dead",
+FUNNY_TOK = {"חחח", "חחחח", "צוחק", "מת", "גמור", "מתתי", "kekw", "lul", "lol", "lmao", "lmfao", "omegalul", "icant", "kekl", "pepelaugh", "dead",
              "💀", "😂", "🤣", "😭", "xd", "haha", "hahaha", "lool", "looool", "bruh", "nah",
              "crying", "weirdchamp", "monkaw", "ratio", "bozo", "aware", "clueless", "sus"}
-HYPE_TOK = {"pog", "poggers", "pogchamp", "pogu", "w", "ww", "www", "clutch", "insane", "holy",
+HYPE_TOK = {"וואו", "מטורף", "פסיכי", "מלך", "אגדה", "תותח", "🔥", "גג", "pog", "poggers", "pogchamp", "pogu", "w", "ww", "www", "clutch", "insane", "holy",
             "sheesh", "ez", "goated", "cracked", "noway", "omg", "wtf", "monkas", "gg", "nice"}
 SPAM_RX = re.compile(
     r"^\s*!|is now live|subscribed (with|at)|gifted (a|\d+)|is gifting|raid(ing|ed)? |"
@@ -131,10 +138,10 @@ def message_kind(text):
     t = (text or "").lower()
     toks = set(re.findall(r"[\w']+|[^\w\s]", t))
     toks |= {x for x in re.findall(r"\b(?:ha){2,}h?\b|\blo+l\b|\bl+m+a+o+\b", t)}
-    if any(re.fullmatch(r"(?:ha){2,}h?|lo+l|l+m+a+o+", x) for x in toks):
+    if any(re.fullmatch(r"(?:ha){2,}h?|lo+l|l+m+a+o+", x) for x in toks) or HE_LAUGH.search(t):
         toks.add("lol")
     f = len(toks & FUNNY_TOK)
-    h = len(toks & HYPE_TOK) + (1 if "no way" in t else 0)
+    h = len(toks & HYPE_TOK) + (1 if ("no way" in t or "אין מצב" in t) else 0)
     if f > h:
         return "funny"
     if h > f:

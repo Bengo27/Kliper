@@ -30,6 +30,7 @@ SWEARS = {"fuck": "f*ck", "fucking": "f*cking", "fucked": "f*cked", "shit": "sh*
           "bitch": "b*tch", "bitches": "b*tches", "nigga": "n*gga", "niggas": "n*ggas", "dick": "d*ck",
           "pussy": "p*ssy", "cunt": "c*nt", "motherfucker": "motherf*cker", "bullshit": "bullsh*t", "ass": "a*s"}
 _LAUGH = _re.compile(r"^(ha){2,}h?|^(he){2,}|^lol+$|^lmao+$", _re.I)
+_LAUGH_HE = _re.compile(r"^(ח[חה]){2,}ח?$|^(הא){3,}$|^(הה){3,}$")
 _SOUND = _re.compile(r"^[\[(*](laugh\w*|scream\w*|sigh\w*|gasp\w*|music|cough\w*|groan\w*|yell\w*)[\])*][.!?,]*$", _re.I)
 
 
@@ -47,6 +48,8 @@ def _editor_text(w):
         return "*" + m.group(1).lower().rstrip("ing").replace("laugh", "laughs") + "*", True
     if _LAUGH.match(_re.sub(r"[^\w]", "", t)):
         return "*laughs*", True
+    if _LAUGH_HE.match(_re.sub(r"[^\w]", "", t)):   # Klipon: "חחחחח" -> *צוחק*
+        return "*צוחק*", True
     return _censor(t), False
 
 
