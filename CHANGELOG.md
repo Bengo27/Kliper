@@ -1,3 +1,18 @@
+# שינויים
+
+## קליפר 0.1.0 (בפיתוח)
+
+- מבוסס על Clip Genie 0.1.2 Beta (GPL-3.0)
+- תמלול עברית עם מודל ivrit.ai (ברירת מחדל), ועברית כשפת הדיבור כברירת מחדל
+- זיהוי רגעים לפי סלנג ישראלי, באנטר, בנייה למתח ותוצאה, צ'אט וצחוקים בעברית
+- כתוביות בעברית בפונטים Rubik / Heebo / Secular One / Suez One
+- ממשק מלא בעברית מימין לשמאל
+- שם, לוגו ומיתוג חדשים
+
+---
+
+היסטוריית Clip Genie המקורית:
+
 # Patch notes
 
 The newest version is at the top. The version is the one the app shows (top left) and the Setup file is named after.
