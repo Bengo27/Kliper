@@ -79,7 +79,7 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
-          & "$env:STAGE\python\python.exe" tools\check_kick_live.py xqc
+          & "$env:STAGE\python\python.exe" tools\check_kick_live.py xqc adinross westcol spursito coscu elzeein roshtein trainwreckstv amouranth
 
       - name: Installer (Inno Setup)
         shell: pwsh

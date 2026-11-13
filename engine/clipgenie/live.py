@@ -67,7 +67,7 @@ def find_vod(slug, live_start):
             continue
         gap = abs(ts - live_start)
         if gap < 20 * 60 and (best is None or gap < best[0]):
-            best = (gap, e["url"], e.get("title") or "", ts)
+            best = (gap, e["url"].split("#")[0], e.get("title") or "", ts)
     return best[1:] if best else None
 
 
@@ -79,6 +79,7 @@ class ChatRecorder(threading.Thread):
         self.chatroom_id, self.path = chatroom_id, path
         self.stop_ev = threading.Event()
         self.count = 0
+        self.subscribed = False
 
     def stop(self):
         self.stop_ev.set()
@@ -101,6 +102,9 @@ class ChatRecorder(threading.Thread):
                                 continue
                             ev = json.loads(raw)
                             name = ev.get("event", "")
+                            if name == "pusher_internal:subscription_succeeded":
+                                self.subscribed = True
+                                continue
                             if name == "pusher:ping":
                                 ws.send(json.dumps({"event": "pusher:pong", "data": {}}))
                                 continue

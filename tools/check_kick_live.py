@@ -10,6 +10,15 @@ from clipgenie import live  # noqa: E402
 
 slug = sys.argv[1]
 d = live.channel_info(slug)
+for cand in sys.argv[2:]:   # for the chat test, use a channel that is live right now (more messages)
+    if d.get("livestream"):
+        break
+    try:
+        c = live.channel_info(cand)
+        if c.get("livestream"):
+            slug, d = cand, c
+    except Exception:
+        pass
 ls = d.get("livestream")
 print("CHANNEL OK:", slug, "| chatroom", (d.get("chatroom") or {}).get("id"), "| live", bool(ls),
       "| start", (ls or {}).get("start_time"))
@@ -32,7 +41,7 @@ rec = live.ChatRecorder((d.get("chatroom") or {}).get("id"), path)
 rec.start()
 time.sleep(40)
 rec.stop()
-print("CHAT MESSAGES IN 40s:", rec.count)
+print("CHAT SUBSCRIBED:", rec.subscribed, "| MESSAGES IN 40s:", rec.count, "| channel", slug)
 if os.path.isfile(path):
     with open(path, encoding="utf-8") as f:
         for line in list(f)[:3]:
