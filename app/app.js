@@ -78,11 +78,27 @@
     document.body.classList.toggle("no-key", !!state.lib.public);
     document.body.classList.toggle("pro-locked", !!state.lib.public && !state.lib.pro);
     if (state.lib.version) { $("appVersion").textContent = "v" + state.lib.version; $("setTitle").textContent = "הגדרות · קליפר v" + state.lib.version + (state.lib.public ? " בטא" : ""); }
-    renderNews();
+    renderNews(); renderLive();
     renderSide(); renderMain(); renderAddLooks();
     var busy = state.lib.streams.some(function (s) { return s.status === "processing" || s.status === "queued"; });
     clearTimeout(state.refreshT);
+    var lv = state.lib.live || {};
     if (busy) state.refreshT = setTimeout(refresh, 2500);
+    else if (lv.enabled) state.refreshT = setTimeout(refresh, 20000);   // Kliper live: keep the status fresh
+  }
+  function renderLive() {
+    var lv = (state.lib && state.lib.live) || {}, box = $("liveBox");
+    if (!lv.enabled) { box.classList.add("hidden"); return; }
+    var t;
+    if (lv.live) {
+      var mins = lv.since ? Math.max(0, Math.round((Date.now() / 1000 - lv.since) / 60)) : 0;
+      t = "<strong>🔴 בלייב עכשיו</strong><br><span class='tiny muted'>" + esc(lv.title || lv.channel) + "</span><br><span class='tiny'>" +
+          (lv.chat || 0).toLocaleString("he-IL") + " הודעות צ'אט נאספו · " + mins + " דק'</span>";
+    } else {
+      t = "<strong>👀 במעקב: kick.com/" + esc(lv.channel) + "</strong><br><span class='tiny muted'>" +
+          esc(lv.message || "כשתעלה לשידור קליפר יתחיל לאסוף את הצ'אט.") + "</span>";
+    }
+    box.innerHTML = t; box.classList.remove("hidden"); box.classList.toggle("on-air", !!lv.live);
   }
   function streams() { return (state.lib && state.lib.streams) || []; }
   function streamByKey(k) { return streams().filter(function (s) { return s.key === k; })[0]; }
@@ -905,6 +921,8 @@
       $("musicName").textContent = mus ? mus.split(/[\\/]/).pop() : "בלי";
       $("setMusicVol").value = st.bg_music_volume || state.lib.style.bg_music_volume || 0.16;
       $("setApiKey").value = s.api_key || "";
+      $("liveSwitch").setAttribute("aria-pressed", String(!!s.live_watch)); $("liveSwitch").classList.toggle("on", !!s.live_watch);
+      $("setLiveCh").value = s.live_channel || s.twitch_channel || "";
       $("setSubs").value = s.subs_default ? "1" : "0";
       $("setGameLooks").value = s.game_looks ? "1" : "0";
       $("setNotes").value = s.ai_notes || "";
@@ -924,7 +942,8 @@
       var cur = await api("GET", "/settings");
       var t = Number($("setLen").value) || Number((cur.style || {}).target_len) || 30;   // never save a length of 0
       var style = Object.assign({}, cur.style || {}, { volume_db: Number($("setVolume").value), auto_count: Number($("setCount").value), target_len: t, min_len: Math.max(10, t * 0.5), max_len: t * 1.5 });
-      await api("POST", "/settings", { out_dir: $("setOut").value.trim(), api_key: $("setApiKey").value.trim(),
+      await api("POST", "/settings", { live_watch: $("liveSwitch").getAttribute("aria-pressed") === "true", live_channel: $("setLiveCh").value.trim(),
+        out_dir: $("setOut").value.trim(), api_key: $("setApiKey").value.trim(),
         subs_default: $("setSubs").value === "1", game_looks: $("setGameLooks").value === "1", ai_notes: $("setNotes").value.trim(), whisper_model: $("setWhisper").value, device: $("setDevice").value, language: $("setLang").value,
         tiktok_client_key: $("setTtKey").value.trim(), tiktok_client_secret: $("setTtSecret").value.trim() });
       await api("POST", "/library/style", { style: style });
@@ -1065,6 +1084,11 @@
     });
     $("candList").addEventListener("change", function (e) { if (e.target.classList.contains("pick")) updateMakeSel(); });
     $("phoneSwitch").addEventListener("click", function () { setPhone(this.getAttribute("aria-pressed") !== "true"); });
+    $("liveSwitch").addEventListener("click", function () {
+      var on = this.getAttribute("aria-pressed") !== "true";
+      this.setAttribute("aria-pressed", String(on)); this.classList.toggle("on", on);
+      if (on && !$("setLiveCh").value.trim()) $("setLiveCh").focus();
+    });
     $("phoneNewKey").addEventListener("click", function () { setPhone(true, true); });
     $("btnAiRank").addEventListener("click", async function () {
       if (this.dataset.mode === "settings") { openSettings(); return; }

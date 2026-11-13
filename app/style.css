@@ -619,3 +619,8 @@ body.pro-locked .switch.pro-only::after { top: -9px; right: -10px; }
 #rangeFrom, #rangeTo, #addSrc, #setApiKey, #setOut, #setTtKey, #setTtSecret { direction: ltr; }
 #addSrc::placeholder { direction: rtl; text-align: right; }
 .tl-cap { font-family: "Rubik Black", "Heebo", sans-serif; font-weight: 400; direction: rtl; }
+
+/* Kliper: live watcher status in the side bar */
+.live-box { margin: 12px 8px; padding: 10px 12px; border-radius: var(--radius); background: var(--raised); border: 1px solid var(--line); font-size: 13px; line-height: 1.5; }
+.live-box.on-air { border-color: #ff3d5a; box-shadow: 0 0 0 1px #ff3d5a55, 0 0 18px #ff3d5a33; }
+.live-set input { margin-top: 8px; width: 100%; }

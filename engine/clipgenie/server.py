@@ -362,7 +362,8 @@ class Handler(BaseHTTPRequestHandler):
                                         "style": {k: v for k, v in lb.style_opts().items() if k != "api_key"},
                                         "ai_ready": (bool(load_settings().get("api_key")) or _public()) and _ai_allowed(), "ai_trial": not _ai_allowed(), "public": _public(),
                                         "server_ai": _public() and _ai_allowed(), "pro": _pro(), "busy": STREAM_LOCK.locked() or EDIT_LOCK.locked(),
-                                        "version": shown_version(), "looks": _looks(), "news": _news()})
+                                        "version": shown_version(), "looks": _looks(), "news": _news(),
+                                        "live": _live_status()})
             if u.path == "/taste":
                 return self._send(200, _taste_status())
             if u.path == "/library/timeline":
@@ -422,6 +423,10 @@ class Handler(BaseHTTPRequestHandler):
                         continue
                     s[k] = v
                 save_settings(s)
+                if "live_watch" in b or "live_channel" in b:
+                    from . import live
+                    if live.WATCHER:
+                        live.WATCHER.poke()
                 return self._send(200, {"ok": True})
             if u.path == "/analyze":
                 a = _analysis(b["video"])
@@ -727,6 +732,28 @@ def shown_version():
     return PUBLIC_VERSION
 
 
+def _live_status():
+    try:
+        from . import live
+        return dict(live.STATUS)
+    except Exception:
+        return {}
+
+
+def queue_vod(src, title=None):
+    """Kliper live: process a finished stream's VOD, the same as pasting its link (used by live.py)."""
+    key = lb.stream_key(src)
+    if (lb.get_stream(key) or {}).get("status") in ("queued", "running", "ready"):
+        return key
+    lb.update_stream(key, source=src, status="queued", message="ממתין להתחלה", progress=0.0, title=title, from_live=True)
+
+    def proc(progress):
+        with STREAM_LOCK:
+            return lb.process(src, progress, analysis_cache=CACHE)
+    _job(proc)
+    return key
+
+
 def _public():
     """Public / tester build (licence enforced): PC only, the app hides the AI and the API key box."""
     from . import licence
@@ -875,4 +902,9 @@ def main(port=PORT):
             h.header = header
     log.info(header)
     log.info("Kliper %s (engine build %s) on http://127.0.0.1:%d", shown, VERSION, port)
+    try:   # Kliper: follow the Kick channel while it is live (only when turned on in Settings)
+        from . import live
+        live.start(load_settings, queue_vod)
+    except Exception as e:
+        log.warning("Live watcher not started: %s", e)
     srv.serve_forever()
