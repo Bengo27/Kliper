@@ -906,9 +906,9 @@
       renderSfx();
       if (s.theme && s.theme !== document.documentElement.dataset.theme) setTheme(s.theme, false);
       api("GET", "/taste").then(showLearned).catch(function () {});
-      $("setWhisper").value = s.whisper_model || "small";
+      $("setWhisper").value = s.whisper_model || "ivrit-turbo";
       $("setDevice").value = s.device || "auto";
-      $("setLang").value = s.language || "";
+      $("setLang").value = s.language || "he";
       $("setTtKey").value = s.tiktok_client_key || "";
       $("setTtSecret").value = s.tiktok_client_secret || "";
     } catch (e) { toast(e.message, true); }

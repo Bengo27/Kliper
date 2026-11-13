@@ -392,10 +392,10 @@ def import_clip(source, progress, analysis_cache=None):
             a.audio_curve = au.excitement_curve(wav)
             a.silences = au.silences(a.audio_curve["db"])
             prog(0.3, "Writing down what's said")
-            from .transcribe import transcribe
+            from .transcribe import transcribe, speech_lang
             a.transcript = sc.strip_music(transcribe(
-                wav, a.cache, model_name=opts.get("whisper_model", "small"), device=opts.get("device", "auto"),
-                language=opts.get("language") or None, duration=dur,
+                wav, a.cache, model_name=opts.get("whisper_model") or None, device=opts.get("device", "auto"),
+                language=speech_lang(opts), duration=dur,
                 progress=lambda f: prog(0.3 + 0.4 * f, f"Writing down what's said ({int(f * 100)}%)"),
                 status=lambda m: prog(0.3, m)))
             if a.transcript.get("language"):
@@ -716,9 +716,9 @@ def _subs_words(a, clip_id, opts, edits=None, progress=None, make=True):
         from . import transcribe as tsc
         if make and progress:
             progress(0.04, "Writing the subtitles in " + LANG_NAMES.get(lang, lang))
-        cached = os.path.join(a.cache, f"subs_{opts.get('whisper_model', 'small')}_{lang}_{int(s0 * 10)}_{int(s1 * 10)}.json")
+        cached = os.path.join(a.cache, f"subs_{opts.get('whisper_model') or 'ivrit-turbo'}_{lang}_{int(s0 * 10)}_{int(s1 * 10)}.json")
         if make or os.path.isfile(cached):
-            new = tsc.transcribe_part(wav, a.cache, s0, s1, lang, model_name=opts.get("whisper_model", "small"),
+            new = tsc.transcribe_part(wav, a.cache, s0, s1, lang, model_name=opts.get("whisper_model") or None,
                                       device=opts.get("device", "auto"))
             others = [w for w in words if w.get("other")]   # keep the 'someone else is talking' colour
 

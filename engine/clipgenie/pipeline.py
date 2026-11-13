@@ -91,10 +91,10 @@ def analyze(a, opts, progress):
                 def tp(f):
                     progress(t0 + span * f, f"Transcribing speech ({int(f * 100)}%)")
                 progress(t0, "Loading speech model (first run downloads it)")
-                from .transcribe import transcribe
+                from .transcribe import transcribe, speech_lang
                 a.transcript = transcribe(
-                    wav, a.cache, model_name=opts.get("whisper_model", "small"),
-                    device=opts.get("device", "auto"), language=opts.get("language") or None,
+                    wav, a.cache, model_name=opts.get("whisper_model") or None,
+                    device=opts.get("device", "auto"), language=speech_lang(opts),
                     progress=tp, duration=dur, status=lambda m: progress(t0, m))
                 a.transcript = sc.strip_music(a.transcript)
                 a.wav_path = wav

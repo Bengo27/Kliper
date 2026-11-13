@@ -32,8 +32,9 @@ def _pick_device(pref):
     return "cpu"
 
 
-def transcribe(wav_path, cache_dir, model_name="small", device="auto",
+def transcribe(wav_path, cache_dir, model_name=None, device="auto",
                language=None, progress=None, duration=None, status=None):
+    model_name = model_name or DEFAULT_MODEL
     out = os.path.join(cache_dir, f"transcript_{model_name}_{language or 'auto'}.json")
     old_en = os.path.join(cache_dir, f"transcript_{model_name}_en.json")
     if not language and not os.path.isfile(out) and os.path.isfile(old_en):
@@ -65,6 +66,29 @@ def transcribe(wav_path, cache_dir, model_name="small", device="auto",
     return data
 
 
+# Klipon: Hebrew speech models from ivrit.ai (Apache-2.0, huggingface.co/ivrit-ai), trained on many hours of
+# Hebrew speech. Much better than the general Whisper models on Hebrew slang, names and fast talking.
+MODELS = {"ivrit-turbo": "ivrit-ai/whisper-large-v3-turbo-ct2", "ivrit-large": "ivrit-ai/whisper-large-v3-ct2"}
+DEFAULT_MODEL = "ivrit-turbo"
+
+
+def model_id(model_name, language=None):
+    """What faster-whisper loads for a model choice. The ivrit.ai models are tuned on Hebrew: when another language
+    is picked on purpose (an English stream, English subtitles) the general large-v3-turbo is used instead."""
+    model_name = model_name or DEFAULT_MODEL
+    if model_name in MODELS:
+        if language and language != "he":
+            return "large-v3-turbo"
+        return MODELS[model_name]
+    return model_name
+
+
+def speech_lang(opts):
+    """The stream's speech language: Hebrew unless Settings says otherwise; "auto" = let Whisper guess."""
+    lang = (opts or {}).get("language") or "he"
+    return None if lang == "auto" else lang
+
+
 def _names():
     try:
         from .taste import names_prompt
@@ -74,7 +98,8 @@ def _names():
 
 
 # download sizes of the faster-whisper models (bytes, about)
-MODEL_BYTES = {"tiny": 75e6, "base": 145e6, "small": 484e6, "medium": 1.53e9,
+MODEL_BYTES = {"ivrit-turbo": 1.62e9, "ivrit-large": 3.09e9, "large-v3-turbo": 1.62e9, "turbo": 1.62e9,
+               "tiny": 75e6, "base": 145e6, "small": 484e6, "medium": 1.53e9,
                "large-v1": 3.09e9, "large-v2": 3.09e9, "large-v3": 3.09e9, "large": 3.09e9}
 
 
@@ -271,8 +296,8 @@ def _units(model, wav_path, language, langs):
 
 def _run(WhisperModel, wav_path, model_name, dev, models_dir, language, progress, duration, loaded=None, out=None):
     compute = "float16" if dev == "cuda" else "int8"
-    log.info("Loading Whisper %s on %s", model_name, dev)
-    model = WhisperModel(model_name, device=dev, compute_type=compute, download_root=models_dir,
+    log.info("Loading Whisper %s (%s) on %s", model_name, model_id(model_name, language), dev)
+    model = WhisperModel(model_id(model_name, language), device=dev, compute_type=compute, download_root=models_dir,
                          cpu_threads=work_threads())
     if loaded:
         loaded()   # stop the download bar
@@ -349,10 +374,11 @@ def _run(WhisperModel, wav_path, model_name, dev, models_dir, language, progress
             "segments": segs, "words": words}
 
 
-def transcribe_part(wav_path, cache_dir, a, b, language, model_name="small", device="auto"):
+def transcribe_part(wav_path, cache_dir, a, b, language, model_name=None, device="auto"):
     """0.1.2: one TikTok's subtitles in the language picked in the editor. Only that part of the stream
     (a..b seconds) is written down again, and speech-to-text is TOLD the language, so it never guesses another
     one. Saved, so re-making the TikTok is instant. Words in stream seconds."""
+    model_name = model_name or DEFAULT_MODEL
     out = os.path.join(cache_dir, f"subs_{model_name}_{language}_{int(a * 10)}_{int(b * 10)}.json")
     if os.path.isfile(out):
         with open(out, "r", encoding="utf-8") as f:
@@ -363,7 +389,7 @@ def transcribe_part(wav_path, cache_dir, a, b, language, model_name="small", dev
     models_dir = os.path.join(local, "BengoGames", "Klipon", "models") if local else os.path.join(data_dir(), "models")
 
     def go(dev):
-        model = WhisperModel(model_name, device=dev, compute_type="float16" if dev == "cuda" else "int8",
+        model = WhisperModel(model_id(model_name, language), device=dev, compute_type="float16" if dev == "cuda" else "int8",
                              download_root=models_dir, cpu_threads=work_threads())
         segments, _ = model.transcribe(_read(wav_path, a, b), language=language, word_timestamps=True,
                                        vad_filter=True, vad_parameters={"min_silence_duration_ms": 400},
