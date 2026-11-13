@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/brand/kliper-banner-1200.png" alt="קליפר" width="720"></p>
+
 # קליפר (Kliper)
 
 **הופך את הסטרימים שלך לקליפים לטיקטוק, שורטס ורילס, בעברית.**
