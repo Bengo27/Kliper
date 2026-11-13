@@ -60,7 +60,8 @@ nav.top .links a.dl { color: var(--ink); }
   background: radial-gradient(900px 520px at 85% 0%, #8B3DFF55, transparent 70%), radial-gradient(700px 500px at 0% 100%, #FF2E9340, transparent 70%); }
 .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; }
 .hero .wrap > div:first-child { position: relative; z-index: 4; }
-.hero h1 { font: clamp(46px, 7.2vw, 92px)/1.02 "Secular One"; margin: 0 0 22px; letter-spacing: -.5px; }
+.hero h1 { font: clamp(42px, 6vw, 78px)/1.08 "Secular One"; margin: 0 0 22px; }
+.hero h1 .cut { margin-top: 6px; }
 .hero h1 .cut { display: block; color: var(--film); -webkit-text-stroke: 2px var(--ink); paint-order: stroke fill; text-shadow: 5px 5px 0 var(--ink); }
 .hero p.lead { font-size: 21px; color: var(--soft); max-width: 30em; margin: 0 0 30px; }
 .hero .cta { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
@@ -69,8 +70,8 @@ nav.top .links a.dl { color: var(--ink); }
 
 /* the cut: a VOD film strip turns into three shorts */
 .cutstage { position: relative; height: 470px; direction: ltr; }
-.strip { position: absolute; left: -8%; right: 0; top: 36px; height: 92px; background: var(--ink); border-radius: 10px;
-  display: flex; gap: 10px; align-items: center; padding: 0 14px; transform: rotate(-6deg);
+.strip { position: absolute; left: -6%; right: 4%; top: 46px; height: 92px; background: var(--ink); border-radius: 10px;
+  display: flex; gap: 10px; align-items: center; padding: 0 14px; transform: rotate(-6deg); overflow: hidden;
   background-image: radial-gradient(circle, #fff 4px, transparent 4.5px), radial-gradient(circle, #fff 4px, transparent 4.5px);
   background-size: 26px 92px; background-position: 0 -36px, 0 36px; background-repeat: repeat-x; }
 .strip i { flex: none; width: 92px; height: 52px; border-radius: 6px; background: var(--film); opacity: .95; }
@@ -165,7 +166,7 @@ footer a { color: var(--text); }
 <header class="hero">
   <div class="wrap">
     <div>
-      <h1>הסטרים שלך,<span class="cut">כבר חתוך לשורטס</span></h1>
+      <h1>הסטרים שלך<span class="cut">כבר חתוך לשורטס</span></h1>
       <p class="lead">מדביקים קישור ל-VOD מ-Kick, ‏YouTube או Twitch. קליפר מקשיב לסטרים בעברית, מוצא את הרגעים הכי טובים, חותך לפורמט אנכי ומוסיף כתוביות. אתם רק בוחרים מה לפרסם.</p>
       <div class="cta">
         <a class="btn go dl-link" href="#download">⬇ הורדה חינם ל-Windows</a>
