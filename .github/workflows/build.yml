@@ -19,6 +19,7 @@ jobs:
     runs-on: windows-latest
     env:
       PY_VER: "3.11.9"
+      PYTHONIOENCODING: utf-8
       STAGE: ${{ github.workspace }}\stage\Kliper
     steps:
       - uses: actions/checkout@v4
@@ -70,7 +71,7 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
-          & "$env:STAGE\python\python.exe" -c "import yt_dlp; d = yt_dlp.YoutubeDL({'quiet': True, 'skip_download': True}).extract_info('https://kick.com/x/videos/01a19d65-cd28-7bd9-b20d-46e109cd022a', download=False); print('KICK OK:', d.get('title'), d.get('duration'), d.get('uploader'))"
+          & "$env:STAGE\python\python.exe" tools\check_kick.py "https://kick.com/x/videos/01a19d65-cd28-7bd9-b20d-46e109cd022a"
 
       - name: Installer (Inno Setup)
         shell: pwsh
