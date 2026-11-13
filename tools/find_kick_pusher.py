@@ -40,18 +40,17 @@ with connect(url, open_timeout=15, additional_headers={"Origin": "https://kick.c
             n += 1
             print("FRAME", part[:700])
 print("done ws test")
-import re
+import re, base64, gzip
 html = S.get("https://kick.com/xqc", timeout=30).text
-PAT = re.compile(r"PUSHER_[A-Z_]+|wsHost|cluster:|new [A-Za-z$_]{1,3}\([a-zA-Z.$_]*PUSHER|subscribe\(|sendMessage\(\"|type:\"[a-z_]*subscribe|\"[a-z_.]*(?:subscribe|chatroom)[a-z_.]*\"")
-seen = set()
 for src in sorted(set(re.findall(r'src="([^"]+\.js[^"]*)"', html))):
     url = src if src.startswith("http") else "https://kick.com" + src
     js = S.get(url, timeout=30).text
-    for m in PAT.finditer(js):
-        ctx = js[max(0, m.start() - 200): m.end() + 260].replace("\n", " ")
-        k = m.group(0) + ctx[150:260]
-        if k in seen or len(seen) > 70:
-            continue
-        seen.add(k)
-        print("-- [%s] %s: %s" % (url.split("/")[-1][:20], m.group(0), ctx))
+    i = js.find("WebSocketProvider")
+    if i < 0:
+        continue
+    seg = js[max(0, i - 9000): i + 30000]
+    blob = base64.b64encode(gzip.compress(seg.encode())).decode()
+    print("BLOB", url.split("/")[-1][:30], len(seg))
+    for k in range(0, len(blob), 4000):
+        print("B64|" + blob[k:k + 4000])
 print("done")
