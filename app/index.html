@@ -4,7 +4,7 @@
 <script>try { document.documentElement.dataset.theme = localStorage.getItem("cg_theme") || "midnight"; } catch (e) {}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>קליפון</title>
+<title>קליפר</title>
 <link rel="icon" href="icon.png">
 <link rel="stylesheet" href="style.css">
 <script>window.CG_TOKEN = "__CG_TOKEN__";</script>
@@ -16,7 +16,7 @@
 <header class="topbar">
   <div class="brand">
     <img class="brand-logo" src="icon.png" width="28" height="28" alt="">
-    <strong>קליפון <span class="beta-tag public-only">בטא</span> <span id="appVersion" class="ver"></span></strong>
+    <strong>קליפר <span class="beta-tag public-only">בטא</span> <span id="appVersion" class="ver"></span></strong>
   </div>
   <nav class="steps" id="steps" aria-label="שלבים">
     <button class="step on" data-step="1"><i>1</i>הוספת סטרים</button>
@@ -24,7 +24,7 @@
     <button class="step" data-step="3"><i>3</i>עריכה</button>
     <button class="step" data-step="4"><i>4</i>ייצוא</button>
   </nav>
-  <button id="btnAccount" class="btn ghost sm acct hidden" title="החשבון שלך בקליפון"></button>
+  <button id="btnAccount" class="btn ghost sm acct hidden" title="החשבון שלך בקליפר"></button>
   <button id="btnSettings" class="btn ghost sm">⚙ הגדרות</button>
 </header>
 <!-- 0.1.0: update available / message from the admin dashboard -->
@@ -58,7 +58,7 @@
 <div id="proModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="proTitle">
   <div class="sheet acct-sheet">
     <img class="acct-logo" src="icon.png" width="56" height="56" alt="">
-    <h2 id="proTitle">קליפון <span class="pro-tag">PRO</span></h2>
+    <h2 id="proTitle">קליפר <span class="pro-tag">PRO</span></h2>
     <p id="proText" class="muted"></p>
     <ul class="pro-list small">
       <li>קיל-פיד של CS2, מצויר מחדש בחדות</li>
@@ -161,7 +161,7 @@
 
     <div id="empty" class="empty hidden">
       <h2>עדיין אין קליפים</h2>
-      <p class="muted">הדביקו למעלה קישור ל-VOD מ-Kick, ‏YouTube או Twitch ולחצו <strong>צור קליפים</strong>. קליפון מוצא את הרגעים הכי טובים, עורך אותם בסגנון שלכם והם יופיעו כאן. אפשר גם להדביק קישור ל- <strong>קליפ</strong> (או לבחור קובץ וידאו קצר) והוא יהפוך כולו לקליפ אחד.</p>
+      <p class="muted">הדביקו למעלה קישור ל-VOD מ-Kick, ‏YouTube או Twitch ולחצו <strong>צור קליפים</strong>. קליפר מוצא את הרגעים הכי טובים, עורך אותם בסגנון שלכם והם יופיעו כאן. אפשר גם להדביק קישור ל- <strong>קליפ</strong> (או לבחור קובץ וידאו קצר) והוא יהפוך כולו לקליפ אחד.</p>
     </div>
   </main>
 </div>
@@ -173,7 +173,7 @@
     <h2 id="edTitle">קליפ</h2>
     <span id="edMeta" class="muted small"></span>
     <div class="ed-top-actions">
-      <span class="vote" id="edVote" title="למדו את קליפון מה זה קליפ טוב בשבילכם">
+      <span class="vote" id="edVote" title="למדו את קליפר מה זה קליפ טוב בשבילכם">
         <button class="btn ghost sm" data-vote="up" aria-pressed="false" aria-label="קליפ טוב">👍</button>
         <button class="btn ghost sm" data-vote="down" aria-pressed="false" aria-label="קליפ לא טוב">👎</button>
       </span>
@@ -482,8 +482,8 @@
   <div class="sheet wc">
     <div class="wc-dots" id="wcDots" aria-hidden="true"></div>
     <section class="wc-step" data-step="0">
-      <h2 id="wcTitle">ברוכים הבאים לקליפון 👋</h2>
-      <p class="muted">קליפון הופך את הסטרימים שלכם לקליפים לטיקטוק, שורטס ורילס. שלוש שאלות קצרות ואתם מוכנים. אפשר לשנות הכל אחר כך בהגדרות.</p>
+      <h2 id="wcTitle">ברוכים הבאים לקליפר 👋</h2>
+      <p class="muted">קליפר הופך את הסטרימים שלכם לקליפים לטיקטוק, שורטס ורילס. שלוש שאלות קצרות ואתם מוכנים. אפשר לשנות הכל אחר כך בהגדרות.</p>
       <label class="field">הערוץ שלך (Kick / Twitch / YouTube)
         <input id="wcChannel" type="text" placeholder="kick.com/השם-שלך" autocomplete="off" spellcheck="false">
         <span class="tiny muted">השם שלך יופיע על כל קליפ.</span>
@@ -520,7 +520,7 @@
   <div class="sheet">
     <div class="row-between"><h2 id="setTitle">הגדרות</h2><button class="btn ghost sm" data-close aria-label="סגירה">✕</button></div>
     <div class="field pc-only phone-box">
-      <div class="toggle"><span><strong>📱 קליפון בטלפון</strong><br><small class="muted">ב-Wi-Fi של הבית, כשהמחשב דולק</small></span><button class="switch pro-only" data-pro="phone" id="phoneSwitch" aria-label="שימוש בטלפון"><span></span></button></div>
+      <div class="toggle"><span><strong>📱 קליפר בטלפון</strong><br><small class="muted">ב-Wi-Fi של הבית, כשהמחשב דולק</small></span><button class="switch pro-only" data-pro="phone" id="phoneSwitch" aria-label="שימוש בטלפון"><span></span></button></div>
       <div id="phonePanel" class="phone-panel hidden">
         <div id="phoneQR" class="phone-qr" aria-label="קוד QR לטלפון"></div>
         <div class="small">סרקו עם מצלמת הטלפון (באותו Wi-Fi של המחשב), ואז "הוספה למסך הבית" כדי שיהיה כמו אפליקציה.<br>
@@ -533,7 +533,7 @@
       <span class="tiny muted">מקבלים ב-console.anthropic.com ← API keys. כמה סנטים לסטרים.</span>
     </label>
     <div class="field learned" id="learnedBox">
-      <div class="row-between"><strong>🧠 מה קליפון למד עליך</strong><button id="btnRules" class="btn ghost sm ai-only">עדכון עכשיו</button></div>
+      <div class="row-between"><strong>🧠 מה קליפר למד עליך</strong><button id="btnRules" class="btn ghost sm ai-only">עדכון עכשיו</button></div>
       <span id="learnedStats" class="small muted"></span>
       <span id="learnedSummary" class="small"></span>
       <ol id="learnedRules" class="rules"></ol>
@@ -571,7 +571,7 @@
     </div>
     <label class="field">עוצמת מוזיקה <input id="setMusicVol" type="range" min="0.03" max="0.5" step="0.01" value="0.16"></label>
     <label class="field">שמירת קליפים ב
-      <input id="setOut" type="text" placeholder="Videos\Klipon">
+      <input id="setOut" type="text" placeholder="Videos\Kliper">
     </label>
     <div class="grid2">
       <label class="field">מודל תמלול

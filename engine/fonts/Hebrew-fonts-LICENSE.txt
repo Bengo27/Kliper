@@ -1,4 +1,4 @@
-Hebrew fonts for Klipon captions, all under the SIL Open Font License 1.1 (from github.com/google/fonts):
+Hebrew fonts for Kliper captions, all under the SIL Open Font License 1.1 (from github.com/google/fonts):
 - Rubik (Rubik-Black.ttf, Rubik-ExtraBold.ttf): static instances made from Rubik[wght].ttf, renamed per OFL (Reserved Font Name: none)
 - Heebo (Heebo-SemiBold.ttf, Heebo-ExtraBold.ttf): static instances made from Heebo[wght].ttf
 - Secular One, Suez One: unchanged

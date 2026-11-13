@@ -690,7 +690,7 @@ def build_command(video, info, clip, plan, ass_name, webcam, opts, out_path, wor
     if plan.get("bw_from") is not None:   # 2.24: black-and-white ending (subtitles / red word stay in colour)
         g.append(f"[{lab}]hue=s=0:enable='gte(t,{plan['bw_from']:.2f})'[bwv]")
         lab = "bwv"
-    mark = _trial_wordmark() if opts.get("trial_mark") else None   # free trial: the Klipon logo on the video
+    mark = _trial_wordmark() if opts.get("trial_mark") else None   # free trial: the Kliper logo on the video
     vo = "vpre" if mark else "vout"
     if ass_name:
         g.append(f"[{lab}]ass=filename={ass_name}:fontsdir=fonts[{vo}]")
@@ -949,7 +949,7 @@ TRIAL_MARK_W, TRIAL_MARK_Y = 0.40, 0.785   # trial mark: share of the width; bot
 
 
 def _trial_wordmark():
-    """The trial mark: Klipon logo + name with a FREE TRIAL badge under it (app/brand/clipgenie_trial_mark.png,
+    """The trial mark: Kliper logo + name with a FREE TRIAL badge under it (app/brand/clipgenie_trial_mark.png,
     made from clipgenie_wordmark.png + free_trial_badge.png), or None if it's missing (then text only)."""
     p = os.path.join(os.path.dirname(ENGINE_DIR), "app", "brand", "clipgenie_trial_mark.png")
     return p if os.path.isfile(p) else None
@@ -995,7 +995,7 @@ def _write_ass(work, name, words, plan, opts, info, webcam, hook=None):
             end = plan["out_dur"]
             f.write(f"\nDialogue: 9,0:00:00.00,{int(end // 3600)}:{int(end % 3600 // 60):02d}:{end % 60:05.2f},KF,,0,0,0,,"
                     f"{{\\an8\\pos({OW // 2},{int(OH * TRIAL_MARK_Y) + 4})\\fs34\\b1\\bord3\\3c&H000000&\\1c&HFFFFFF&\\alpha&H30&}}"
-                    + ("free trial" if _trial_wordmark() else "Made with Klipon · free trial") + "\n")
+                    + ("free trial" if _trial_wordmark() else "Made with Kliper · free trial") + "\n")
     return name
 
 
@@ -1027,7 +1027,7 @@ def render_clip(video, info, clip, transcript_words, webcam, opts, out_dir,
         if w and clip["start"] - w["start"] <= 1.5:
             s0 = max(0.0, round(w["start"] - 0.06, 3))
         clip = dict(clip, start=s0)
-    try:   # free trial (public builds): the server decides if videos get the "Made with Klipon" mark
+    try:   # free trial (public builds): the server decides if videos get the "Made with Kliper" mark
         from . import licence
         if licence.limits()["watermark"] and not opts.get("_trial_full"):
             opts = dict(opts, trial_mark=True)

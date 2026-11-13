@@ -1,4 +1,4 @@
-# Klipon engine (Python 3.11, Windows)
+# Kliper engine (Python 3.11, Windows)
 faster-whisper==1.2.1
 ctranslate2==4.8.3
 numpy==2.4.6

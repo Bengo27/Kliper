@@ -1,7 +1,7 @@
-"""The TikTok library: every stream Klipon processed and the TikToks it made.
+"""The TikTok library: every stream Kliper processed and the TikToks it made.
 
-Stored in %APPDATA%/BengoGames/Klipon/library.json; videos live in
-Videos/Klipon/<date> <stream title>/.
+Stored in %APPDATA%/BengoGames/Kliper/library.json; videos live in
+Videos/Kliper/<date> <stream title>/.
 """
 import json
 import os
@@ -129,7 +129,7 @@ def _free_name(folder, n, title):
 
 def output_root():
     s = load_settings()
-    return s.get("out_dir") or os.path.join(os.path.expanduser("~"), "Videos", "Klipon")
+    return s.get("out_dir") or os.path.join(os.path.expanduser("~"), "Videos", "Kliper")
 
 
 def _safe(s, n=50):
@@ -215,7 +215,7 @@ def style_opts(extra=None):
             o[k] = s[k]
     from . import licence
     if licence.enforced():
-        # public builds: never the user's own key; the built-in AI (through the Klipon server) when it's on
+        # public builds: never the user's own key; the built-in AI (through the Kliper server) when it's on
         o.pop("api_key", None)
         if licence.server_ai():
             from . import ai
@@ -372,7 +372,7 @@ def import_clip(source, progress, analysis_cache=None):
         if tw.clip_slug(source):
             prog(0.02, "מוריד את הקליפ מ-" + tw.platform(tw.clip_slug(source)).title())
             local = os.environ.get("LOCALAPPDATA")
-            base = os.path.join(local, "BengoGames", "Klipon", "cache") if local else os.path.join(data_dir(), "cache")
+            base = os.path.join(local, "BengoGames", "Kliper", "cache") if local else os.path.join(data_dir(), "cache")
             video, meta = tw.download_clip(source, os.path.join(base, key),
                                            lambda f: prog(0.02 + 0.18 * f, f"מוריד את הקליפ ({int(f * 100)}%)"))
             if meta.get("channel"):
@@ -557,7 +557,7 @@ def _toks(t):
 
 
 def sync_views(analysis_cache=None):
-    """Pull view counts for your posted videos from TikTok and match them to Klipon's TikToks
+    """Pull view counts for your posted videos from TikTok and match them to Kliper's TikToks
     by title/caption. Returns {"matched": n, "videos": n}."""
     import difflib
     import re

@@ -1,10 +1,10 @@
 """Sign in with Twitch + the free trial (public / tester builds).
 
 The trial count lives on the licence server (server/licence), never on this PC, so reinstalling or deleting
-Klipon's files doesn't reset it. The server also knows this PC (hashed Windows id, board and disk serials),
+Kliper's files doesn't reset it. The server also knows this PC (hashed Windows id, board and disk serials),
 so a second Twitch account on the same PC gets no new trial.
 
-Only ENFORCED in the compiled engine (tools/build_engine.py), or with env KLIPON_TRIAL=1 for testing.
+Only ENFORCED in the compiled engine (tools/build_engine.py), or with env KLIPER_TRIAL=1 for testing.
 Running from source (the creator's own copy) never asks."""
 import hashlib, json, os, subprocess, threading, time, urllib.error, urllib.request, webbrowser
 
@@ -20,12 +20,12 @@ TRIAL_PER_STREAM = 10   # free trial: most TikToks from one stream/clip (the ser
 
 
 def enforced():
-    return COMPILED or os.environ.get("KLIPON_TRIAL") == "1"
+    return COMPILED or os.environ.get("KLIPER_TRIAL") == "1"
 
 
 def _url():
-    if not COMPILED and os.environ.get("KLIPON_LICENCE_URL"):
-        return os.environ["KLIPON_LICENCE_URL"].rstrip("/")
+    if not COMPILED and os.environ.get("KLIPER_LICENCE_URL"):
+        return os.environ["KLIPER_LICENCE_URL"].rstrip("/")
     return LICENCE_URL.rstrip("/")
 
 
@@ -64,7 +64,7 @@ def parts():
 
 def _post(path, body, timeout=15):
     req = urllib.request.Request(_url() + path, data=json.dumps(body).encode(), method="POST",
-                                 headers={"Content-Type": "application/json", "User-Agent": "Klipon"})
+                                 headers={"Content-Type": "application/json", "User-Agent": "Kliper"})
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.status, json.load(r)
@@ -74,18 +74,18 @@ def _post(path, body, timeout=15):
         except Exception:
             return e.code, {}
     except Exception:
-        raise RuntimeError("Can't reach the Klipon server. Check your internet and try again.")
+        raise RuntimeError("Can't reach the Kliper server. Check your internet and try again.")
 
 
 def _get(path, timeout=15):
-    req = urllib.request.Request(_url() + path, headers={"User-Agent": "Klipon"})
+    req = urllib.request.Request(_url() + path, headers={"User-Agent": "Kliper"})
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.status, json.load(r)
     except urllib.error.HTTPError as e:
         return e.code, {}
     except Exception:
-        raise RuntimeError("Can't reach the Klipon server. Check your internet and try again.")
+        raise RuntimeError("Can't reach the Kliper server. Check your internet and try again.")
 
 
 def _version():
@@ -101,7 +101,7 @@ _AUTO = {"at": 0}
 
 
 def _auto_token():
-    """Klipon is free (the creator, 12 Nov: "no login"): no sign-in screen. When there is no account yet, this PC
+    """Kliper is free (the creator, 12 Nov: "no login"): no sign-in screen. When there is no account yet, this PC
     quietly gets its own (the server's per-PC guest account, the same one again after a reinstall), so the
     built-in AI still has a per-PC daily cap. Tried at most once a minute; "" when the server can't be reached."""
     tok = _token()
@@ -125,7 +125,7 @@ def _auto_token():
 
 
 def _free():
-    # no login anywhere (the creator, 12 Nov): when the server can't be reached, treat Klipon as free too
+    # no login anywhere (the creator, 12 Nov): when the server can't be reached, treat Kliper as free too
     return bool(news().get("free", True))
 
 
@@ -141,7 +141,7 @@ def status(fresh=False):
     if not enforced():
         return {"enforced": False}
     tok = _auto_token()
-    if not tok:   # signed out: say whether Klipon is free (the server's "Klipon is free" switch)
+    if not tok:   # signed out: say whether Kliper is free (the server's "Kliper is free" switch)
         return {"enforced": True, "signed_in": False, "free": _free()}
     with _LOCK:
         if not fresh and _STATUS["data"] and time.time() - _STATUS["at"] < 60:
@@ -162,7 +162,7 @@ def status(fresh=False):
             _STATUS.update(at=time.time(), data=d)
         return d
     if code != 200:
-        raise RuntimeError("The Klipon server had a problem. Try again in a minute.")
+        raise RuntimeError("The Kliper server had a problem. Try again in a minute.")
     d = dict(d, enforced=True, signed_in=True)
     with _LOCK:
         _STATUS.update(at=time.time(), data=d)
@@ -179,7 +179,7 @@ def limits():
     except RuntimeError:
         st = _STATUS["data"] or {}
     # public builds are PC only: no AI / API key for anyone (the creator, 12 Nov). "free" = the server's
-    # "Klipon is free" switch: no limits at all (the creator, 12 Nov: free for everyone).
+    # "Kliper is free" switch: no limits at all (the creator, 12 Nov: free for everyone).
     # "ai" = the server's built-in AI (OpenRouter, the key stays on the server); never the user's own key.
     lim = st.get("limits") or {}
     if st.get("plan") in ("paid", "owner") or (st.get("free") and not st.get("banned") and not st.get("closed")):
@@ -205,9 +205,9 @@ def check_open():
     except RuntimeError:
         return   # can't reach the server: the add-stream check stops new streams anyway
     if st.get("closed"):
-        raise RuntimeError("TRIAL_USED: The Klipon beta has ended. Thanks for testing!")
+        raise RuntimeError("TRIAL_USED: The Kliper beta has ended. Thanks for testing!")
     if st.get("banned"):
-        raise RuntimeError("TRIAL_USED: This account is blocked from Klipon.")
+        raise RuntimeError("TRIAL_USED: This account is blocked from Kliper.")
 
 
 def pro():
@@ -227,7 +227,7 @@ PRO_MSG = {
 def need_pro(what):
     """Raise for a Pro feature in the free trial (the app shows it as a 'Pro' preview)."""
     if not pro():
-        raise RuntimeError("PRO: %s is part of Klipon Pro, coming soon. Your free trial had it unlocked."
+        raise RuntimeError("PRO: %s is part of Kliper Pro, coming soon. Your free trial had it unlocked."
                            % PRO_MSG.get(what, "This"))
 
 
@@ -258,16 +258,16 @@ def ai_allowed():
 
 
 def server_ai():
-    """Public builds: the AI runs through the Klipon server (built-in, no key for the user)."""
+    """Public builds: the AI runs through the Kliper server (built-in, no key for the user)."""
     return enforced() and ai_allowed()
 
 
 def ai(body, timeout=150):
-    """Send one Claude-style AI request ({system, messages, max_tokens}) through the Klipon server.
+    """Send one Claude-style AI request ({system, messages, max_tokens}) through the Kliper server.
     Returns the Claude-style answer ({content:[{type:'text', text}]})."""
     tok = _auto_token()
     if not tok:
-        raise RuntimeError("The AI can't reach the Klipon server right now. Try again in a minute.")
+        raise RuntimeError("The AI can't reach the Kliper server right now. Try again in a minute.")
     code, d = _post("/ai", {"token": tok, "version": _version(),
                             "body": {k: body.get(k) for k in ("system", "messages", "max_tokens")}}, timeout=timeout)
     if code == 200 and d.get("content"):
@@ -337,22 +337,22 @@ def use(item):
         return None   # no login (the creator, 12 Nov): never block making TikToks because of an account
     code, d = _post("/use", {"token": tok, "parts": parts(), "item": str(item)[:200], "version": _version()})
     if code == 426:
-        raise RuntimeError("UPDATE: This copy of Klipon is out of date. Download the newest version to keep going.")
+        raise RuntimeError("UPDATE: This copy of Kliper is out of date. Download the newest version to keep going.")
     if code == 401:
         _forget()
         return None
     if code == 403:
-        raise RuntimeError("TRIAL_USED: This account is blocked from Klipon.")
+        raise RuntimeError("TRIAL_USED: This account is blocked from Kliper.")
     if code == 410:
         _STATUS.update(at=0, data=None)
-        raise RuntimeError("TRIAL_USED: The Klipon beta has ended. Thanks for testing!")
+        raise RuntimeError("TRIAL_USED: The Kliper beta has ended. Thanks for testing!")
     if code == 402 and d.get("reason") == "trials_closed":
         raise RuntimeError("TRIAL_USED: Free trials have ended. Upgrade to keep making TikToks.")
     if code == 402:
         raise RuntimeError("TRIAL_USED: Your free trial is used up (%s streams). Upgrade to keep making TikToks."
                            % d.get("limit", 3))
     if code != 200 or not d.get("ok"):
-        raise RuntimeError("The Klipon server had a problem. Try again in a minute.")
+        raise RuntimeError("The Kliper server had a problem. Try again in a minute.")
     d = dict(d, enforced=True, signed_in=True)
     with _LOCK:
         _STATUS.update(at=time.time(), data=d)

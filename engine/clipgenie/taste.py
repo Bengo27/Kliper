@@ -341,7 +341,7 @@ def _pairs(old_words, new_words):
 
 
 def learn_edit(stream_key, cand, edits, words):
-    """Remember how you changed one of Klipon's picks: trims/extensions and subtitle fixes."""
+    """Remember how you changed one of Kliper's picks: trims/extensions and subtitle fixes."""
     if not cand or not edits:
         return
     with _LOCK:
@@ -383,7 +383,7 @@ def learn_edit(stream_key, cand, edits, words):
 
 
 def edit_bias(min_edits=3, clamp=8.0):
-    """How you usually move Klipon's start/end (median of your recent edits), or (0, 0)."""
+    """How you usually move Kliper's start/end (median of your recent edits), or (0, 0)."""
     ed = [x for x in load().get("edits", [])[-20:]]
     if len(ed) < min_edits:
         return 0.0, 0.0

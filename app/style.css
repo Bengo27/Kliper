@@ -605,7 +605,7 @@ body.pro-locked .switch.pro-only::after { top: -9px; right: -10px; }
 .news-bar .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
 .news-bar.hidden{display:none}
 
-/* ---- Klipon: Hebrew, right to left ---- */
+/* ---- Kliper: Hebrew, right to left ---- */
 @font-face { font-family: "Heebo"; font-weight: 400 600; src: url("Heebo-SemiBold.ttf") format("truetype"); }
 @font-face { font-family: "Heebo"; font-weight: 700 900; src: url("Heebo-ExtraBold.ttf") format("truetype"); }
 @font-face { font-family: "Rubik Black"; src: url("Rubik-Black.ttf") format("truetype"); }

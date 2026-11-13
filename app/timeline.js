@@ -1,4 +1,4 @@
-/* Klipon timeline editor: cut the video, edit/move/retime subtitles, resize the webcam.
+/* Kliper timeline editor: cut the video, edit/move/retime subtitles, resize the webcam.
    Times are in "clip time": 0 = the TikTok's current start in the stream. */
 window.CGTimeline = (function () {
   "use strict";
@@ -489,10 +489,10 @@ window.CGTimeline = (function () {
     window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
     if (ev.currentTarget.id === "tlRuler") at(ev);
   }
-  // subtitles made by Klipon itself (same as the automatic ones) for the kept parts
+  // subtitles made by Kliper itself (same as the automatic ones) for the kept parts
   function serverCaps() {
     return fetch("/library/timeline_captions", {
-      method: "POST", headers: { "Content-Type": "application/json", "X-Klipon-Token": window.CG_TOKEN },
+      method: "POST", headers: { "Content-Type": "application/json", "X-Kliper-Token": window.CG_TOKEN },
       body: JSON.stringify({ key: T.d.key, clip_id: T.d.clip_id, clip_start: T.d.clip_start,
         segs: T.segs.map(function (s) { return [s[0], s[1]]; }) })
     }).then(function (r) { return r.json(); }).then(function (d) {

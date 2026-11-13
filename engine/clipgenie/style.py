@@ -180,7 +180,7 @@ Editor's look (May 2026 reels):
   swearing censored (sh*t).
 - Rhythm: gameplay keeps running (about 1 hard cut per 10 s); full-screen webcam on big reactions.
   (The editor also punched the webcam in and out every ~1.5-2 s: the creator doesn't like those small
-  zooms, so Klipon doesn't do them since 2.9. Subtitles are off by default since 2.9 too.)
+  zooms, so Kliper doesn't do them since 2.9. Subtitles are off by default since 2.9 too.)
 
 What performs (views):
 - Chaos/panic in party games (How to Fish): median ~11k views vs ~660 for the rest.

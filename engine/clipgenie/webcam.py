@@ -49,7 +49,7 @@ def _detector():
             return [tuple(int(v) for v in f[:4]) for f in faces]
         return run_yunet
     if not hasattr(cv2, "CascadeClassifier"):
-        raise RuntimeError("Face model missing - reinstall Klipon")
+        raise RuntimeError("Face model missing - reinstall Kliper")
     casc = cv2.CascadeClassifier(os.path.join(cv2.data.haarcascades, "haarcascade_frontalface_default.xml"))
 
     def run_haar(gray):

@@ -1,12 +1,12 @@
-; Klipon Setup.exe (Inno Setup 6). Build:
-;   "K:\KliponBuild\InnoSetup6\ISCC.exe" /DSrc="<staged Klipon folder>" /O"<out dir>" tools\installer\clipgenie.iss
-; <staged Klipon folder> = the "Klipon" folder tools/build_tester.py makes (app, engine, python, ffmpeg, README.md).
+; Kliper Setup.exe (Inno Setup 6). Build:
+;   "K:\KliperBuild\InnoSetup6\ISCC.exe" /DSrc="<staged Kliper folder>" /O"<out dir>" tools\installer\clipgenie.iss
+; <staged Kliper folder> = the "Kliper" folder tools/build_tester.py makes (app, engine, python, ffmpeg, README.md).
 ; Installs for this Windows user only (no admin), to the same place as before:
-; %LOCALAPPDATA%\BengoGames\Klipon by default; the user can pick another folder (the launcher only stops the
+; %LOCALAPPDATA%\BengoGames\Kliper by default; the user can pick another folder (the launcher only stops the
 ; engine of its own folder, so any path works).
 
 #ifndef Src
-  #error Pass /DSrc="...\Klipon"
+  #error Pass /DSrc="...\Kliper"
 #endif
 ;   the version comes from PUBLIC_VERSION in engine\clipgenie\server.py (the one the app shows); /DAppVer=x.y.z overrides
 #ifndef AppVer
@@ -42,15 +42,15 @@
 
 [Setup]
 AppId={{A3E5D1C2-6B7F-4E21-9C8D-5B1F0E2A7D44}
-AppName=Klipon
+AppName=Kliper
 AppVersion={#Label}
-AppVerName=Klipon {#Label}
+AppVerName=Kliper {#Label}
 AppPublisher=BengoGames
 AppCopyright=Copyright (C) 2026 BengoGames
 VersionInfoVersion={#AppVer}
 VersionInfoCompany=BengoGames
-VersionInfoDescription=Klipon {#Stage} Setup
-VersionInfoProductName=Klipon
+VersionInfoDescription=Kliper {#Stage} Setup
+VersionInfoProductName=Kliper
 VersionInfoProductVersion={#AppVer}
 PrivilegesRequired=lowest
 DefaultDirName={code:DefDir}
@@ -63,10 +63,10 @@ AppendDefaultDirName=yes
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0
-OutputBaseFilename=Klipon Setup {#Label}
+OutputBaseFilename=Kliper Setup {#Label}
 SetupIconFile=..\..\app\icon.ico
 UninstallDisplayIcon={app}\app\icon.ico
-UninstallDisplayName={#Trim("Klipon " + Stage)}
+UninstallDisplayName={#Trim("Kliper " + Stage)}
 ; dark purple theme to match the app (the creator: "extra premium")
 WizardStyle=modern dark hidebevels includetitlebar
 WizardBackColor=#150b28
@@ -84,11 +84,11 @@ RestartApplications=no
 Name: "en"; MessagesFile: "compiler:Default.isl"
 
 [Messages]
-WelcomeLabel2=This will install Klipon {#Label} on your computer.%n%n{#BetaNote}Klipon turns your Twitch streams and clips into TikToks: webcam + gameplay, cuts, titles and subtitles.%n%nYou need about 5 GB of free space. An NVIDIA graphics card makes it much faster.
-FinishedLabel=Klipon is installed.%n%nThe first stream takes a bit longer: it downloads the speech model once (about 0.5 GB).
+WelcomeLabel2=This will install Kliper {#Label} on your computer.%n%n{#BetaNote}Kliper turns your Twitch streams and clips into TikToks: webcam + gameplay, cuts, titles and subtitles.%n%nYou need about 5 GB of free space. An NVIDIA graphics card makes it much faster.
+FinishedLabel=Kliper is installed.%n%nThe first stream takes a bit longer: it downloads the speech model once (about 0.5 GB).
 
 [Tasks]
-Name: "desktopicon"; Description: "Put Klipon on the Desktop"; GroupDescription: "Shortcuts:"
+Name: "desktopicon"; Description: "Put Kliper on the Desktop"; GroupDescription: "Shortcuts:"
 
 [Files]
 Source: "{#Src}\app\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -102,25 +102,25 @@ Source: "{#Src}\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Type: files; Name: "{app}\uninstall.ps1"
 
 [Icons]
-Name: "{autoprograms}\Klipon"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Klipon: Twitch streams to TikToks"; Check: not IsTest
-Name: "{autodesktop}\Klipon"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Klipon: Twitch streams to TikToks"; Tasks: desktopicon; Check: not IsTest
+Name: "{autoprograms}\Kliper"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Kliper: Twitch streams to TikToks"; Check: not IsTest
+Name: "{autodesktop}\Kliper"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Kliper: Twitch streams to TikToks"; Tasks: desktopicon; Check: not IsTest
 
 [Run]
-Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; Description: "Open Klipon now"; Flags: postinstall nowait skipifsilent; Check: not IsTest
+Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; Description: "Open Kliper now"; Flags: postinstall nowait skipifsilent; Check: not IsTest
 
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""{code:StopCmd}"""; Flags: runhidden waituntilterminated; RunOnceId: "StopEngine"
 
 [UninstallDelete]
-; app files + what Klipon downloads next to them (speech models, cache, window profile).
+; app files + what Kliper downloads next to them (speech models, cache, window profile).
 ; Settings / library in %APPDATA% and the finished videos are kept.
 Type: filesandordirs; Name: "{app}"
-; downloads Klipon keeps in AppData whatever folder it was installed to (speech models, stream cache, window)
-Type: filesandordirs; Name: "{localappdata}\BengoGames\Klipon\models"; Check: not IsTest
-Type: filesandordirs; Name: "{localappdata}\BengoGames\Klipon\cache"; Check: not IsTest
-Type: filesandordirs; Name: "{localappdata}\BengoGames\Klipon\window"; Check: not IsTest
-Type: filesandordirs; Name: "{localappdata}\BengoGames\Klipon\window2"; Check: not IsTest
-Type: dirifempty; Name: "{localappdata}\BengoGames\Klipon"; Check: not IsTest
+; downloads Kliper keeps in AppData whatever folder it was installed to (speech models, stream cache, window)
+Type: filesandordirs; Name: "{localappdata}\BengoGames\Kliper\models"; Check: not IsTest
+Type: filesandordirs; Name: "{localappdata}\BengoGames\Kliper\cache"; Check: not IsTest
+Type: filesandordirs; Name: "{localappdata}\BengoGames\Kliper\window"; Check: not IsTest
+Type: filesandordirs; Name: "{localappdata}\BengoGames\Kliper\window2"; Check: not IsTest
+Type: dirifempty; Name: "{localappdata}\BengoGames\Kliper"; Check: not IsTest
 
 [Code]
 { /CGTEST on the command line: no shortcuts, no settings, no start (for checking a copy in another folder with /DIR=) }
@@ -133,12 +133,12 @@ end;
 function DefDir(Param: String): String;
 begin
   if IsTest then
-    Result := ExpandConstant('{%TEMP}\KliponSetupTest\Klipon')
+    Result := ExpandConstant('{%TEMP}\KliperSetupTest\Kliper')
   else
-    Result := ExpandConstant('{localappdata}\BengoGames\Klipon');
+    Result := ExpandConstant('{localappdata}\BengoGames\Kliper');
 end;
 
-{ stops only the Klipon running from THIS folder }
+{ stops only the Kliper running from THIS folder }
 function StopCmdFor(Dir: String): String;
 begin
   Result := 'Get-CimInstance Win32_Process -Filter ''Name=\"pythonw.exe\" OR Name=\"python.exe\"'' | ' +
@@ -155,7 +155,7 @@ function PrepareToInstall(var NeedsRestart: Boolean): String;
 var
   Code: Integer;
 begin
-  { stop a running Klipon so its files can be replaced (never in test mode) }
+  { stop a running Kliper so its files can be replaced (never in test mode) }
   if not IsTest then
     Exec('powershell.exe', '-NoProfile -ExecutionPolicy Bypass -Command "' + StopCmdFor(WizardDirValue) + '"', '',
        SW_HIDE, ewWaitUntilTerminated, Code);
@@ -169,7 +169,7 @@ begin
   if (CurStep = ssPostInstall) and not IsTest then
   begin
     { first run: empty name tag (the welcome screen asks for the Twitch name); plain ASCII, no BOM }
-    Dir := ExpandConstant('{userappdata}\BengoGames\Klipon');
+    Dir := ExpandConstant('{userappdata}\BengoGames\Kliper');
     ForceDirectories(Dir);
     if not FileExists(Dir + '\settings.json') then
       SaveStringToFile(Dir + '\settings.json', '{ "style": { "watermark": "" } }', False);

@@ -1,1 +1,1 @@
-"""Klipon engine — BengoGames."""
+"""Kliper engine — BengoGames."""

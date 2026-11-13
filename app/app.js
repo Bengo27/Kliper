@@ -1,4 +1,4 @@
-/* Klipon app — BengoGames */
+/* Kliper app — BengoGames */
 (function () {
   "use strict";
   var TOKEN = window.CG_TOKEN;
@@ -28,7 +28,7 @@
   }
 
   function api(method, url, body) {
-    return fetch(url, { method: method, headers: { "Content-Type": "application/json", "X-Klipon-Token": TOKEN },
+    return fetch(url, { method: method, headers: { "Content-Type": "application/json", "X-Kliper-Token": TOKEN },
       body: body ? JSON.stringify(body) : undefined })
       .then(function (r) { return r.json().then(function (d) { if (!r.ok || d.error) throw new Error(d.error || "HTTP " + r.status); return d; }); });
   }
@@ -38,7 +38,7 @@
       var j;
       // a check can fail for a moment while the PC is busy rendering: the job is still running, so keep waiting
       try { j = await api("GET", "/job?id=" + id); misses = 0; }
-      catch (e) { if (++misses > 30) throw new Error("הקשר עם המנוע של קליפון נותק. סגרו את קליפון ופתחו מחדש."); await sleep(2000); continue; }
+      catch (e) { if (++misses > 30) throw new Error("הקשר עם המנוע של קליפר נותק. סגרו את קליפר ופתחו מחדש."); await sleep(2000); continue; }
       if (onp) onp(j.progress, j.message);
       if (j.status === "done") return j.result;
       if (j.status === "error") throw new Error(j.message);
@@ -56,7 +56,7 @@
   function renderNews() {
     var n = (state.lib && state.lib.news) || {}, bar = $("newsBar");
     var newer = !!(n.latest && verNum(n.latest) > verNum(state.lib.version));
-    var text = (newer ? "קליפון " + n.latest + " יצאה. " : "") + (n.notice || "");
+    var text = (newer ? "קליפר " + n.latest + " יצאה. " : "") + (n.notice || "");
     var hidden = "";
     try { hidden = localStorage.getItem("cg_news_hidden") || ""; } catch (e) {}
     bar.classList.toggle("hidden", !text.trim() || hidden === newsKey(n));
@@ -72,7 +72,7 @@
     document.body.classList.toggle("no-ai", !!state.lib.public && !state.lib.server_ai);
     document.body.classList.toggle("no-key", !!state.lib.public);
     document.body.classList.toggle("pro-locked", !!state.lib.public && !state.lib.pro);
-    if (state.lib.version) { $("appVersion").textContent = "v" + state.lib.version; $("setTitle").textContent = "הגדרות · קליפון v" + state.lib.version + (state.lib.public ? " בטא" : ""); }
+    if (state.lib.version) { $("appVersion").textContent = "v" + state.lib.version; $("setTitle").textContent = "הגדרות · קליפר v" + state.lib.version + (state.lib.public ? " בטא" : ""); }
     renderNews();
     renderSide(); renderMain(); renderAddLooks();
     var busy = state.lib.streams.some(function (s) { return s.status === "processing" || s.status === "queued"; });
@@ -222,7 +222,7 @@
     return out + (out ? " · " : "") + "עוד בערך " + fmtMins(Math.max(30, est)) + "";
   }
 
-  /* rotating messages while Klipon is hunting for TikToks */
+  /* rotating messages while Kliper is hunting for TikToks */
   var FUN = ["מחפש קליפים…", "מקשיב לקטעים הרועשים…", "קורא את הצ'אט…", "מחפש את הרגעים המצחיקים…",
     "צד קלאצ'ים…", "סופר צחוקים וצעקות…", "בודק את המשחק…", "מסדר את הקליפים הכי טובים…",
     "חותך את החלקים המשעממים…", "בוחר את הרגעים הכי טובים…"];
@@ -292,7 +292,7 @@
     showWhy(whyHost(btn), v === "down", []);
     try {
       var r = await api("POST", "/library/feedback", { key: key, clip_id: id, vote: v });
-      if (v) toast((v === "up" ? "הבנתי: עוד כאלה. " : "הבנתי: פחות כאלה. סמנו מה לא היה טוב כדי שיבין למה. ") + "קליפון למד מ-" + (r.likes + r.dislikes) + " דירוגים.");
+      if (v) toast((v === "up" ? "הבנתי: עוד כאלה. " : "הבנתי: פחות כאלה. סמנו מה לא היה טוב כדי שיבין למה. ") + "קליפר למד מ-" + (r.likes + r.dislikes) + " דירוגים.");
     } catch (err) { toast(err.message, true); }
   }
   async function sendWhy(key, id, chip) {
@@ -1133,7 +1133,7 @@
     $("btnSyncViews").addEventListener("click", syncViews);
     $("btnRules").addEventListener("click", async function () {
       var b = this; b.disabled = true; b.textContent = "חושב…";
-      try { showLearned(await api("POST", "/taste/rules", {})); toast("עודכן מה שקליפון יודע על הטעם שלך."); }
+      try { showLearned(await api("POST", "/taste/rules", {})); toast("עודכן מה שקליפר יודע על הטעם שלך."); }
       catch (e) { toast(e.message, true); }
       finally { b.disabled = false; b.textContent = "עדכון עכשיו"; }
     });
@@ -1309,7 +1309,7 @@
         var url = st.url + "?open=" + encodeURIComponent(ed.key + "|" + ed.id);
         var qr = qrcode(0, "M"); qr.addData(url); qr.make(); $("exportQRImg").innerHTML = qr.createImgTag(5, 0);
         $("exportQR").classList.remove("hidden");
-        if (turned) toast("הגישה מהטלפון פועלת (הגדרות ← קליפון בטלפון).");
+        if (turned) toast("הגישה מהטלפון פועלת (הגדרות ← קליפר בטלפון).");
       } catch (e) { toast(e.message, true); }
     });
     $("btnMarkPosted").addEventListener("click", async function () { await saveField({ status: "posted" }); toast("סומן כפורסם."); });
@@ -1370,23 +1370,23 @@
     var a = acct || {}, inn = !!a.signed_in, plan = $("acctPlan");
     if (a.free && !a.banned && !a.closed) usedUp = false;
     var tr = a.plan === "trial" && !a.free;   // a counted trial (not the free version)
-    $("acctTitle").textContent = a.free && !inn ? "ברוכים הבאים לקליפון"
-      : a.free ? "קליפון חינמי"
+    $("acctTitle").textContent = a.free && !inn ? "ברוכים הבאים לקליפר"
+      : a.free ? "קליפר חינמי"
       : !inn ? "Start your free trial"
       : usedUp || (a.plan === "trial" && a.left <= 0) ? "Your free trial is used up"
       : a.plan === "trial" ? "Free trial" : "Your account";
     if (inn && a.banned) $("acctTitle").textContent = "Account blocked";
     if (inn && a.closed) $("acctTitle").textContent = "The beta has ended";
-    $("acctText").textContent = inn && a.banned ? "This account is blocked from Klipon."
-      : inn && a.closed ? "Thanks for testing Klipon! The beta is over. Your videos are still in your Videos folder."
-      : a.free && !inn ? "קליפון חינמי. בלי הגבלות, כל הפיצ'רים."
+    $("acctText").textContent = inn && a.banned ? "This account is blocked from Kliper."
+      : inn && a.closed ? "Thanks for testing Kliper! The beta is over. Your videos are still in your Videos folder."
+      : a.free && !inn ? "קליפר חינמי. בלי הגבלות, כל הפיצ'רים."
       : a.free ? "Unlimited streams and TikToks, every feature. Enjoy!"
       : !inn
       ? "Your first " + (a.limit || 3) + " streams or clips are free. Sign in with Twitch, or carry on without it (the trial is then kept for this PC)."
       : tr && a.left <= 0
         ? "You've used your " + a.limit + " free streams. Upgrade to keep making TikToks. Everything you already made stays here."
         : tr ? "Each new stream or clip you add uses one. Making and re-making TikToks from it is free."
-        : "Unlimited streams. Thanks for supporting Klipon!";
+        : "Unlimited streams. Thanks for supporting Kliper!";
     plan.classList.toggle("hidden", !inn);
     plan.textContent = inn ? (a.user && a.user.guest ? "No Twitch login" + (a.user.name && a.user.name !== "Guest" ? " · " + a.user.name : "") : "Signed in as " + ((a.user && a.user.name) || "")) + (tr ? " · " + a.left + " מתוך " + a.limit + " free left" : "") : "";
     $("acctSignIn").classList.toggle("hidden", inn);
@@ -1424,7 +1424,7 @@
     var b = $("acctGuestGo"); b.disabled = true;
     try {
       var a = await api("POST", "/account/guest", { name: $("acctGuestName").value.trim() });
-      showAccount(a); toast(a.free ? "You're in. Enjoy Klipon!" : "Free trial started."); openAcct();
+      showAccount(a); toast(a.free ? "You're in. Enjoy Kliper!" : "Free trial started."); openAcct();
       if (a.signed_in) closeAcct();
     } catch (e) { toast(e.message, true); }
     b.disabled = false;
@@ -1445,7 +1445,7 @@
     });
     $("acctClose").addEventListener("click", closeAcct);
     $("acctSignOut").addEventListener("click", async function () {
-      if (!confirm("Sign out of Klipon?")) return;
+      if (!confirm("Sign out of Kliper?")) return;
       showAccount(await api("POST", "/account/signout", {}).catch(function () { return acct; })); openAcct();
     });
   }
@@ -1454,10 +1454,10 @@
     var m = /^(SIGNIN|TRIAL_USED|UPDATE|PRO):\s*(.*)$/.exec(msg || "");
     if (!m) return false;
     if (m[1] === "PRO") { proBox(m[2]); return true; }
-    if (m[1] === "SIGNIN") { toast("אין חיבור לשרת של קליפון. בדקו את האינטרנט ונסו שוב."); return true; }
+    if (m[1] === "SIGNIN") { toast("אין חיבור לשרת של קליפר. בדקו את האינטרנט ונסו שוב."); return true; }
     loadAccount(true).then(function () {
       if (m[1] === "SIGNIN") openAcct(); else openAcct(true);
-      if (m[1] !== "SIGNIN") { $("acctTitle").textContent = m[1] === "UPDATE" ? "Update Klipon" : $("acctTitle").textContent; $("acctText").textContent = m[2]; }
+      if (m[1] !== "SIGNIN") { $("acctTitle").textContent = m[1] === "UPDATE" ? "Update Kliper" : $("acctTitle").textContent; $("acctText").textContent = m[2]; }
       var n = (state.lib && state.lib.news) || {};
       $("acctUpdate").classList.toggle("hidden", !(m[1] === "UPDATE" && n.url) || IS_PHONE);
     });
@@ -1475,7 +1475,7 @@
     if (!document.body.classList.contains("pro-locked")) return;
     var el = e.target.closest && e.target.closest(".pro-only"); if (!el) return;
     e.preventDefault(); e.stopImmediatePropagation();
-    proBox((PRO_NAMES[el.dataset.pro] || "This") + " is part of Klipon Pro, coming soon. Your free trial had it unlocked.");
+    proBox((PRO_NAMES[el.dataset.pro] || "This") + " is part of Kliper Pro, coming soon. Your free trial had it unlocked.");
   }, true);
   $("proClose").addEventListener("click", function () { $("proModal").classList.add("hidden"); });
   $("proModal").addEventListener("click", function (e) { if (e.target === $("proModal")) $("proModal").classList.add("hidden"); });

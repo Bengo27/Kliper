@@ -4,7 +4,7 @@ import re
 W, H = 1080, 1920
 
 FONTS = {
-    # Hebrew + Latin (Klipon's defaults): Rubik, Heebo, Secular One, Suez One (SIL OFL, engine/fonts)
+    # Hebrew + Latin (Kliper's defaults): Rubik, Heebo, Secular One, Suez One (SIL OFL, engine/fonts)
     "Rubik Black": {"size": 100, "spacing": 0},
     "Rubik ExtraBold": {"size": 96, "spacing": 0},
     "Heebo ExtraBold": {"size": 100, "spacing": 0},
@@ -48,7 +48,7 @@ def _editor_text(w):
         return "*" + m.group(1).lower().rstrip("ing").replace("laugh", "laughs") + "*", True
     if _LAUGH.match(_re.sub(r"[^\w]", "", t)):
         return "*laughs*", True
-    if _LAUGH_HE.match(_re.sub(r"[^\w]", "", t)):   # Klipon: "חחחחח" -> *צוחק*
+    if _LAUGH_HE.match(_re.sub(r"[^\w]", "", t)):   # Kliper: "חחחחח" -> *צוחק*
         return "*צוחק*", True
     return _censor(t), False
 

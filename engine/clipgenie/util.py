@@ -51,7 +51,7 @@ def data_dir():
     """Per-user folder for settings, tokens, caches."""
     if sys.platform == "win32":
         base = os.environ.get("APPDATA") or os.path.expanduser("~")
-        d = os.path.join(base, "BengoGames", "Klipon")
+        d = os.path.join(base, "BengoGames", "Kliper")
     else:
         d = os.path.join(os.path.expanduser("~"), ".clipgenie")
     os.makedirs(d, exist_ok=True)
@@ -70,7 +70,7 @@ def _find_bin(name):
     found = shutil.which(name)
     if found:
         return found
-    raise RuntimeError(f"{name} not found. Re-run the Klipon installer.")
+    raise RuntimeError(f"{name} not found. Re-run the Kliper installer.")
 
 
 def ffmpeg():

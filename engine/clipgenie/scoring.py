@@ -20,7 +20,7 @@ SPOKEN = [
     (r"\b(vac|walling|wallhack(ing|s)?|cheater|cheating|aimbot|spinbot)\b", 1.5),
     (r"\b(caught|exposed|snitch(ing|ed)?)\b", 1.4), (r"\bwhat is that\b", 1.3),
 ]
-# Klipon: what Israeli streamers say at clip-worthy moments. Hebrew glues small words to the front of the next
+# Kliper: what Israeli streamers say at clip-worthy moments. Hebrew glues small words to the front of the next
 # word (ו, ה, ש, ב, ל, כ, מ: "ואין מצב", "שמה זה"), so every phrase may start with up to two of them.
 HE = "(?:[והשבלכמ]{0,2})"
 SPOKEN_HE = [
@@ -127,7 +127,7 @@ FUNNY = [
     (r"\b(one time|i remember|story ?time|when i was (a kid|young|little)|back in the day|i used to)\b", 1.3),
     (r"\bdid you (hear|see|know)\b|\byou (won'?t|will never) believe\b", 1.2),
 ]
-# Klipon: the same for Hebrew banter, roasts and stories
+# Kliper: the same for Hebrew banter, roasts and stories
 FUNNY += [
     (r"(ח[חה]){2,}ח?|(הא){3,}|(הה){3,}|" + HE + r"(צוחק|צוחקת|צחקתי|מתפוצץ מצחוק|מתגלגל)", 2.2),
     (HE + r"(אני|אנחנו) (מת|מתה|מתים|בוכה|גמור|גמורה)|לא יכול (לנשום|להפסיק)", 2.0),
@@ -360,14 +360,14 @@ SUSPENSE = re.compile(
     r"\b(three,? two,? one|3,? 2,? 1|two,? one|here we go|we go|please,? please|come on,? come on|"
     r"left or right|let'?s see|moment of truth|upgrade|upgrader|spin|opening|open it|roll|"
     r"\d+ ?(%|percent)|all in|double or nothing|last round|clutch|1v\d|one v)\b|"
-    # Klipon: Hebrew build-up
+    # Kliper: Hebrew build-up
     r"(?:[והשבלכמ]{0,2})(שלוש,? שתיים,? אחת|שלוש,? שתיים|יאללה בוא נראה|בוא נראה|בואו נראה|רגע האמת|קדימה קדימה|"
     r"בבקשה,? בבקשה|נו,? נו|ימינה או שמאלה|פותח|פותחים|אני פותח|הכל או כלום|כפול או כלום|סיבוב אחרון|ראונד אחרון|"
     r"אחד על|אחד נגד|הימור|מהמר|מהמרים|מסובב|סיבוב)", re.I)
 OUTCOME = re.compile(
     r"\b(no way|what the|oh my (god|days)|let'?s go+|yes+|no+o|i won|we won|i lost|lost it|"
     r"bullshit|fuck|shit|are you (kidding|serious)|unlucky|lucky|insane|holy|brother|bro+)\b|"
-    # Klipon: Hebrew outcomes
+    # Kliper: Hebrew outcomes
     r"(?:[והשבלכמ]{0,2})(אין מצב|מה זה|יאללה|כן+(?!\w)|לא+ ?לא+|זכיתי|זכינו|ניצחנו|ניצחתי|הפסדתי|הפסדנו|"
     r"איזה מזל|איזה באסה|באסה|וואו+|פאק|שיט|זין|כוס ?אמק|אתה רציני|מטורף|פסיכי|אחי+(?!\w))", re.I)
 

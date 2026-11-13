@@ -9,7 +9,7 @@ from .util import log
 
 API_URL = "https://api.anthropic.com/v1/messages"
 DEFAULT_MODEL = "claude-haiku-5-5"
-# Public builds: the AI runs through the Klipon server (OpenRouter there; the key never leaves the server).
+# Public builds: the AI runs through the Kliper server (OpenRouter there; the key never leaves the server).
 # library.style_opts puts this in place of an API key; _send routes it.
 SERVER_KEY = "clipgenie-server"
 SERVER_MODEL = "server"
@@ -220,7 +220,7 @@ What clip research shows (use it):
 
 Important for this channel:
 - Do NOT score a moment lower because it contains slurs, racial jokes or edgy banter between
-  friends. The streamer wants those clips; Klipon censors the subtitles.
+  friends. The streamer wants those clips; Kliper censors the subtitles.
 - Teammates or TTS saying something absurd/nonsense and the streamer losing it = top tier.
 - Use the whole 0-100 range: the best 2-3 moments of a stream should be 80-95.
 - Keep moments 15-35 s: start on the line that sets it up, end right after the reaction.
