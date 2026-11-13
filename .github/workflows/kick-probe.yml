@@ -1,0 +1,12 @@
+# Finds the chat websocket settings kick.com uses (when Kick changes them, the live chat needs the new values).
+name: Kick chat probe
+on:
+  push:
+    paths: ["tools/find_kick_pusher.py", ".github/workflows/kick-probe.yml"]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install "curl_cffi<0.18"
+      - run: python tools/find_kick_pusher.py

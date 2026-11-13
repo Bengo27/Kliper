@@ -115,21 +115,59 @@
   function renderSide() {
     $("newCount").textContent = allClips(true).filter(function (x) { return x.c.status === "new"; }).length;
     document.querySelector('.stream-item.all').classList.toggle("on", state.view === "__new");
+    // Kliper: each stream says clearly what it is (platform, channel, title, date) and can be removed right here
     $("streamList").innerHTML = streams().map(function (s) {
       var n = (s.clips || []).filter(function (c) { return c.status !== "discarded"; }).length;
-      var sub = s.status === "ready" ? n + " קליפים" : (s.status === "error" ? "נכשל" : (s.message || "ממתין"));
-      var bar = (s.status === "processing") ? '<span class="si-bar"><div style="width:' + Math.round((s.progress || 0) * 100) + '%"></div></span>' : "";
-      return '<button class="stream-item' + (state.view === s.key ? " on" : "") + '" data-key="' + esc(s.key) + '">' +
-        '<span class="si-title">' + esc(s.title || "סטרים") + '</span>' +
-        '<span class="si-sub"><span class="dot ' + esc(s.status) + '"></span>' + esc((s.date ? s.date + " · " : "") + sub) + '</span>' + bar + '</button>';
-    }).join("") || '<p class="muted small" style="padding:6px 10px">עדיין אין סטרימים.</p>';
+      var pf = platformOf(s), pct = Math.round((s.progress || 0) * 100);
+      var st = s.status === "ready" ? "✅ מוכן · " + n + " קליפים"
+        : s.status === "error" ? "⚠️ נכשל: " + shortErr(s.message)
+        : s.status === "queued" ? "⏳ ממתין בתור"
+        : s.status === "processing" ? "⚙️ " + (s.message || "עובד") + (pct ? " · " + pct + "%" : "")
+        : (s.message || "");
+      var bar = s.status === "processing" ? '<span class="si-bar"><div style="width:' + pct + '%"></div></span>' : "";
+      var ch = s.channel || s.uploader || "";
+      return '<div class="stream-item si2' + (state.view === s.key ? " on" : "") + (s.status === "error" ? " err" : "") + '" role="button" tabindex="0" data-key="' + esc(s.key) + '" title="' + esc((s.title || "") + (s.source ? "\n" + s.source : "")) + '">' +
+        '<span class="si-top"><span class="pf pf-' + pf.id + '">' + pf.label + '</span>' +
+        (ch ? '<strong class="si-ch">' + esc(ch) + '</strong>' : '') + (s.from_live ? '<span class="si-live" title="מהמעקב אחרי הלייב">🔴</span>' : '') +
+        '<button class="si-del" data-del="' + esc(s.key) + '" title="הסרה מהרשימה" aria-label="הסרה מהרשימה">🗑</button></span>' +
+        '<span class="si-title">' + esc(s.title || (s.kind === "clip" ? "קליפ" : "סטרים")) + '</span>' +
+        '<span class="si-sub">' + esc(s.date ? s.date + (s.duration ? " · " + fmtLen(s.duration) : "") : (s.duration ? fmtLen(s.duration) : "")) + '</span>' +
+        '<span class="si-st st-' + esc(s.status || "") + '">' + esc(st) + '</span>' + bar + '</div>';
+    }).join("") || '<p class="muted small" style="padding:6px 10px">עדיין אין סטרימים. הדביקו קישור למעלה כדי להתחיל.</p>';
+  }
+
+  function platformOf(s) {
+    var src = String(s.source || s.key || "").toLowerCase();
+    if (/kick\.com|^kick-/.test(src)) return { id: "kick", label: "Kick" };
+    if (/twitch\.tv|^twitch_/.test(src)) return { id: "twitch", label: "Twitch" };
+    if (/youtube\.com|youtu\.be|^yt-/.test(src)) return { id: "youtube", label: "YouTube" };
+    return { id: "file", label: "קובץ" };
+  }
+  function fmtLen(sec) {
+    sec = Math.round(Number(sec) || 0); var h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60);
+    return h ? h + " שע' " + m + " דק'" : m + " דק'";
+  }
+  function shortErr(m) {
+    m = String(m || "שגיאה");
+    if (/404|not found|deleted or private/i.test(m)) return "ה-VOD לא נמצא (נמחק או פרטי?)";
+    if (/network|timed out|connection|getaddrinfo/i.test(m)) return "בעיית אינטרנט, נסו שוב";
+    return m.length > 70 ? m.slice(0, 70) + "…" : m;
+  }
+  async function removeStream(key) {
+    var s = streamByKey(key) || {};
+    if (!confirm("להסיר את \"" + (s.title || "הסטרים") + "\" מהרשימה?\nקבצי הווידאו שכבר נוצרו נשארים בתיקייה.")) return;
+    try {
+      await api("POST", "/library/remove_stream", { key: key });
+      if (state.view === key) state.view = "__new";
+      toast("הוסר מהרשימה."); refresh();
+    } catch (e) { toast(e.message, true); }
   }
 
   function card(x) {
     var c = x.c, chip = c.status === "posted" ? '<span class="chip posted">פורסם</span>' : c.status === "edited" ? '<span class="chip edited">נערך</span>' : c.status === "new" ? '<span class="chip">חדש</span>' : "";
     return '<button class="card" data-key="' + esc(x.s.key) + '" data-id="' + esc(c.id) + '">' +
       '<div class="thumb">' + (c.thumb ? '<img alt="" loading="lazy" src="' + media(c.thumb, Math.round(c.rendered_at || 0)) + '">' : "") + chip +
-      '<span class="dur">' + fmt(c.duration) + '</span>' + ((c.checks || []).length ? '<span class="warn" title="Self-check: something to look at">⚠ check</span>' : "") + '</div>' +
+      '<span class="dur">' + fmt(c.duration) + '</span>' + ((c.checks || []).length ? '<span class="warn" title="בדיקה עצמית: משהו שכדאי לבדוק">⚠ לבדוק</span>' : "") + '</div>' +
       '<div class="body"><span class="t">' + esc(c.title) + '</span><span class="m">Score ' + esc(c.score) + ' · ' + esc(c.start_label || "") + (c.views != null ? ' · 👁 ' + nice(c.views) : "") + '</span></div></button>';
   }
 
@@ -165,7 +203,9 @@
       $("findBox").classList.add("hidden");
     } else {
       $("viewTitle").textContent = s.title || "סטרים";
-      $("viewSub").textContent = s.status === "error" ? "Failed: " + (s.message || "") : ((s.date || "") + (s.duration ? " · " + fmt(s.duration) + (s.kind === "clip" ? " קליפ" : " סטרים") : "") + (s.folder ? " · נשמר ב-" + s.folder : ""));
+      var pf = platformOf(s), who = (s.channel ? s.channel + " ב-" + pf.label : pf.label);
+      $("viewSub").textContent = s.status === "error" ? "⚠️ נכשל: " + shortErr(s.message) + " (" + (s.message || "") + ")"
+        : (who + (s.date ? " · " + s.date : "") + (s.duration ? " · " + fmtLen(s.duration) : "") + (s.folder ? " · נשמר ב-" + s.folder : ""));
       items = (s.clips || []).filter(function (c) { return c.status !== "discarded"; }).map(function (c) { return { s: s, c: c }; });
       html = items.map(card).join("");
       var cands = s.extra_candidates || [];
@@ -1066,6 +1106,8 @@
       renderAddLooks();
     });
     document.querySelector(".streams").addEventListener("click", function (e) {
+      var del = e.target.closest("[data-del]");
+      if (del) { e.stopPropagation(); removeStream(del.dataset.del); return; }
       var b = e.target.closest(".stream-item"); if (!b) return;
       state.view = b.dataset.key; renderSide(); renderMain(); $("grid").scrollIntoView({ block: "start" });
     });
@@ -1102,10 +1144,7 @@
     });
     $("btnMakeSel").addEventListener("click", function () { var ids = selectedMoments(); if (ids.length) makeMoments(ids); });
     $("btnFolder").addEventListener("click", function () { api("POST", "/library/open_folder", { key: state.view }).catch(function (e) { toast(e.message, true); }); });
-    $("btnRemoveStream").addEventListener("click", async function () {
-      if (!confirm("להסיר את הסטרים מהרשימה? קבצי הווידאו נשארים בתיקייה.")) return;
-      await api("POST", "/library/remove_stream", { key: state.view }); state.view = "__new"; refresh();
-    });
+    $("btnRemoveStream").addEventListener("click", function () { removeStream(state.view); });
     $("btnSettings").addEventListener("click", openSettings);
     $("btnSaveSettings").addEventListener("click", saveSettings);
     $("btnMusic").addEventListener("click", async function () {
