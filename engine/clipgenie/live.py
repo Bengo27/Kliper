@@ -18,6 +18,7 @@ import time
 from .util import data_dir, log
 
 PUSHER_URL = "wss://ws-us2.pusher.com/app/32cbd69e4b950bf97679?protocol=7&client=js&version=8.4.0&flash=false"
+LIVE_CHAT = False   # Kick moved its chat off Pusher (Nov 2026); chat isn't needed for shorts, so it's off
 POLL_OFF = 90       # seconds between "are you live?" checks
 POLL_LIVE = 60
 VOD_WAIT_MAX = 6 * 3600   # give up looking for the VOD after this long
@@ -243,10 +244,10 @@ class LiveWatcher(threading.Thread):
                     "chatroom": (data.get("chatroom") or {}).get("id"), "status": "live", "ended": None}
         self._save(meta)
         self.session = meta
-        if meta.get("chatroom"):
+        if meta.get("chatroom") and LIVE_CHAT:
             self.rec = ChatRecorder(meta["chatroom"], os.path.join(d, "chat.jsonl"))
             self.rec.start()
-        log.info("Live: %s is live (%s), recording chat", slug, meta["title"])
+        log.info("Live: %s is live (%s)", slug, meta["title"])
 
     def _end_live(self):
         if self.rec:

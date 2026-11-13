@@ -92,12 +92,11 @@
     var t;
     if (lv.live) {
       var mins = lv.since ? Math.max(0, Math.round((Date.now() / 1000 - lv.since) / 60)) : 0;
-      t = "<strong>🔴 בלייב עכשיו</strong><br><span class='tiny muted'>" + esc(lv.title || lv.channel) + "</span><br><span class='tiny'>" +
-          (lv.chat_ok === false ? "הצ'אט של Kick לא נקרא כרגע (עדיין עובדים על זה)" : (lv.chat || 0).toLocaleString("he-IL") + " הודעות צ'אט נאספו") +
-          " · " + mins + " דק'</span>";
+      t = "<strong>🔴 בלייב עכשיו · " + mins + " דק'</strong><br><span class='tiny muted'>" + esc(lv.title || lv.channel) +
+          "</span><br><span class='tiny'>כשהשידור ייגמר קליפר יעבד את ה-VOD לבד.</span>";
     } else {
       t = "<strong>👀 במעקב: kick.com/" + esc(lv.channel) + "</strong><br><span class='tiny muted'>" +
-          esc(lv.message || "כשתעלה לשידור קליפר יתחיל לאסוף את הצ'אט.") + "</span>";
+          esc(lv.message || "כשתסיים שידור, קליפר יתחיל לעבד אותו לבד.") + "</span>";
     }
     box.innerHTML = t; box.classList.remove("hidden"); box.classList.toggle("on-air", !!lv.live);
   }
