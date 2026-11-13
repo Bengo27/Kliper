@@ -39,4 +39,17 @@ with connect(url, open_timeout=15, additional_headers={"Origin": "https://kick.c
                 continue
             n += 1
             print("FRAME", part[:700])
+print("done ws test")
+import re
+html = S.get("https://kick.com/xqc", timeout=30).text
+for src in sorted(set(re.findall(r'src="([^"]+\.js[^"]*)"', html))):
+    url = src if src.startswith("http") else "https://kick.com" + src
+    js = S.get(url, timeout=30).text
+    i = js.find("viewer/v1/token")
+    if i < 0:
+        continue
+    print("##### client code in", url)
+    seg = js[i: i + 16000]
+    for m in re.finditer(r"\.send\(|JSON\.parse|onmessage|subscribe|\bevent\b|type:\"", seg):
+        print("--", seg[max(0, m.start() - 250): m.start() + 350].replace("\n", " "))
 print("done")
