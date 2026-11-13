@@ -55,15 +55,20 @@
   function newsKey(n) { return (n.latest || "") + "|" + (n.notice || ""); }
   function renderNews() {
     var n = (state.lib && state.lib.news) || {}, bar = $("newsBar");
-    var newer = !!(n.latest && verNum(n.latest) > verNum(state.lib.version));
-    var text = (newer ? "קליפר " + n.latest + " יצאה. " : "") + (n.notice || "");
+    var newer = !!n.newer || !!(n.latest && verNum(n.latest) > verNum(state.lib.version));
+    var text = n.newer ? (n.notice || "יש גרסה חדשה של קליפר.") : ((newer ? "קליפר " + n.latest + " יצאה. " : "") + (n.notice || ""));
     var hidden = "";
     try { hidden = localStorage.getItem("cg_news_hidden") || ""; } catch (e) {}
     bar.classList.toggle("hidden", !text.trim() || hidden === newsKey(n));
     $("newsText").textContent = text.trim();
     $("newsGet").classList.toggle("hidden", !(newer && n.url) || IS_PHONE);
   }
-  function openUpdate() { api("POST", "/open_update", {}).catch(function (e) { toast(e.message, true); }); }
+  function openUpdate() {
+    api("POST", "/open_update", {}).then(function () {
+      toast("מוריד את העדכון. ההתקנה תיפתח לבד: לחצו 'הבא' עד הסוף, וקליפר ייפתח מחדש.");
+      $("newsGet").disabled = true;
+    }).catch(function (e) { toast(e.message, true); });
+  }
 
   /* ---------------- library ---------------- */
   async function refresh() {

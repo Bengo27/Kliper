@@ -579,6 +579,10 @@ class Handler(BaseHTTPRequestHandler):
                     lib["streams"].pop(b["key"], None)
                     lb.save(lib)
                 return self._send(200, {"ok": True})
+            if u.path == "/open_update" and not _public():   # Kliper: download the new Setup.exe and open it
+                from . import updates
+                updates.install()
+                return self._send(200, {"ok": True})
             if u.path == "/open_update":   # 0.1.0: the admin dashboard's update link, in the normal browser
                 link = (_news().get("url") or "").strip()
                 if not re.match(r"^https://[^\s\"'<>]{3,500}$", link):
@@ -732,7 +736,11 @@ def _public():
 def _news():
     """0.1.0: update notice + message from the admin dashboard (public builds)."""
     if not _public():
-        return {}
+        try:   # Kliper: new installers from GitHub Releases
+            from . import updates
+            return updates.news()
+        except Exception:
+            return {}
     try:
         from . import licence
         return licence.news()

@@ -33,6 +33,8 @@ jobs:
           Remove-Item -Force "$env:STAGE\engine\vendor.zip" -ErrorAction SilentlyContinue
           Get-ChildItem -Recurse -Directory -Filter __pycache__ $env:STAGE | Remove-Item -Recurse -Force
           Copy-Item README.md, LICENSE "$env:STAGE\"
+          # the build number: the app compares it with the newest GitHub Release to offer updates
+          "BUILD = $env:GITHUB_RUN_NUMBER`n" | Set-Content -Encoding ascii "$env:STAGE\engine\clipgenie\_build.py"
 
       - name: Python (embeddable) + packages
         shell: pwsh

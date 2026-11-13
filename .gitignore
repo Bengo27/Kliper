@@ -27,3 +27,6 @@ __pycache__/
 
 # Wrangler cache (made when wrangler runs in the repo root)
 .wrangler/
+
+# written by CI into the installer
+engine/clipgenie/_build.py
