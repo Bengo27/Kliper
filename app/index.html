@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
 <script>try { document.documentElement.dataset.theme = localStorage.getItem("cg_theme") || "midnight"; } catch (e) {}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Klipon</title>
+<title>קליפון</title>
 <link rel="icon" href="icon.png">
 <link rel="stylesheet" href="style.css">
 <script>window.CG_TOKEN = "__CG_TOKEN__";</script>
@@ -16,69 +16,69 @@
 <header class="topbar">
   <div class="brand">
     <img class="brand-logo" src="icon.png" width="28" height="28" alt="">
-    <strong>Klipon <span class="beta-tag public-only">BETA</span> <span id="appVersion" class="ver"></span></strong>
+    <strong>קליפון <span class="beta-tag public-only">בטא</span> <span id="appVersion" class="ver"></span></strong>
   </div>
-  <nav class="steps" id="steps" aria-label="Steps">
-    <button class="step on" data-step="1"><i>1</i>Add stream</button>
-    <button class="step" data-step="2"><i>2</i>Pick moments</button>
-    <button class="step" data-step="3"><i>3</i>Edit</button>
-    <button class="step" data-step="4"><i>4</i>Export</button>
+  <nav class="steps" id="steps" aria-label="שלבים">
+    <button class="step on" data-step="1"><i>1</i>הוספת סטרים</button>
+    <button class="step" data-step="2"><i>2</i>בחירת רגעים</button>
+    <button class="step" data-step="3"><i>3</i>עריכה</button>
+    <button class="step" data-step="4"><i>4</i>ייצוא</button>
   </nav>
-  <button id="btnAccount" class="btn ghost sm acct hidden" title="Your Klipon account"></button>
-  <button id="btnSettings" class="btn ghost sm">⚙ Settings</button>
+  <button id="btnAccount" class="btn ghost sm acct hidden" title="החשבון שלך בקליפון"></button>
+  <button id="btnSettings" class="btn ghost sm">⚙ הגדרות</button>
 </header>
 <!-- 0.1.0: update available / message from the admin dashboard -->
 <div id="newsBar" class="news-bar hidden" role="status">
   <span id="newsText"></span>
-  <button id="newsGet" class="btn primary sm hidden">Download update</button>
-  <button id="newsClose" class="btn ghost sm" aria-label="Hide">✕</button>
+  <button id="newsGet" class="btn primary sm hidden">הורדת עדכון</button>
+  <button id="newsClose" class="btn ghost sm" aria-label="הסתרה">✕</button>
 </div>
 
 <!-- Sign in with Twitch + free trial (public builds only; licence.py) -->
 <div id="acctModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="acctTitle">
   <div class="sheet acct-sheet">
     <img class="acct-logo" src="icon.png" width="56" height="56" alt="">
-    <h2 id="acctTitle">Start your free trial</h2>
-    <p id="acctText" class="muted">Your first 3 streams or clips are free. Sign in with your Twitch account so we can keep track of your trial.</p>
+    <h2 id="acctTitle">התחלת ניסיון חינם</h2>
+    <p id="acctText" class="muted">3 הסטרימים או הקליפים הראשונים בחינם.</p>
     <div id="acctPlan" class="acct-plan hidden"></div>
-    <button id="acctSignIn" class="btn primary full twitch-btn">Sign in with Twitch</button>
-    <button id="acctGuest" class="btn ghost full">Continue without Twitch</button>
+    <button id="acctSignIn" class="btn primary full twitch-btn">כניסה עם Twitch</button>
+    <button id="acctGuest" class="btn ghost full">המשך בלי חשבון</button>
     <div id="acctGuestBox" class="acct-guest hidden">
-      <input id="acctGuestName" type="text" maxlength="25" placeholder="Your Twitch name (optional)" autocomplete="off">
-      <button id="acctGuestGo" class="btn primary full">Start free trial</button>
+      <input id="acctGuestName" type="text" maxlength="25" placeholder="שם הערוץ שלך (לא חובה)" autocomplete="off">
+      <button id="acctGuestGo" class="btn primary full">התחלת ניסיון חינם</button>
     </div>
-    <p id="acctWait" class="small muted hidden">Finish signing in in your browser, then come back here.</p>
-    <a id="acctBuy" class="btn primary full hidden" target="_blank" rel="noopener">Upgrade</a>
-    <button id="acctUpdate" class="btn primary full hidden">Download update</button>
-    <button id="acctSignOut" class="btn ghost full hidden">Sign out</button>
-    <button id="acctClose" class="btn ghost full">Close</button>
-    <p class="tiny muted acct-privacy">We only see your Twitch name, never your password. Your videos and streams stay on your PC.</p>
+    <p id="acctWait" class="small muted hidden">סיימו להתחבר בדפדפן וחזרו לכאן.</p>
+    <a id="acctBuy" class="btn primary full hidden" target="_blank" rel="noopener">שדרוג</a>
+    <button id="acctUpdate" class="btn primary full hidden">הורדת עדכון</button>
+    <button id="acctSignOut" class="btn ghost full hidden">התנתקות</button>
+    <button id="acctClose" class="btn ghost full">סגירה</button>
+    <p class="tiny muted acct-privacy">הסרטונים והסטרימים שלך נשארים על המחשב שלך.</p>
   </div>
 </div>
 <div id="proModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="proTitle">
   <div class="sheet acct-sheet">
     <img class="acct-logo" src="icon.png" width="56" height="56" alt="">
-    <h2 id="proTitle">Klipon <span class="pro-tag">PRO</span></h2>
+    <h2 id="proTitle">קליפון <span class="pro-tag">PRO</span></h2>
     <p id="proText" class="muted"></p>
     <ul class="pro-list small">
-      <li>CS2 kill feed, redrawn sharp</li>
-      <li>Save your own styles</li>
-      <li>Background music + your own sound effects</li>
-      <li>Pick part of a long VOD</li>
-      <li>Export straight to your phone</li>
-      <li>Unlimited streams, no watermark</li>
+      <li>קיל-פיד של CS2, מצויר מחדש בחדות</li>
+      <li>שמירת סגנונות משלך</li>
+      <li>מוזיקת רקע + אפקטים קוליים משלך</li>
+      <li>בחירת חלק מ-VOD ארוך</li>
+      <li>ייצוא ישר לטלפון</li>
+      <li>סטרימים ללא הגבלה, בלי סימן מים</li>
     </ul>
-    <button id="proClose" class="btn primary full">OK</button>
+    <button id="proClose" class="btn primary full">אישור</button>
   </div>
 </div>
 <div class="shell">
 
   <aside class="side">
-    <nav class="streams" aria-label="Streams">
+    <nav class="streams" aria-label="סטרימים">
       <button class="stream-item all on" data-key="__new">
-        <span class="si-title">New TikToks</span><span class="badge" id="newCount">0</span>
+        <span class="si-title">קליפים חדשים</span><span class="badge" id="newCount">0</span>
       </button>
-      <div class="side-label">Streams</div>
+      <div class="side-label">סטרימים</div>
       <div id="streamList"></div>
     </nav>
   </aside>
@@ -88,47 +88,47 @@
       <div class="hero-sp" aria-hidden="true">✨</div>
       <div class="hero-main">
       <div class="add-look">
-        <span class="add-look-label">1 · Pick an editing style</span>
-        <div id="addLook" class="look-chips" role="radiogroup" aria-label="Editing style for new TikToks"></div>
+        <span class="add-look-label">1 · בחרו סגנון עריכה</span>
+        <div id="addLook" class="look-chips" role="radiogroup" aria-label="סגנון עריכה לקליפים חדשים"></div>
       </div>
       <div class="add">
-        <label class="sr" for="addSrc">Twitch, YouTube or Kick link, or a video file</label>
-        <input id="addSrc" type="text" placeholder="2 · Paste a Twitch, YouTube or Kick link" autocomplete="off" spellcheck="false">
+        <label class="sr" for="addSrc">קישור מ-Kick, ‏YouTube או Twitch, או קובץ וידאו</label>
+        <input id="addSrc" type="text" placeholder="2 · הדביקו קישור ל-VOD מ-Kick, ‏YouTube או Twitch" autocomplete="off" spellcheck="false">
         <div class="add-row">
-          <button id="btnAdd" class="btn primary">Make TikToks</button>
-          <button id="btnFile" class="btn ghost pc-only" title="Use a video file on this PC: a whole stream, or a short clip (up to 3 minutes) to make one TikTok from">File…</button>
+          <button id="btnAdd" class="btn primary">צור קליפים</button>
+          <button id="btnFile" class="btn ghost pc-only" title="קובץ וידאו מהמחשב: סטרים שלם, או קליפ קצר (עד 3 דקות) שיהפוך לקליפ אחד">קובץ…</button>
         </div>
       </div>
       <div id="addRange" class="add-range hidden">
-        <span class="add-look-label">3 · Which part of the VOD?</span>
+        <span class="add-look-label">3 · איזה חלק מה-VOD?</span>
         <div class="range-row">
-          <button id="rangeAll" class="btn primary">Whole VOD</button>
-          <span class="muted">or from</span>
-          <input id="rangeFrom" type="text" placeholder="1:00:00" autocomplete="off" aria-label="From (hours:minutes:seconds)">
-          <span class="muted">to</span>
-          <input id="rangeTo" type="text" placeholder="2:30:00" autocomplete="off" aria-label="To (hours:minutes:seconds)">
-          <button id="rangeGo" class="btn ghost pro-only" data-pro="range">Use this part</button>
-          <button id="rangeCancel" class="btn ghost" title="Cancel">✕</button>
+          <button id="rangeAll" class="btn primary">כל ה-VOD</button>
+          <span class="muted">או מ-</span>
+          <input id="rangeFrom" type="text" placeholder="1:00:00" autocomplete="off" aria-label="מ- (שעות:דקות:שניות)">
+          <span class="muted">עד</span>
+          <input id="rangeTo" type="text" placeholder="2:30:00" autocomplete="off" aria-label="עד (שעות:דקות:שניות)">
+          <button id="rangeGo" class="btn ghost pro-only" data-pro="range">רק החלק הזה</button>
+          <button id="rangeCancel" class="btn ghost" title="ביטול">✕</button>
         </div>
-        <span id="rangeInfo" class="tiny muted">Times as shown on Twitch (hours:minutes:seconds). A shorter part is ready much sooner.</span>
+        <span id="rangeInfo" class="tiny muted">זמנים כמו בנגן של ה-VOD (שעות:דקות:שניות). חלק קצר יותר מוכן הרבה יותר מהר.</span>
       </div>
       </div>
     </section>
     <header class="main-head">
       <div>
-        <h1 id="viewTitle">New TikToks</h1>
+        <h1 id="viewTitle">קליפים חדשים</h1>
         <p id="viewSub" class="muted"></p>
       </div>
       <div class="head-actions">
-        <button id="btnFolder" class="btn ghost hidden pc-only">Open folder</button>
-        <button id="btnRemoveStream" class="btn ghost hidden">Remove from list</button>
+        <button id="btnFolder" class="btn ghost hidden pc-only">פתיחת תיקייה</button>
+        <button id="btnRemoveStream" class="btn ghost hidden">הסרה מהרשימה</button>
       </div>
     </header>
 
     <div id="progressBox" class="progress-box hidden">
       <div class="loader" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="pb-top"><strong id="pbTitle">Working…</strong><span id="pbPct">0%</span></div>
-      <div id="pbFun" class="pb-fun">Finding TikToks…</div>
+      <div class="pb-top"><strong id="pbTitle">עובד…</strong><span id="pbPct">0%</span></div>
+      <div id="pbFun" class="pb-fun">מחפש קליפים…</div>
       <div class="bar"><div id="pbBar"></div></div>
       <span id="pbMsg" class="muted small"></span>
       <span id="pbEta" class="pb-eta small"></span>
@@ -137,10 +137,10 @@
     <section id="grid" class="grid" aria-live="polite"></section>
 
     <section id="findBox" class="find hidden ai-only">
-      <label for="findText"><strong>🔎 Find a moment</strong> <span class="small muted">Describe a bit you remember from this stream and the AI finds it</span></label>
+      <label for="findText"><strong>🔎 מצא רגע</strong> <span class="small muted">תארו קטע שאתם זוכרים מהסטרים וה-AI ימצא אותו</span></label>
       <div class="find-row">
-        <input id="findText" type="text" maxlength="600" placeholder="e.g. the bit where a guy comes over, asks for my number and we start arguing">
-        <button id="btnFind" class="btn primary">Find it</button>
+        <input id="findText" type="text" maxlength="600" placeholder="למשל: הקטע שמישהו נכנס לדיסקורד ומתחיל לרדת עליי">
+        <button id="btnFind" class="btn primary">מצא</button>
       </div>
       <span id="findMsg" class="small muted hidden"></span>
     </section>
@@ -148,20 +148,20 @@
     <section id="candidates" class="candidates hidden">
       <div class="cand-head">
         <div>
-          <h2>2 · Pick the moments you want</h2>
-          <p id="candSub" class="muted small">Ranked by chat, audio, funny/banter lines, viewer clips and the AI read. Tick the ones you want, then make them.</p>
+          <h2>2 · בחרו את הרגעים שאתם רוצים</h2>
+          <p id="candSub" class="muted small">מדורגים לפי הצ'אט, הקול, משפטים מצחיקים, קליפים של צופים וה-AI. סמנו את מה שאתם רוצים וצרו.</p>
         </div>
         <div class="cand-btns">
           <button id="btnAiRank" class="btn ghost hidden ai-only"></button>
-          <button id="btnMakeSel" class="btn primary" disabled>Make TikToks (0)</button>
+          <button id="btnMakeSel" class="btn primary" disabled>צור קליפים (0)</button>
         </div>
       </div>
       <div id="candList" class="cand-list"></div>
     </section>
 
     <div id="empty" class="empty hidden">
-      <h2>No TikToks yet</h2>
-      <p class="muted">Paste a Twitch, YouTube or Kick link on the left and press <strong>Make TikToks</strong>. Klipon finds the best moments, edits them in your style and they appear here. Paste a Twitch <strong>clip</strong> link (or pick a short video file) and it turns the whole clip into one TikTok.</p>
+      <h2>עדיין אין קליפים</h2>
+      <p class="muted">הדביקו למעלה קישור ל-VOD מ-Kick, ‏YouTube או Twitch ולחצו <strong>צור קליפים</strong>. קליפון מוצא את הרגעים הכי טובים, עורך אותם בסגנון שלכם והם יופיעו כאן. אפשר גם להדביק קישור ל- <strong>קליפ</strong> (או לבחור קובץ וידאו קצר) והוא יהפוך כולו לקליפ אחד.</p>
     </div>
   </main>
 </div>
@@ -169,19 +169,19 @@
 <!-- Editor -->
 <div id="editor" class="editor hidden" role="dialog" aria-modal="true" aria-labelledby="edTitle">
   <div class="ed-top">
-    <button id="edBack" class="btn ghost">← Back</button>
-    <h2 id="edTitle">TikTok</h2>
+    <button id="edBack" class="btn ghost">חזרה →</button>
+    <h2 id="edTitle">קליפ</h2>
     <span id="edMeta" class="muted small"></span>
     <div class="ed-top-actions">
-      <span class="vote" id="edVote" title="Teach Klipon what a good clip is for you">
-        <button class="btn ghost sm" data-vote="up" aria-pressed="false" aria-label="Good clip">👍</button>
-        <button class="btn ghost sm" data-vote="down" aria-pressed="false" aria-label="Bad clip">👎</button>
+      <span class="vote" id="edVote" title="למדו את קליפון מה זה קליפ טוב בשבילכם">
+        <button class="btn ghost sm" data-vote="up" aria-pressed="false" aria-label="קליפ טוב">👍</button>
+        <button class="btn ghost sm" data-vote="down" aria-pressed="false" aria-label="קליפ לא טוב">👎</button>
       </span>
       <span id="edViews" class="chip views hidden"></span>
-      <button id="edOriginal" class="btn ghost hidden" title="Throw away every change (yours and the AI's) and re-make this TikTok the way it was first made. You can undo this.">↺ Back to original</button>
-      <button id="edUndo" class="btn ghost hidden" title="Put this TikTok back to how it was before the last change">↩ Undo last change</button>
-      <button id="edDiscard" class="btn ghost">Discard</button>
-      <button id="edApply" class="btn primary" disabled>Apply changes</button>
+      <button id="edOriginal" class="btn ghost hidden" title="מבטל את כל השינויים (שלכם ושל ה-AI) ומחזיר את הקליפ למצב המקורי. אפשר לבטל את זה.">↺ חזרה למקור</button>
+      <button id="edUndo" class="btn ghost hidden" title="מחזיר את הקליפ למצב שלפני השינוי האחרון">↩ ביטול שינוי אחרון</button>
+      <button id="edDiscard" class="btn ghost">ביטול שינויים</button>
+      <button id="edApply" class="btn primary" disabled>החל שינויים</button>
     </div>
   </div>
   <div id="edWhy" class="why-row ed-why hidden"></div>
@@ -191,285 +191,285 @@
       <div class="busy-card">
         <div class="busy-phone" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
         <div class="loader" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-        <strong id="edBusyFun" class="busy-fun">Cutting your clip…</strong>
-        <span id="edBusyMsg" class="small muted">Re-building…</span>
+        <strong id="edBusyFun" class="busy-fun">חותך את הקליפ…</strong>
+        <span id="edBusyMsg" class="small muted">בונה מחדש…</span>
         <div class="bar busy-bar"><div id="edBusyBar"></div></div>
       </div>
     </div>
-    <nav class="rail" aria-label="Editor sections">
-      <button class="tab on" data-tab="look"><b class="ico i-look"></b>Look</button>
-      <button class="tab" data-tab="subs"><b class="ico i-subs"></b>Subtitles</button>
-      <button class="tab" data-tab="chat"><b class="ico i-chat"></b>Chat</button>
-      <button class="tab pro-only" data-pro="killfeed" data-tab="kill"><b class="ico i-kill"></b>Kill feed</button>
-      <button class="tab" data-tab="sound"><b class="ico i-sound"></b>Sound</button>
-      <button class="tab" data-tab="cut"><b class="ico i-cut"></b>Cutting</button>
-      <button id="edTimeline" class="tab tl-btn" aria-pressed="false"><b class="ico i-timeline"></b>Timeline</button>
-      <button class="tab ai-only" data-tab="ask"><b class="ico i-ai"></b>Ask AI</button>
-      <button class="tab rail-post" data-tab="post"><b class="ico i-post"></b>Export</button>
+    <nav class="rail" aria-label="חלקי העורך">
+      <button class="tab on" data-tab="look"><b class="ico i-look"></b>מראה</button>
+      <button class="tab" data-tab="subs"><b class="ico i-subs"></b>כתוביות</button>
+      <button class="tab" data-tab="chat"><b class="ico i-chat"></b>צ'אט</button>
+      <button class="tab pro-only" data-pro="killfeed" data-tab="kill"><b class="ico i-kill"></b>קיל-פיד</button>
+      <button class="tab" data-tab="sound"><b class="ico i-sound"></b>סאונד</button>
+      <button class="tab" data-tab="cut"><b class="ico i-cut"></b>חיתוך</button>
+      <button id="edTimeline" class="tab tl-btn" aria-pressed="false"><b class="ico i-timeline"></b>ציר זמן</button>
+      <button class="tab ai-only" data-tab="ask"><b class="ico i-ai"></b>בקשו מה-AI</button>
+      <button class="tab rail-post" data-tab="post"><b class="ico i-post"></b>ייצוא</button>
     </nav>
     <div class="ed-player">
       <video id="edVideo" controls playsinline preload="metadata"></video>
     </div>
-    <div id="tlWrap" class="tl hidden" aria-label="Timeline editor">
+    <div id="tlWrap" class="tl hidden" aria-label="עורך ציר זמן">
       <div class="tl-stage">
         <div id="tlBox" class="tl-box">
           <video id="tlVideo" playsinline preload="auto" muted></video>
           <audio id="tlMusicAudio" preload="auto" loop></audio>
-          <div id="tlCam" class="tl-cam" title="Webcam area: drag to move, drag corners to resize">
-            <span class="tl-cam-label">Webcam</span>
+          <div id="tlCam" class="tl-cam" title="אזור המצלמה: גררו להזזה, גררו פינות לשינוי גודל">
+            <span class="tl-cam-label">מצלמה</span>
             <span class="hd nw" data-h="nw"></span><span class="hd ne" data-h="ne"></span>
             <span class="hd sw" data-h="sw"></span><span class="hd se" data-h="se"></span>
           </div>
-          <div id="tlGame" class="tl-game hidden" title="Gameplay: the part of the stream shown in the TikTok. Drag to move, drag corners to zoom in or out">
-            <span class="tl-game-label">Gameplay</span>
+          <div id="tlGame" class="tl-game hidden" title="משחק: החלק של הסטרים שמופיע בקליפ. גררו להזזה, גררו פינות לזום">
+            <span class="tl-game-label">משחק</span>
             <span class="hd nw" data-h="nw"></span><span class="hd ne" data-h="ne"></span>
             <span class="hd sw" data-h="sw"></span><span class="hd se" data-h="se"></span>
           </div>
           <div id="tlCap" class="tl-cap"></div>
-          <div id="tlLoading" class="tl-loading"><div class="spinner"></div><span>Loading the stream footage…</span></div>
+          <div id="tlLoading" class="tl-loading"><div class="spinner"></div><span>טוען את הסטרים…</span></div>
         </div>
         <div class="tl-phone-wrap" id="tlPhoneWrap">
-          <canvas id="tlPhone" class="tl-phone" width="360" height="640" aria-label="Live preview of the finished TikTok"></canvas>
-          <span class="tl-phone-label">Live preview · finished TikTok</span>
+          <canvas id="tlPhone" class="tl-phone" width="360" height="640" aria-label="תצוגה חיה של הקליפ המוגמר"></canvas>
+          <span class="tl-phone-label">תצוגה חיה · קליפ מוגמר</span>
         </div>
       </div>
       <div class="tl-bar">
-        <button id="tlPlay" class="btn ghost sm" aria-label="Play">▶</button>
+        <button id="tlPlay" class="btn ghost sm" aria-label="ניגון">▶</button>
         <span id="tlTime" class="mono-t">0:00.0</span>
         <span class="tl-sep"></span>
-        <button id="tlSplit" class="btn ghost sm" title="Cut the video at the playhead (S)">✂ Cut here</button>
-        <button id="tlDelete" class="btn ghost sm" title="Delete the selected piece or subtitle (Del)">Delete</button>
-        <button id="tlAddCap" class="btn ghost sm" title="Add a subtitle at the playhead">+ Subtitle</button>
-        <select id="tlSfxPick" class="tl-sfxpick" title="Your sound effects (import them in Settings)" aria-label="Sound effect to add"></select>
-        <button id="tlAddSfx" class="btn ghost sm" title="Add the chosen sound at the playhead">+ Sound</button>
-        <button id="tlSubsOff" class="btn ghost sm hidden" title="This TikTok has no subtitles. Click to add the ones below to the video.">Subtitles are off: turn on</button>
-        <button id="tlRegen" class="btn ghost sm" title="Make all subtitles again from what's said in the kept parts">↻ Redo subtitles</button>
-        <button id="tlReset" class="btn ghost sm">Reset</button>
+        <button id="tlSplit" class="btn ghost sm" title="חיתוך הווידאו במיקום הנוכחי (S)">✂ חתוך כאן</button>
+        <button id="tlDelete" class="btn ghost sm" title="מחיקת הקטע או הכתובית שנבחרו (Del)">מחיקה</button>
+        <button id="tlAddCap" class="btn ghost sm" title="הוספת כתובית במיקום הנוכחי">+ כתובית</button>
+        <select id="tlSfxPick" class="tl-sfxpick" title="האפקטים הקוליים שלך (מייבאים בהגדרות)" aria-label="אפקט קולי להוספה"></select>
+        <button id="tlAddSfx" class="btn ghost sm" title="הוספת הסאונד שנבחר במיקום הנוכחי">+ סאונד</button>
+        <button id="tlSubsOff" class="btn ghost sm hidden" title="לקליפ הזה אין כתוביות. לחצו כדי להוסיף את אלה שלמטה.">הכתוביות כבויות: הפעלה</button>
+        <button id="tlRegen" class="btn ghost sm" title="יצירת כל הכתוביות מחדש ממה שנאמר בחלקים שנשארו">↻ כתוביות מחדש</button>
+        <button id="tlReset" class="btn ghost sm">איפוס</button>
         <span class="tl-sep"></span>
-        <label class="tl-music" title="Volume of this TikTok (0 dB = same as the stream)"><i class="gly i-volume"></i> Volume <input id="tlVol" type="range" min="-20" max="20" step="1" value="0"><span id="tlVolVal">0 dB</span></label>
-        <label id="tlMusicBox" class="tl-music hidden" title="Background music level for this TikTok"><i class="gly i-sound"></i> Music <input id="tlMusic" type="range" min="0" max="50" value="16"><span id="tlMusicVal">16%</span></label>
-        <label class="tl-zoom">Zoom <input id="tlZoom" type="range" min="12" max="140" value="40"></label>
+        <label class="tl-music" title="עוצמת הקליפ (0dB = כמו בסטרים)"><i class="gly i-volume"></i> עוצמה <input id="tlVol" type="range" min="-20" max="20" step="1" value="0"><span id="tlVolVal">0 dB</span></label>
+        <label id="tlMusicBox" class="tl-music hidden" title="עוצמת מוזיקת הרקע בקליפ"><i class="gly i-sound"></i> מוזיקה <input id="tlMusic" type="range" min="0" max="50" value="16"><span id="tlMusicVal">16%</span></label>
+        <label class="tl-zoom">זום <input id="tlZoom" type="range" min="12" max="140" value="40"></label>
       </div>
       <div class="tl-scroll" id="tlScroll">
         <div class="tl-inner" id="tlInner">
           <div class="tl-ruler" id="tlRuler"></div>
-          <div class="tl-row"><span class="tl-lab">Video</span><div class="tl-track" id="trkVideo"></div></div>
-          <div class="tl-row tl-row-audio"><span class="tl-lab">Audio</span><div class="tl-track tl-audio" id="trkAudio"><canvas id="tlWave"></canvas><div id="tlGains"></div></div></div>
-          <div class="tl-row"><span class="tl-lab">Subtitles</span><div class="tl-track" id="trkSubs"></div></div>
-          <div class="tl-row"><span class="tl-lab">Sounds</span><div class="tl-track" id="trkSfx"></div></div>
-          <div class="tl-head" id="tlHead"><span class="tl-grip" id="tlHeadGrip" title="Drag to move through the video"></span></div>
+          <div class="tl-row"><span class="tl-lab">וידאו</span><div class="tl-track" id="trkVideo"></div></div>
+          <div class="tl-row tl-row-audio"><span class="tl-lab">אודיו</span><div class="tl-track tl-audio" id="trkAudio"><canvas id="tlWave"></canvas><div id="tlGains"></div></div></div>
+          <div class="tl-row"><span class="tl-lab">כתוביות</span><div class="tl-track" id="trkSubs"></div></div>
+          <div class="tl-row"><span class="tl-lab">סאונדים</span><div class="tl-track" id="trkSfx"></div></div>
+          <div class="tl-head" id="tlHead"><span class="tl-grip" id="tlHeadGrip" title="גררו כדי לזוז בווידאו"></span></div>
           <div class="tl-marquee" id="tlMarquee"></div>
         </div>
       </div>
       <div class="tl-insp" id="tlInsp">
-        <span class="muted small" id="tlHint">Click a block to select it. Drag across empty space to select several (or Ctrl+click). Drag edges to trim. Grey parts are cut out.</span>
+        <span class="muted small" id="tlHint">לחצו על קטע כדי לבחור. גררו על שטח ריק לבחירת כמה (או Ctrl+קליק). גררו קצוות לקיצור. חלקים אפורים נחתכים.</span>
         <div id="tlSegEdit" class="tl-segedit hidden">
-          <span class="small"><strong>Selected piece</strong> · <span id="tlSegTimes" class="muted"></span></span>
-          <label class="tl-vol">Volume <input id="tlSegVol" type="range" min="-20" max="12" step="1" value="0"><span id="tlSegVolVal">0 dB</span></label>
-          <button id="tlSegMute" class="btn ghost sm" aria-pressed="false"><i class="gly i-mute"></i> Mute</button>
-          <button id="tlSegVolReset" class="btn ghost sm">Reset volume</button>
+          <span class="small"><strong>קטע נבחר</strong> · <span id="tlSegTimes" class="muted"></span></span>
+          <label class="tl-vol">עוצמה <input id="tlSegVol" type="range" min="-20" max="12" step="1" value="0"><span id="tlSegVolVal">0 dB</span></label>
+          <button id="tlSegMute" class="btn ghost sm" aria-pressed="false"><i class="gly i-mute"></i> השתקה</button>
+          <button id="tlSegVolReset" class="btn ghost sm">איפוס עוצמה</button>
         </div>
         <div id="tlCapEdit" class="tl-capedit hidden">
-          <label class="sr" for="tlCapText">Subtitle text</label>
+          <label class="sr" for="tlCapText">טקסט הכתובית</label>
           <input id="tlCapText" type="text" maxlength="80">
-          <button id="tlCapOther" class="btn ghost sm" aria-pressed="false" title="Colour this subtitle as someone else talking (teammate, TTS)">🗣 Someone else</button>
+          <button id="tlCapOther" class="btn ghost sm" aria-pressed="false" title="צביעת הכתובית כמישהו אחר שמדבר (חבר לצוות, TTS)">🗣 מישהו אחר</button>
           <span id="tlCapTimes" class="muted small"></span>
         </div>
       </div>
     </div>
     <div class="ed-panel">
       <div class="ask ai-only" id="askBox">
-        <label for="askText"><strong>✨ Tell the AI what to change</strong></label>
-        <textarea id="askText" rows="2" placeholder="e.g. Make it longer: add the bit a little later where someone comes in and it's really funny"></textarea>
-        <div class="ask-row"><span id="askReply" class="small muted">Type it like you'd tell an editor: longer, shorter, add a moment, cut a part, subtitles, volume, title…</span>
-          <button id="btnAsk" class="btn primary sm">Do it</button></div>
+        <label for="askText"><strong>✨ ספרו ל-AI מה לשנות</strong></label>
+        <textarea id="askText" rows="2" placeholder="למשל: תאריך את זה, תוסיף את הקטע קצת אחרי שמישהו נכנס וזה ממש מצחיק"></textarea>
+        <div class="ask-row"><span id="askReply" class="small muted">כתבו כמו לעורך: ארוך יותר, קצר יותר, להוסיף רגע, לחתוך חלק, כתוביות, עוצמה, כותרת…</span>
+          <button id="btnAsk" class="btn primary sm">בצע</button></div>
       </div>
-      <div class="sec-head"><h3 id="secTitle">Look</h3><span id="secSub" class="tiny muted"></span></div>
+      <div class="sec-head"><h3 id="secTitle">מראה</h3><span id="secSub" class="tiny muted"></span></div>
 
       <div class="pane" id="pane-subs">
-        <label class="field" id="subsLangField">Language of the subtitles
-          <select id="sSubsLang"><option value="">Detect it for me</option><option value="en">English</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="fr">French</option><option value="de">German</option><option value="it">Italian</option><option value="nl">Dutch</option><option value="pl">Polish</option><option value="tr">Turkish</option><option value="ru">Russian</option><option value="uk">Ukrainian</option><option value="ar">Arabic</option><option value="he">Hebrew</option><option value="hi">Hindi</option><option value="th">Thai</option><option value="vi">Vietnamese</option><option value="id">Indonesian</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="zh">Chinese</option></select>
-          <span class="tiny muted">Pick this first. The subtitles are written in this language only: a word in another language is left out.</span>
+        <label class="field" id="subsLangField">שפת הכתוביות
+          <select id="sSubsLang"><option value="">זיהוי אוטומטי</option><option value="en">אנגלית</option><option value="es">ספרדית</option><option value="pt">פורטוגזית</option><option value="fr">צרפתית</option><option value="de">גרמנית</option><option value="it">איטלקית</option><option value="nl">הולנדית</option><option value="pl">פולנית</option><option value="tr">טורקית</option><option value="ru">רוסית</option><option value="uk">אוקראינית</option><option value="ar">ערבית</option><option value="he">עברית</option><option value="hi">הינדי</option><option value="th">תאית</option><option value="vi">וייטנאמית</option><option value="id">אינדונזית</option><option value="ja">יפנית</option><option value="ko">קוריאנית</option><option value="zh">סינית</option></select>
+          <span class="tiny muted">בחרו את זה קודם. הכתוביות ייכתבו רק בשפה הזו: מילה בשפה אחרת לא תופיע.</span>
         </label>
         <div id="noSubs" class="notice hidden">
-          <strong>No subtitles on this TikTok</strong>
-          <span class="small muted">New TikToks are made without subtitles. Add them here whenever you want.</span>
-          <button id="btnAddSubs" class="btn primary full">＋ Add subtitles</button>
+          <strong>אין כתוביות בקליפ הזה</strong>
+          <span class="small muted">קליפים חדשים נוצרים בלי כתוביות. אפשר להוסיף אותן כאן מתי שרוצים.</span>
+          <button id="btnAddSubs" class="btn primary full">＋ הוספת כתוביות</button>
         </div>
         <div id="subsOn">
-        <label class="field">Which lines get subtitles
-          <select id="sSubsMode"><option value="all">Every line</option><option value="key">Only the key lines (big moments, shouts, questions)</option></select>
-          <span class="tiny muted">Key lines: 1-3 CAPS words at the top of the gameplay, the important word in colour.</span>
+        <label class="field">אילו משפטים מקבלים כתוביות
+          <select id="sSubsMode"><option value="all">כל משפט</option><option value="key">רק המשפטים החשובים (רגעים גדולים, צעקות, שאלות)</option></select>
+          <span class="tiny muted">משפטים חשובים: 1-3 מילים גדולות מעל המשחק, המילה החשובה בצבע.</span>
         </label>
-        <label class="field">Subtitle text
+        <label class="field">טקסט הכתובית
           <textarea id="subText" rows="5" spellcheck="true"></textarea>
         </label>
-        <span class="tiny muted">Fix any wrong words here. Same number of words keeps the exact timing.</span>
-        <span class="label">Subtitle style</span>
+        <span class="tiny muted">תקנו כאן מילים שגויות. אותו מספר מילים שומר על התזמון המדויק.</span>
+        <span class="label">סגנון כתוביות</span>
         <div id="styleGrid" class="style-grid"></div>
         <div class="grid2">
-          <label class="field">Font
-            <select id="sFont"><option>Montserrat ExtraBold</option><option>Anton</option><option>Bebas Neue</option><option>Archivo Black</option><option>Luckiest Guy</option></select>
+          <label class="field">פונט
+            <select id="sFont"><option>Rubik Black</option><option>Rubik ExtraBold</option><option>Heebo ExtraBold</option><option>Secular One</option><option>Suez One</option><option>Montserrat ExtraBold</option><option>Anton</option><option>Bebas Neue</option><option>Archivo Black</option><option>Luckiest Guy</option></select>
           </label>
-          <label class="field">Words on screen
-            <select id="sWords"><option value="1">1 word</option><option value="2">2 words</option><option value="3">3 words</option><option value="4">Up to 4 words</option><option value="line">Full line</option></select>
+          <label class="field">מילים על המסך
+            <select id="sWords"><option value="1">מילה אחת</option><option value="2">2 מילים</option><option value="3">3 מילים</option><option value="4">עד 4 מילים</option><option value="line">משפט שלם</option></select>
           </label>
         </div>
-        <span class="label">Highlight colour</span>
+        <span class="label">צבע הדגשה</span>
         <div id="swatches" class="swatches"></div>
-        <label class="field">Size <input id="sSize" type="range" min="0.7" max="1.4" step="0.05"></label>
-        <div class="toggle"><span>On the webcam / gameplay line</span><button class="switch" data-opt="caption_seam" aria-label="Captions on the webcam and gameplay line"><span></span></button></div>
-        <label class="field" id="posField">Position <input id="sPos" type="range" min="0.3" max="0.85" step="0.01"></label>
-        <div class="toggle"><span>UPPERCASE</span><button class="switch" data-opt="uppercase" aria-label="Uppercase"><span></span></button></div>
-        <div class="toggle"><span>Show subtitles</span><button class="switch" data-opt="captions" aria-label="Show subtitles"><span></span></button></div>
-        <div class="toggle"><span>Other people talking in <b style="color:#5ec8ff">blue</b><br><small class="muted">teammates, TTS, calls</small></span><button class="switch" data-opt="color_others" aria-label="Colour other people's subtitles"><span></span></button></div>
+        <label class="field">גודל <input id="sSize" type="range" min="0.7" max="1.4" step="0.05"></label>
+        <div class="toggle"><span>על הקו בין המצלמה למשחק</span><button class="switch" data-opt="caption_seam" aria-label="כתוביות על הקו בין המצלמה למשחק"><span></span></button></div>
+        <label class="field" id="posField">מיקום <input id="sPos" type="range" min="0.3" max="0.85" step="0.01"></label>
+        <div class="toggle"><span>אותיות גדולות</span><button class="switch" data-opt="uppercase" aria-label="אותיות גדולות (באנגלית)"><span></span></button></div>
+        <div class="toggle"><span>הצגת כתוביות</span><button class="switch" data-opt="captions" aria-label="הצגת כתוביות"><span></span></button></div>
+        <div class="toggle"><span>אנשים אחרים שמדברים ב <b style="color:#5ec8ff">כחול</b><br><small class="muted">חברים לצוות, TTS, שיחות</small></span><button class="switch" data-opt="color_others" aria-label="צביעת כתוביות של אחרים"><span></span></button></div>
         </div>
       </div>
 
       <div class="pane hidden" id="pane-edit">
         <div class="sec" data-sec="look">
-        <span class="label">Look</span>
+        <span class="label">מראה</span>
         <div id="lookGrid" class="look-grid"></div>
         <span id="lookAbout" class="tiny muted"></span>
         <div class="look-save">
-          <button id="btnSaveLook" class="btn ghost sm pro-only" data-pro="styles">＋ Save as my style</button>
-          <button id="btnDelLook" class="btn ghost sm hidden">Delete this style</button>
+          <button id="btnSaveLook" class="btn ghost sm pro-only" data-pro="styles">＋ שמירה כסגנון שלי</button>
+          <button id="btnDelLook" class="btn ghost sm hidden">מחיקת הסגנון</button>
         </div>
-        <div class="toggle"><div><strong>Title on screen</strong><span>The TikTok's title stays on the whole video. Put *stars* round a word to colour it.</span></div><button class="switch" data-opt="title_bar" aria-label="Title on screen"><span></span></button></div>
+        <div class="toggle"><div><strong>כותרת על המסך</strong><span>הכותרת נשארת על המסך לאורך כל הקליפ. שימו *כוכביות* סביב מילה כדי לצבוע אותה.</span></div><button class="switch" data-opt="title_bar" aria-label="כותרת על המסך"><span></span></button></div>
         <div class="grid2" id="titleOpts">
-          <label class="field">Title goes
-            <select id="sTitlePos"><option value="top">At the top</option><option value="seam">On the webcam line</option><option value="middle">In the middle</option></select>
+          <label class="field">מיקום הכותרת
+            <select id="sTitlePos"><option value="top">למעלה</option><option value="seam">על קו המצלמה</option><option value="middle">באמצע</option></select>
           </label>
-          <label class="field">Title colour word
-            <select id="sTitleColor"><option value="#ffd23f">Yellow</option><option value="#3dff4a">Green</option><option value="#5ec8ff">Blue</option><option value="#a37bff">Purple</option><option value="#ff5c8a">Pink</option><option value="#ffffff">White</option></select>
+          <label class="field">צבע המילה המודגשת
+            <select id="sTitleColor"><option value="#ffd23f">צהוב</option><option value="#3dff4a">ירוק</option><option value="#5ec8ff">כחול</option><option value="#a37bff">סגול</option><option value="#ff5c8a">ורוד</option><option value="#ffffff">לבן</option></select>
           </label>
         </div>
-        <label class="field" id="titleSizeField">Title size <input id="sTitleSize" type="range" min="40" max="140" step="5"><span id="sTitleSizeVal" class="tiny muted"></span></label>
-        <label class="field" id="titleStyleField">Title style
-          <select id="sTitleStyle"><option value="plain">Clean text with outline</option><option value="caps">CLEAN CAPS WITH OUTLINE</option><option value="quote">Big quote (Fortnite)</option><option value="box">White text box</option><option value="banner">White CAPS banner</option></select>
+        <label class="field" id="titleSizeField">גודל כותרת <input id="sTitleSize" type="range" min="40" max="140" step="5"><span id="sTitleSizeVal" class="tiny muted"></span></label>
+        <label class="field" id="titleStyleField">סגנון כותרת
+          <select id="sTitleStyle"><option value="plain">טקסט נקי עם קו מתאר</option><option value="caps">טקסט מודגש עם קו מתאר</option><option value="quote">ציטוט גדול (פורטנייט)</option><option value="box">תיבת טקסט לבנה</option><option value="banner">באנר לבן</option></select>
         </label>
-        <label class="field">Title text <input id="sTitleText" type="text" maxlength="90" placeholder="Empty = the TikTok's title"></label>
-        <div class="toggle"><div><strong>Framed</strong><span>Video smaller on black, title above it</span></div><button class="switch" data-opt="frame" aria-label="Framed"><span></span></button></div>
-        <label class="field">Layout
+        <label class="field">טקסט הכותרת <input id="sTitleText" type="text" maxlength="90" placeholder="ריק = כותרת הקליפ"></label>
+        <div class="toggle"><div><strong>ממוסגר</strong><span>וידאו קטן יותר על רקע שחור, הכותרת מעליו</span></div><button class="switch" data-opt="frame" aria-label="ממוסגר"><span></span></button></div>
+        <label class="field">פריסה
           <select id="sLayout">
-            <option value="auto">Auto</option>
-            <option value="split">Webcam top + gameplay</option>
-            <option value="blur">Full gameplay, blurred background</option>
-            <option value="crop">Gameplay crop</option>
-            <option value="fullcam">Webcam only</option>
-            <option value="letterbox">Full stream (nothing cut off)</option>
-            <option value="camover">Webcam box over full gameplay</option>
-            <option value="camblur">Webcam only, blurred webcam behind</option>
+            <option value="auto">אוטומטי</option>
+            <option value="split">מצלמה למעלה + משחק</option>
+            <option value="blur">משחק מלא, רקע מטושטש</option>
+            <option value="crop">חיתוך של המשחק</option>
+            <option value="fullcam">רק מצלמה</option>
+            <option value="letterbox">הסטרים המלא (בלי חיתוך)</option>
+            <option value="camover">מצלמה בחלון מעל משחק מלא</option>
+            <option value="camblur">רק מצלמה, עם מצלמה מטושטשת ברקע</option>
           </select>
         </label>
-        <label class="field">Channel name goes
-          <select id="sWmPos"><option value="bottom">On the gameplay</option><option value="seam">On the webcam line (name tag)</option></select>
+        <label class="field">מיקום שם הערוץ
+          <select id="sWmPos"><option value="bottom">על המשחק</option><option value="seam">על קו המצלמה (תגית שם)</option></select>
         </label>
-        <label class="field">Channel name on video
-          <input id="sWatermark" type="text" placeholder="Leave empty for none">
-          <span class="tiny muted">Shown on every TikTok, with or without subtitles.</span>
+        <label class="field">שם הערוץ על הווידאו
+          <input id="sWatermark" type="text" placeholder="השאירו ריק כדי לא להציג">
+          <span class="tiny muted">מופיע בכל קליפ, עם או בלי כתוביות.</span>
         </label>
         <div id="logoOpts">
-          <label class="field">Logo + name size <input id="sLogoSize" type="range" min="0" max="200" step="10" title="Makes the Twitch logo and your name bigger or smaller together. 0 = hide the logo"><span id="sLogoSizeVal" class="tiny muted"></span></label>
-          <label class="field">Logo + name: left / right <input id="sLogoX" type="range" min="-20" max="20" step="1"><span id="sLogoXVal" class="tiny muted"></span></label>
-          <label class="field">Logo + name: up / down <input id="sLogoY" type="range" min="-10" max="10" step="1"><span id="sLogoYVal" class="tiny muted"></span></label>
-          <label class="field">Logo + name opacity <input id="sLogoOpacity" type="range" min="10" max="100" step="5" title="100 % = solid. Lower = more see-through"><span id="sLogoOpacityVal" class="tiny muted"></span></label>
-          <span class="tiny muted">Size, left / right and up / down change the logo and the name together. Size 0 hides the logo.</span>
+          <label class="field">גודל לוגו + שם <input id="sLogoSize" type="range" min="0" max="200" step="10" title="מגדיל או מקטין את הלוגו והשם ביחד. 0 = בלי לוגו"><span id="sLogoSizeVal" class="tiny muted"></span></label>
+          <label class="field">לוגו + שם: ימינה / שמאלה <input id="sLogoX" type="range" min="-20" max="20" step="1"><span id="sLogoXVal" class="tiny muted"></span></label>
+          <label class="field">לוגו + שם: למעלה / למטה <input id="sLogoY" type="range" min="-10" max="10" step="1"><span id="sLogoYVal" class="tiny muted"></span></label>
+          <label class="field">שקיפות לוגו + שם <input id="sLogoOpacity" type="range" min="10" max="100" step="5" title="100% = אטום. פחות = שקוף יותר"><span id="sLogoOpacityVal" class="tiny muted"></span></label>
+          <span class="tiny muted">גודל, ימינה/שמאלה ולמעלה/למטה משנים את הלוגו והשם ביחד. גודל 0 מסתיר את הלוגו.</span>
         </div>
         </div>
         <div class="sec hidden" data-sec="chat">
-        <label class="field">Chat pop-ups
-          <select id="sChatPop"><option value="auto">When I talk to chat</option><option value="always">Throughout the TikTok</option><option value="off">Off</option></select>
-          <span class="tiny muted">A real chat message from that moment pops up over the gameplay (Twitch VODs).</span>
+        <label class="field">הודעות צ'אט קופצות
+          <select id="sChatPop"><option value="auto">כשאני מדבר לצ'אט</option><option value="always">לאורך כל הקליפ</option><option value="off">כבוי</option></select>
+          <span class="tiny muted">הודעת צ'אט אמיתית מאותו רגע קופצת מעל המשחק (VOD-ים של Twitch).</span>
         </label>
         <div class="grid2" id="chatOpacityOpts">
-          <label class="field">Chat box opacity <input id="sChatOpacity" type="range" min="0" max="100" step="5"><span id="sChatOpacityVal" class="tiny muted"></span></label>
-          <label class="field">Viewer name opacity <input id="sChatNameOpacity" type="range" min="0" max="100" step="5"><span id="sChatNameOpacityVal" class="tiny muted"></span></label>
+          <label class="field">שקיפות תיבת הצ'אט <input id="sChatOpacity" type="range" min="0" max="100" step="5"><span id="sChatOpacityVal" class="tiny muted"></span></label>
+          <label class="field">שקיפות שם הצופה <input id="sChatNameOpacity" type="range" min="0" max="100" step="5"><span id="sChatNameOpacityVal" class="tiny muted"></span></label>
         </div>
         </div>
         <div class="sec hidden" data-sec="kill">
-        <span class="label">Show game parts the 9:16 crop cuts off</span>
+        <span class="label">הצגת חלקי משחק שהחיתוך ל-9:16 חותך</span>
         <div id="hudParts"></div>
         <div id="kfNamesWrap" class="hidden">
-          <span class="label">Names in the kill feed</span>
-          <span class="tiny muted" style="display:block">Got a name wrong? Type the right one, then press Apply.</span>
+          <span class="label">שמות בקיל-פיד</span>
+          <span class="tiny muted" style="display:block">שם לא נכון? כתבו את הנכון ולחצו על החל.</span>
           <div id="kfNames"></div>
         </div>
-        <span class="tiny muted">CS2 kills are read from your stream and redrawn sharp, only on a clutch (a burst of kills, a headshot, no-scope or knife kill).</span>
+        <span class="tiny muted">הריגות ב-CS2 נקראות מהסטרים ומצוירות מחדש בחדות, רק ברגעי קלאץ' (כמה הריגות ברצף, הדשוט, נו-סקופ או סכין).</span>
         </div>
         <div class="sec hidden" data-sec="sound">
-        <div class="toggle"><div><strong>Sound effects</strong><span>A sound on big reactions</span></div><button class="switch" data-opt="sfx" aria-label="Sound effects"><span></span></button></div>
-        <label class="field" id="reactSfxField">Sound on big reactions
+        <div class="toggle"><div><strong>אפקטים קוליים</strong><span>סאונד בתגובות גדולות</span></div><button class="switch" data-opt="sfx" aria-label="אפקטים קוליים"><span></span></button></div>
+        <label class="field" id="reactSfxField">סאונד בתגובות גדולות
           <select id="sReactSfx"></select>
-          <span class="tiny muted">Import your own sounds in Settings. Place sounds anywhere with the Timeline.</span>
+          <span class="tiny muted">ייבאו סאונדים משלכם בהגדרות. אפשר למקם סאונדים איפה שרוצים בציר הזמן.</span>
         </label>
         </div>
         <div class="sec hidden" data-sec="cut">
-        <span class="label">Trim</span>
+        <span class="label">קיצור</span>
         <div class="trim">
-          <button class="btn ghost sm" data-trim="start,-2">Start −2s</button>
-          <button class="btn ghost sm" data-trim="start,2">Start +2s</button>
-          <button class="btn ghost sm" data-trim="end,-2">End −2s</button>
-          <button class="btn ghost sm" data-trim="end,2">End +2s</button>
+          <button class="btn ghost sm" data-trim="start,-2">התחלה −2 שנ'</button>
+          <button class="btn ghost sm" data-trim="start,2">התחלה +2 שנ'</button>
+          <button class="btn ghost sm" data-trim="end,-2">סוף −2 שנ'</button>
+          <button class="btn ghost sm" data-trim="end,2">סוף +2 שנ'</button>
         </div>
         <span id="trimInfo" class="tiny muted"></span>
-        <div class="toggle"><div><strong>Gameplay punch-ins</strong><span>Closer shot on the gameplay during action (no webcam zooms)</span></div><button class="switch" data-opt="zoom" aria-label="Punch-in cuts"><span></span></button></div>
-        <div class="toggle"><div><strong>Jump cuts</strong><span>Removes pauses between sentences</span></div><button class="switch" data-opt="jump_cuts" aria-label="Jump cuts"><span></span></button></div>
-        <div class="toggle"><div><strong>Skip filler</strong><span>Drops "um", "uh", "so yeah" before the big moment</span></div><button class="switch" data-opt="cut_boring" aria-label="Skip filler"><span></span></button></div>
-        <label class="field">Let the ending run <input id="sLinger" type="range" min="0" max="4" step="0.5"><span id="sLingerVal" class="tiny muted"></span></label>
-        <div class="toggle"><div><strong>Cold-open hook</strong><span>Starts on the best moment</span></div><button class="switch" data-opt="hook_teaser" aria-label="Cold-open hook"><span></span></button></div>
-        <div class="toggle"><div><strong>Reaction cutaways</strong><span>Webcam full screen on big reactions</span></div><button class="switch" data-opt="cutaways" aria-label="Reaction cutaways"><span></span></button></div>
-        <div class="toggle"><div><strong>Extra gameplay zoom-ins</strong><span>A quick zoom on the gameplay every few seconds (never on the webcam)</span></div><button class="switch" data-opt="punch_more" aria-label="Extra gameplay zoom-ins"><span></span></button></div>
-        <div class="toggle"><div><strong>Black-and-white ending</strong><span>Only when you type a word below: the last seconds go black and white and your word slams in, in red</span></div><button class="switch" data-opt="end_bw" aria-label="Black-and-white ending"><span></span></button></div>
-        <label class="field" id="endWordField">Red word at the end <input id="sEndWord" type="text" maxlength="14" placeholder="e.g. HUMBLED (empty = no ending effect)"></label>
-        <div class="toggle"><div><strong>Tight webcam framing</strong><span>Frames your face</span></div><button class="switch" data-opt="cam_tight" aria-label="Tight webcam framing"><span></span></button></div>
+        <div class="toggle"><div><strong>זום-אין למשחק</strong><span>זום על המשחק ברגעי אקשן (בלי זום על המצלמה)</span></div><button class="switch" data-opt="zoom" aria-label="חיתוכי זום"><span></span></button></div>
+        <div class="toggle"><div><strong>ג'אמפ-קאטים</strong><span>מוריד הפסקות בין משפטים</span></div><button class="switch" data-opt="jump_cuts" aria-label="ג'אמפ-קאטים"><span></span></button></div>
+        <div class="toggle"><div><strong>דילוג על מילות מילוי</strong><span>מוריד "אממ", "אהה", "כאילו" לפני הרגע הגדול</span></div><button class="switch" data-opt="cut_boring" aria-label="דילוג על מילות מילוי"><span></span></button></div>
+        <label class="field">לתת לסוף לרוץ <input id="sLinger" type="range" min="0" max="4" step="0.5"><span id="sLingerVal" class="tiny muted"></span></label>
+        <div class="toggle"><div><strong>פתיחה עם הרגע הכי חזק</strong><span>מתחיל ברגע הכי טוב</span></div><button class="switch" data-opt="hook_teaser" aria-label="פתיחה עם הרגע הכי חזק"><span></span></button></div>
+        <div class="toggle"><div><strong>קאט לתגובה</strong><span>מצלמה במסך מלא בתגובות גדולות</span></div><button class="switch" data-opt="cutaways" aria-label="קאט לתגובה"><span></span></button></div>
+        <div class="toggle"><div><strong>עוד זום-אין למשחק</strong><span>זום קצר על המשחק כל כמה שניות (אף פעם לא על המצלמה)</span></div><button class="switch" data-opt="punch_more" aria-label="עוד זום-אין למשחק"><span></span></button></div>
+        <div class="toggle"><div><strong>סיום בשחור-לבן</strong><span>רק כשכותבים מילה למטה: השניות האחרונות בשחור-לבן והמילה שלכם נכנסת באדום</span></div><button class="switch" data-opt="end_bw" aria-label="סיום בשחור-לבן"><span></span></button></div>
+        <label class="field" id="endWordField">מילה אדומה בסוף <input id="sEndWord" type="text" maxlength="14" placeholder="למשל: נאכל (ריק = בלי אפקט סיום)"></label>
+        <div class="toggle"><div><strong>מסגור צמוד של המצלמה</strong><span>ממסגר את הפנים שלך</span></div><button class="switch" data-opt="cam_tight" aria-label="מסגור צמוד של המצלמה"><span></span></button></div>
         </div>
         <div class="sec" data-sec="look">
-        <button id="btnSaveDefault" class="btn ghost full">Use these settings for all new TikToks</button>
+        <button id="btnSaveDefault" class="btn ghost full">להשתמש בהגדרות האלה לכל הקליפים החדשים</button>
         </div>
       </div>
 
       <div class="pane hidden" id="pane-post">
         <div class="account tt-only hidden" id="account">
           <span class="avatar">TT</span>
-          <div class="acc-text"><strong id="accName">TikTok not connected</strong><span id="accSub" class="small muted">Connect @hotgamerdude_</span></div>
-          <button id="btnConnect" class="btn ghost sm">Connect</button>
+          <div class="acc-text"><strong id="accName">טיקטוק לא מחובר</strong><span id="accSub" class="small muted">חיבור חשבון טיקטוק</span></div>
+          <button id="btnConnect" class="btn ghost sm">חיבור</button>
         </div>
-        <label class="field">Title
+        <label class="field">כותרת
           <input id="pTitle" type="text" maxlength="100">
         </label>
-        <label class="field">Caption and hashtags
+        <label class="field">תיאור והאשטגים
           <textarea id="pCaption" rows="3"></textarea>
         </label>
-        <a id="btnSave" class="btn primary full save-btn" download>⬇ Export video</a>
-        <span class="tiny muted">Saves the finished TikTok as an MP4 to this device (PC or phone). Then upload it wherever you like.</span>
+        <a id="btnSave" class="btn primary full save-btn" download>⬇ ייצוא וידאו</a>
+        <span class="tiny muted">שומר את הקליפ המוגמר כ-MP4 במכשיר הזה (מחשב או טלפון). אחר כך מעלים לאן שרוצים.</span>
         <div class="phone-tip phone-only small">
-          <strong>Want it in Photos?</strong><br>
-          <b>iPhone:</b> the video goes to Files. Open the <b>Files</b> app, tap the video, tap <b>Share</b> (square with an arrow), then <b>Save Video</b>.<br>
-          <b>Android:</b> it's already in your Gallery / Google Photos, in the <b>Download</b> album.
+          <strong>רוצים אותו בגלריה?</strong><br>
+          <b>אייפון:</b> הווידאו נשמר ב-Files. פתחו את אפליקציית <b>Files</b> , הקישו על הווידאו, הקישו על <b>שיתוף</b> (ריבוע עם חץ), ואז <b>שמירת סרטון</b>.<br>
+          <b>אנדרואיד:</b> הוא כבר בגלריה / Google Photos, באלבום <b>הורדות</b> .
         </div>
-        <button id="btnPhoneExport" class="btn ghost full pc-only pro-only" data-pro="phone">Export to phone (QR code)</button>
+        <button id="btnPhoneExport" class="btn ghost full pc-only pro-only" data-pro="phone">ייצוא לטלפון (קוד QR)</button>
         <div id="exportQR" class="phone-panel hidden">
-          <div id="exportQRImg" class="phone-qr" aria-label="QR code that opens this TikTok on your phone"></div>
-          <span class="small muted" style="flex:1 1 180px">Scan it with your phone's camera (same Wi-Fi as this PC). It opens this TikTok on your phone: tap <strong>Export video</strong> to save it there.</span>
+          <div id="exportQRImg" class="phone-qr" aria-label="קוד QR שפותח את הקליפ בטלפון"></div>
+          <span class="small muted" style="flex:1 1 180px">סרקו עם המצלמה של הטלפון (באותו Wi-Fi של המחשב). הקליפ ייפתח בטלפון: הקישו על <strong>ייצוא וידאו</strong> כדי לשמור אותו שם.</span>
         </div>
         <div class="postall pc-only hidden">
-          <button id="btnPostAll" class="btn primary full">🚀 Post everywhere</button>
+          <button id="btnPostAll" class="btn primary full">🚀 פרסום בכל מקום</button>
           <div class="postall-pick">
-            <label><input type="checkbox" data-plat="tiktok" checked> TikTok</label>
+            <label><input type="checkbox" data-plat="tiktok" checked> קליפ</label>
             <label><input type="checkbox" data-plat="instagram" checked> Instagram</label>
             <label><input type="checkbox" data-plat="youtube" checked> YouTube</label>
           </div>
-          <span class="small muted">Opens each upload page in your browser, shows the clip in its folder and copies the caption. Drag the clip in, paste (Ctrl+V), post.</span>
+          <span class="small muted">פותח את דף ההעלאה של כל אתר בדפדפן, מראה את הקליפ בתיקייה ומעתיק את התיאור. גוררים את הקליפ, מדביקים (Ctrl+V) ומפרסמים.</span>
         </div>
-        <button id="btnUpload" class="btn ghost full tt-only hidden">Send to TikTok drafts</button>
-        <span class="tiny muted tt-only hidden">Lands in your TikTok inbox. Open TikTok and post it within 24 hours.</span>
-        <button id="btnMarkPosted" class="btn ghost full hidden">Mark as posted</button>
+        <button id="btnUpload" class="btn ghost full tt-only hidden">שליחה לטיוטות בטיקטוק</button>
+        <span class="tiny muted tt-only hidden">מגיע לתיבת הדואר בטיקטוק. פתחו את טיקטוק ופרסמו תוך 24 שעות.</span>
+        <button id="btnMarkPosted" class="btn ghost full hidden">סמן כפורסם</button>
         <div class="field views-box hidden">
-          <label for="pViews"><strong>Views on TikTok</strong> <span class="small muted">teaches the AI what really works</span></label>
+          <label for="pViews"><strong>צפיות בטיקטוק</strong> <span class="small muted">מלמד את ה-AI מה באמת עובד</span></label>
           <div class="views-row"><input id="pViews" type="number" min="0" step="1" inputmode="numeric" placeholder="e.g. 12400">
-            <button id="btnSaveViews" class="btn ghost sm">Save</button></div>
-          <button id="btnSyncViews" class="btn ghost sm pc-only tt-only">↻ Get views from TikTok</button>
+            <button id="btnSaveViews" class="btn ghost sm">שמירה</button></div>
+          <button id="btnSyncViews" class="btn ghost sm pc-only tt-only">↻ משיכת צפיות מטיקטוק</button>
         </div>
       </div>
     </div>
@@ -482,113 +482,113 @@
   <div class="sheet wc">
     <div class="wc-dots" id="wcDots" aria-hidden="true"></div>
     <section class="wc-step" data-step="0">
-      <h2 id="wcTitle">Welcome to Klipon 👋</h2>
-      <p class="muted">It turns your Twitch streams into TikToks. Three quick questions and you're ready. You can change any of it later in Settings.</p>
-      <label class="field">Your Twitch channel
-        <input id="wcChannel" type="text" placeholder="twitch.tv/yourname" autocomplete="off" spellcheck="false">
-        <span class="tiny muted">Your name goes on every TikTok, next to the Twitch logo.</span>
+      <h2 id="wcTitle">ברוכים הבאים לקליפון 👋</h2>
+      <p class="muted">קליפון הופך את הסטרימים שלכם לקליפים לטיקטוק, שורטס ורילס. שלוש שאלות קצרות ואתם מוכנים. אפשר לשנות הכל אחר כך בהגדרות.</p>
+      <label class="field">הערוץ שלך (Kick / Twitch / YouTube)
+        <input id="wcChannel" type="text" placeholder="kick.com/השם-שלך" autocomplete="off" spellcheck="false">
+        <span class="tiny muted">השם שלך יופיע על כל קליפ.</span>
       </label>
       <div class="wc-tag" id="wcTagPreview" aria-hidden="true"></div>
     </section>
     <section class="wc-step hidden" data-step="1">
-      <h2>Background music</h2>
-      <p class="muted">A song that plays quietly under every new TikTok. Pick a file from your PC, or skip it.</p>
+      <h2>מוזיקת רקע</h2>
+      <p class="muted">שיר שמתנגן בשקט מתחת לכל קליפ חדש. בחרו קובץ מהמחשב או דלגו.</p>
       <div class="wc-choice">
-        <button class="wc-opt" data-music="none"><strong>No music</strong><span>Just your stream's sound</span></button>
-        <button class="wc-opt pro-only" data-pro="music" data-music="file"><strong>🎵 Import a song</strong><span id="wcMusicName">mp3, wav, m4a…</span></button>
+        <button class="wc-opt" data-music="none"><strong>בלי מוזיקה</strong><span>רק הסאונד של הסטרים</span></button>
+        <button class="wc-opt pro-only" data-pro="music" data-music="file"><strong>🎵 ייבוא שיר</strong><span id="wcMusicName">mp3, wav, m4a…</span></button>
       </div>
-      <span class="tiny muted">Use music you're allowed to post. It plays at one steady volume, no fades.</span>
+      <span class="tiny muted">השתמשו רק במוזיקה שמותר לכם לפרסם. היא מתנגנת בעוצמה קבועה.</span>
     </section>
     <section class="wc-step hidden" data-step="2">
-      <h2>Sound effects</h2>
-      <p class="muted">A sound when you have a big reaction. Use the built-in one, add your own, or turn it off.</p>
-      <div class="toggle"><div><strong>Sound effects</strong></div><button class="switch on" id="wcSfxOn" aria-pressed="true" aria-label="Sound effects"><span></span></button></div>
+      <h2>אפקטים קוליים</h2>
+      <p class="muted">סאונד כשיש לכם תגובה גדולה. השתמשו במובנה, הוסיפו משלכם או כבו.</p>
+      <div class="toggle"><div><strong>אפקטים קוליים</strong></div><button class="switch on" id="wcSfxOn" aria-pressed="true" aria-label="אפקטים קוליים"><span></span></button></div>
       <div id="wcSfxBox">
         <div class="wc-sounds" id="wcSfxList"></div>
-        <button class="btn ghost pro-only" data-pro="sfx" id="wcSfxAdd">＋ Add your own sound</button>
+        <button class="btn ghost pro-only" data-pro="sfx" id="wcSfxAdd">＋ הוספת סאונד משלך</button>
       </div>
     </section>
     <div class="row-between wc-nav">
-      <button class="btn ghost" id="wcBack">Back</button>
-      <button class="btn ghost sm" id="wcSkip">Skip for now</button>
-      <button class="btn primary" id="wcNext">Next</button>
+      <button class="btn ghost" id="wcBack">חזרה</button>
+      <button class="btn ghost sm" id="wcSkip">דילוג</button>
+      <button class="btn primary" id="wcNext">הבא</button>
     </div>
   </div>
 </div>
 
 <div id="settings" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="setTitle">
   <div class="sheet">
-    <div class="row-between"><h2 id="setTitle">Settings</h2><button class="btn ghost sm" data-close aria-label="Close">✕</button></div>
+    <div class="row-between"><h2 id="setTitle">הגדרות</h2><button class="btn ghost sm" data-close aria-label="סגירה">✕</button></div>
     <div class="field pc-only phone-box">
-      <div class="toggle"><span><strong>📱 Use Klipon on your phone</strong><br><small class="muted">On your home Wi-Fi, while this PC is on</small></span><button class="switch pro-only" data-pro="phone" id="phoneSwitch" aria-label="Use on your phone"><span></span></button></div>
+      <div class="toggle"><span><strong>📱 קליפון בטלפון</strong><br><small class="muted">ב-Wi-Fi של הבית, כשהמחשב דולק</small></span><button class="switch pro-only" data-pro="phone" id="phoneSwitch" aria-label="שימוש בטלפון"><span></span></button></div>
       <div id="phonePanel" class="phone-panel hidden">
-        <div id="phoneQR" class="phone-qr" aria-label="QR code for your phone"></div>
-        <div class="small">Scan this with your phone camera (same Wi-Fi as this PC), then "Add to Home Screen" to keep it like an app.<br>
+        <div id="phoneQR" class="phone-qr" aria-label="קוד QR לטלפון"></div>
+        <div class="small">סרקו עם מצלמת הטלפון (באותו Wi-Fi של המחשב), ואז "הוספה למסך הבית" כדי שיהיה כמו אפליקציה.<br>
           <code id="phoneUrl" class="phone-url"></code><br>
-          <button id="phoneNewKey" class="btn ghost sm">New link (logs other phones out)</button></div>
+          <button id="phoneNewKey" class="btn ghost sm">קישור חדש (מנתק טלפונים אחרים)</button></div>
       </div>
     </div>
-    <label class="field ai-only key-only">Claude API key: turns on the AI read for every stream
+    <label class="field ai-only key-only">מפתח Claude API: מפעיל את ה-AI לכל סטרים
       <input id="setApiKey" type="password" placeholder="sk-ant-…" autocomplete="off">
-      <span class="tiny muted">Get one at console.anthropic.com → API keys. A few pence per stream.</span>
+      <span class="tiny muted">מקבלים ב-console.anthropic.com ← API keys. כמה סנטים לסטרים.</span>
     </label>
     <div class="field learned" id="learnedBox">
-      <div class="row-between"><strong>🧠 What Klipon has learned about you</strong><button id="btnRules" class="btn ghost sm ai-only">Update now</button></div>
+      <div class="row-between"><strong>🧠 מה קליפון למד עליך</strong><button id="btnRules" class="btn ghost sm ai-only">עדכון עכשיו</button></div>
       <span id="learnedStats" class="small muted"></span>
       <span id="learnedSummary" class="small"></span>
       <ol id="learnedRules" class="rules"></ol>
     </div>
-    <div class="field">Theme
+    <div class="field">ערכת צבעים
       <div class="themes" id="themes"></div>
     </div>
-    <label class="field">Notes for the AI <span class="small muted">anything it should know when picking clips: the game you're on, who you play with, what you want more or less of</span>
-      <textarea id="setNotes" rows="3" maxlength="1500" placeholder="e.g. I'm playing GTA 6 story mode this month. Clip first reactions, chaos and funny NPC moments. No story spoilers in titles. My friend Dima is usually on call."></textarea>
+    <label class="field">הערות ל-AI <span class="small muted">כל מה שכדאי לו לדעת כשהוא בוחר קליפים: באיזה משחק אתם, עם מי אתם משחקים, ממה אתם רוצים יותר או פחות</span>
+      <textarea id="setNotes" rows="3" maxlength="1500" placeholder="למשל: החודש אני משחק GTA 6 במצב סיפור. תקלפו תגובות ראשונות, כאוס ורגעים מצחיקים עם NPC. בלי ספוילרים בכותרות. החבר שלי איתי בדיסקורד בדרך כלל."></textarea>
     </label>
-    <label class="field hidden">Look for each game <!-- 2.27: game looks hidden; kept so Save still works -->
-      <select id="setGameLooks"><option value="0">Off: new TikToks use my default look</option><option value="1">On: CS2 and Call of Duty TikToks get the look made for that game</option></select>
+    <label class="field hidden">מראה לכל משחק <!-- 2.27: game looks hidden; kept so Save still works -->
+      <select id="setGameLooks"><option value="0">כבוי: קליפים חדשים במראה ברירת המחדל שלי</option><option value="1">פועל: קליפים מ-CS2 ו-Call of Duty מקבלים מראה מותאם למשחק</option></select>
     </label>
-    <label class="field">Subtitles on new TikToks
-      <select id="setSubs"><option value="0">Off: I'll add them when I want (recommended)</option><option value="1">On: every new TikTok gets subtitles</option></select>
+    <label class="field">כתוביות בקליפים חדשים
+      <select id="setSubs"><option value="0">כבוי: אוסיף כשארצה (מומלץ)</option><option value="1">פועל: כל קליפ חדש מקבל כתוביות</option></select>
     </label>
-    <label class="field">Volume for all TikToks
-      <select id="setVolume"><option value="-6">Quieter (−6 dB)</option><option value="-3">A bit quieter (−3 dB)</option><option value="0">Same as the stream</option><option value="3">A bit louder (+3 dB)</option><option value="6">Louder (+6 dB)</option><option value="10">Much louder (+10 dB)</option></select>
-      <span class="tiny muted">No auto-levelling: your audio stays at one level. Change it per TikTok in the Timeline.</span>
+    <label class="field">עוצמה לכל הקליפים
+      <select id="setVolume"><option value="-6">שקט יותר (−6 dB)</option><option value="-3">קצת יותר שקט (−3 dB)</option><option value="0">כמו בסטרים</option><option value="3">קצת יותר חזק (+3 dB)</option><option value="6">חזק יותר (+6 dB)</option><option value="10">הרבה יותר חזק (+10 dB)</option></select>
+      <span class="tiny muted">בלי איזון אוטומטי: האודיו נשאר באותה רמה. אפשר לשנות לכל קליפ בציר הזמן.</span>
     </label>
-    <label class="field">After ranking a stream
-      <select id="setCount"><option value="0">Let me preview and pick (recommended)</option><option value="3">Auto-make the top 3</option><option value="6">Auto-make the top 6</option><option value="10">Auto-make the top 10</option></select>
+    <label class="field">אחרי דירוג סטרים
+      <select id="setCount"><option value="0">תן לי לראות ולבחור (מומלץ)</option><option value="3">צור אוטומטית את 3 הטובים</option><option value="6">צור אוטומטית את 6 הטובים</option><option value="10">צור אוטומטית את 10 הטובים</option></select>
     </label>
-    <label class="field">Length
+    <label class="field">אורך
       <select id="setLen"><option value="20">~20s</option><option value="30">~30s</option><option value="40">~40s</option><option value="55">~55s</option></select>
     </label>
-    <div class="field">Background music (under every TikTok)
-      <div class="music-row"><span id="musicName" class="music-name">None</span>
-        <button id="btnMusic" class="btn ghost sm pc-only pro-only" data-pro="music">Choose…</button>
-        <button id="btnMusicClear" class="btn ghost sm">Remove</button></div>
+    <div class="field">מוזיקת רקע (מתחת לכל קליפ)
+      <div class="music-row"><span id="musicName" class="music-name">בלי</span>
+        <button id="btnMusic" class="btn ghost sm pc-only pro-only" data-pro="music">בחירה…</button>
+        <button id="btnMusicClear" class="btn ghost sm">הסרה</button></div>
     </div>
-    <div class="field">Sound effects <span class="small muted">your own sounds, for big reactions or to place in the Timeline</span>
+    <div class="field">אפקטים קוליים <span class="small muted">סאונדים משלכם, לתגובות גדולות או למיקום בציר הזמן</span>
       <div id="sfxList" class="sfx-list"></div>
-      <div class="music-row"><button id="btnSfxAdd" class="btn ghost sm pc-only pro-only" data-pro="sfx">＋ Import sound…</button></div>
+      <div class="music-row"><button id="btnSfxAdd" class="btn ghost sm pc-only pro-only" data-pro="sfx">＋ ייבוא סאונד…</button></div>
     </div>
-    <label class="field">Music volume <input id="setMusicVol" type="range" min="0.03" max="0.5" step="0.01" value="0.16"></label>
-    <label class="field">Save TikToks to
+    <label class="field">עוצמת מוזיקה <input id="setMusicVol" type="range" min="0.03" max="0.5" step="0.01" value="0.16"></label>
+    <label class="field">שמירת קליפים ב
       <input id="setOut" type="text" placeholder="Videos\Klipon">
     </label>
     <div class="grid2">
-      <label class="field">Speech model
+      <label class="field">מודל תמלול
         <select id="setWhisper"><option value="ivrit-turbo">עברית: ivrit.ai Turbo (מומלץ)</option><option value="ivrit-large">עברית: ivrit.ai Large (הכי מדויק, איטי)</option><option value="small">כללי: מהיר</option><option value="large-v3-turbo">כללי: מדויק</option></select>
       </label>
-      <label class="field">Run on
-        <select id="setDevice"><option value="auto">Auto</option><option value="cpu">CPU</option><option value="cuda">NVIDIA GPU</option></select>
+      <label class="field">להריץ על
+        <select id="setDevice"><option value="auto">אוטומטי</option><option value="cpu">מעבד (CPU)</option><option value="cuda">כרטיס מסך NVIDIA</option></select>
       </label>
     </div>
-    <label class="field">Speech language
-      <select id="setLang"><option value="he">עברית</option><option value="auto">זיהוי אוטומטי</option><option value="en">English</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="fr">French</option><option value="de">German</option><option value="it">Italian</option><option value="nl">Dutch</option><option value="pl">Polish</option><option value="tr">Turkish</option><option value="ru">Russian</option><option value="uk">Ukrainian</option><option value="ar">Arabic</option><option value="he">Hebrew</option><option value="hi">Hindi</option><option value="th">Thai</option><option value="vi">Vietnamese</option><option value="id">Indonesian</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="zh">Chinese</option></select>
+    <label class="field">שפת הדיבור בסטרים
+      <select id="setLang"><option value="he">עברית</option><option value="auto">זיהוי אוטומטי</option><option value="en">אנגלית</option><option value="es">ספרדית</option><option value="pt">פורטוגזית</option><option value="fr">צרפתית</option><option value="de">גרמנית</option><option value="it">איטלקית</option><option value="nl">הולנדית</option><option value="pl">פולנית</option><option value="tr">טורקית</option><option value="ru">רוסית</option><option value="uk">אוקראינית</option><option value="ar">ערבית</option><option value="he">עברית</option><option value="hi">הינדי</option><option value="th">תאית</option><option value="vi">וייטנאמית</option><option value="id">אינדונזית</option><option value="ja">יפנית</option><option value="ko">קוריאנית</option><option value="zh">סינית</option></select>
     </label>
     <label class="field">TikTok client key <input id="setTtKey" type="text" autocomplete="off"></label>
     <label class="field">TikTok client secret <input id="setTtSecret" type="password" autocomplete="off"></label>
-    <span class="tiny muted">From developers.tiktok.com. Redirect URI: http://localhost:47860/tiktok/callback</span>
-    <button id="btnWelcome" class="btn ghost full">Run the welcome again</button>
-    <button id="btnSaveSettings" class="btn primary full">Save</button>
+    <span class="tiny muted">מ-developers.tiktok.com. כתובת הפניה: http://localhost:47860/tiktok/callback</span>
+    <button id="btnWelcome" class="btn ghost full">הצגת מסך הפתיחה שוב</button>
+    <button id="btnSaveSettings" class="btn primary full">שמירה</button>
   </div>
 </div>
 

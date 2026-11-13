@@ -604,3 +604,18 @@ body.pro-locked .switch.pro-only::after { top: -9px; right: -10px; }
 .news-bar #newsText{flex:1;min-width:0}
 .news-bar .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
 .news-bar.hidden{display:none}
+
+/* ---- Klipon: Hebrew, right to left ---- */
+@font-face { font-family: "Heebo"; font-weight: 400 600; src: url("Heebo-SemiBold.ttf") format("truetype"); }
+@font-face { font-family: "Heebo"; font-weight: 700 900; src: url("Heebo-ExtraBold.ttf") format("truetype"); }
+@font-face { font-family: "Rubik Black"; src: url("Rubik-Black.ttf") format("truetype"); }
+@font-face { font-family: "Rubik ExtraBold"; src: url("Rubik-ExtraBold.ttf") format("truetype"); }
+@font-face { font-family: "Heebo ExtraBold"; src: url("Heebo-ExtraBold.ttf") format("truetype"); }
+@font-face { font-family: "Secular One"; src: url("SecularOne-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Suez One"; src: url("SuezOne-Regular.ttf") format("truetype"); }
+:root, [data-theme] { --font: "Heebo", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; }
+/* time runs left to right: the timeline, its ruler, the progress bars and the video boxes stay LTR */
+.tl-stage, .tl-box, .tl-track, .tl-row, .tl-inner, .tl-ruler, .tl-scroll, .tl-marquee, .bar, video, .mono-t,
+#rangeFrom, #rangeTo, #addSrc, #setApiKey, #setOut, #setTtKey, #setTtSecret { direction: ltr; }
+#addSrc::placeholder { direction: rtl; text-align: right; }
+.tl-cap { font-family: "Rubik Black", "Heebo", sans-serif; font-weight: 400; direction: rtl; }

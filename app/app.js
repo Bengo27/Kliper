@@ -678,7 +678,7 @@
     $("swatches").innerHTML = SWATCHES.map(function (c) {
       return '<button class="swatch' + (String(o.highlight).toLowerCase() === c ? " on" : "") + '" data-color="' + c + '" style="background:' + c + '" aria-label="Highlight ' + c + '"></button>';
     }).join("");
-    $("sFont").value = o.font || "Montserrat ExtraBold";
+    $("sFont").value = o.font || "Rubik Black";
     $("sWatermark").value = o.watermark || "";
     $("sWords").value = String(o.words_per_line || "3");
     $("sSize").value = o.size || 1;
