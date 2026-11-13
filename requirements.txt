@@ -1,0 +1,10 @@
+# Clip Genie engine (Python 3.11, Windows)
+faster-whisper==1.2.1
+ctranslate2==4.8.3
+numpy==2.4.6
+opencv-python-headless==5.0.0.93
+onnxruntime==1.31.0
+yt-dlp==2026.8.19
+# Optional, NVIDIA GPU speech recognition (much faster):
+# nvidia-cublas-cu12==12.9.2.10
+# nvidia-cudnn-cu12==9.27.0.42

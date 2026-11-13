@@ -1,0 +1,29 @@
+# Bundled runtimes (huge, never change): copied from the live install, not tracked
+/python/
+/ffmpeg/
+/models/
+/cache/
+/window/
+/window2/
+
+# Never commit secrets or user data
+settings.json
+engine_token
+tiktok_token.json
+twitch_cookies.txt
+library.json
+taste.json
+*.log
+
+# Prototype renders for review
+/prototypes/
+
+# Build / work files
+__pycache__/
+*.pyc
+.work/
+.clipgenie/
+.claude/settings.local.json
+
+# Wrangler cache (made when wrangler runs in the repo root)
+.wrangler/

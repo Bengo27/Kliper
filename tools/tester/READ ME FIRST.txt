@@ -1,0 +1,35 @@
+CLIP GENIE - TESTER COPY
+========================
+Clip Genie turns your Twitch streams and clips into TikToks (9:16, webcam + gameplay, cuts, titles).
+Thanks for testing! It's an early test version, so things can break: please tell me when they do.
+
+WHAT YOU NEED
+- Windows 10 or 11, about 5 GB free space.
+- An NVIDIA graphics card makes it much faster (it also works without one, just slower).
+
+INSTALL
+1. Unzip this whole folder (right-click the zip > Extract All).
+2. Double-click "Install Clip Genie.cmd".
+   If Windows says "Windows protected your PC": click "More info" > "Run anyway"
+   (the test version isn't signed yet).
+3. Clip Genie opens. Answer the 3 quick questions (your Twitch name, music, sounds).
+
+MAKE TIKTOKS
+- Paste a Twitch VOD link (twitch.tv/videos/...) or a Twitch clip link and press "Make TikToks".
+  For a long VOD you can pick just a part (From / To times).
+- The first stream takes longer: it downloads the speech model once.
+- Open a TikTok to edit it (style, subtitles, title, timeline). Press Apply to re-make it.
+- To save a TikTok: open it > Export > "Export video" (saves the MP4), or "Export to phone"
+  (scan the QR code with your phone, same Wi-Fi). Finished videos are also in
+  Videos\Clip Genie.
+- Phone: Settings > "Use Clip Genie on your phone" (same Wi-Fi) lets you save TikToks to your phone.
+
+WHAT TO SEND BACK
+- What went wrong or looked bad, with the stream link and roughly when.
+- If something breaks, also send this file:
+  %APPDATA%\GenieStudioFX\ClipGenie\engine.log
+  (paste that line into the File Explorer address bar to find it)
+
+REMOVE IT
+- Right-click "uninstall.ps1" in %LOCALAPPDATA%\GenieStudioFX\ClipGenie > "Run with PowerShell".
+  Your finished videos are kept.
