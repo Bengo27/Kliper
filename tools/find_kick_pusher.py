@@ -25,4 +25,9 @@ for src in srcs:
             seen.add(sig)
             print("FOUND in", url.split("/")[-1][:60], "| keys", keys, "| hosts", hosts, "| cluster", clus)
             print("   ", ctx[:330])
+    i = js.find("websockets.kick.com")
+    while i >= 0:
+        print("=== websockets.kick.com in", url.split("/")[-1][:60])
+        print(js[max(0, i - 2500): i + 2500].replace("\n", " "))
+        i = js.find("websockets.kick.com", i + 1)
 print("done")
