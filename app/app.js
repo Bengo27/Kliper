@@ -414,10 +414,10 @@
   var ED_OPTS = ["color_others", "style", "font", "words_per_line", "highlight", "size", "caption_seam", "position", "uppercase", "captions",
     "layout", "zoom", "jump_cuts", "cut_boring", "hook_teaser", "cutaways", "sfx", "cam_tight", "watermark",
     "look", "title_bar", "title_pos", "title_highlight", "title_text", "frame", "watermark_pos", "overlays", "react_sfx",
-    "title_style", "chat_popups", "cam_ratio", "chat_opacity", "chat_name_opacity", "logo_size", "logo_dx", "logo_dy", "watermark_logo", "watermark_opacity",
+    "title_style", "chat_popups", "cam_ratio", "chat_opacity", "chat_name_opacity", "logo_size", "logo_dx", "logo_dy", "watermark_logo", "watermark_opacity", "watermark_platform",
     "subs_mode", "title_size", "punch_more", "end_bw", "end_word", "kf_names", "subs_lang"];
   var LOOK_KEYS = ["layout", "title_bar", "title_pos", "title_highlight", "title_style", "frame", "watermark_pos", "overlays",
-    "title_size", "subs_mode", "punch_more", "end_bw", "sfx", "chat_style", "chat_pos"];
+    "title_size", "subs_mode", "punch_more", "end_bw", "sfx", "chat_style", "chat_pos", "watermark_platform"];
 
   /* ---------------- looks (2.18): ready-made styles + your own ---------------- */
   function looks() { return (state.lib && state.lib.looks) || { presets: [], mine: {}, hud_parts: [] }; }
@@ -442,6 +442,7 @@
     }).join("");
     renderKfNames();
     $("sTitlePos").value = o.title_pos || "top";
+    $("sWmPlat").value = o.watermark_platform || "auto";
     $("sTitleStyle").value = o.title_style || "plain";
     $("sChatPop").value = o.chat_popups || "auto";
     [["sChatOpacity", "chat_opacity"], ["sChatNameOpacity", "chat_name_opacity"]].forEach(function (p) {
@@ -1185,7 +1186,7 @@
       if (k >= 0) ov.splice(k, 1); else ov.push(b.dataset.hud);
       state.ed.style.overlays = ov; lookChanged("overlays"); syncEdControls(); setDirty();
     });
-    [["sTitlePos", "title_pos"], ["sTitleColor", "title_highlight"], ["sWmPos", "watermark_pos"], ["sTitleStyle", "title_style"], ["sChatPop", "chat_popups"]].forEach(function (p) {
+    [["sTitlePos", "title_pos"], ["sTitleColor", "title_highlight"], ["sWmPos", "watermark_pos"], ["sWmPlat", "watermark_platform"], ["sTitleStyle", "title_style"], ["sChatPop", "chat_popups"]].forEach(function (p) {
       $(p[0]).addEventListener("change", function () { state.ed.style[p[1]] = this.value; lookChanged(p[1]); syncEdControls(); setDirty(); });
     });
     [["sChatOpacity", "chat_opacity"], ["sChatNameOpacity", "chat_name_opacity"]].forEach(function (p) {

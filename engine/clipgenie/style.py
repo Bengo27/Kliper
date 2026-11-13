@@ -7,6 +7,7 @@ EDITOR_STYLE = {
     # outline, hype words + sound effects (*laughs*) in green, swearing censored (sh*t)
     "style": "editor",
     "font": "Rubik Black",
+    "watermark_platform": "auto",   # Kliper: logo next to the name: auto (Kick/Twitch/YouTube) / kick / twitch / youtube / none
     "highlight": "#3dff4a",
     "words_per_line": "4",
     "uppercase": False,

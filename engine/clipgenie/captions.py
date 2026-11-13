@@ -302,9 +302,33 @@ def _inactive(style, t):
     return t
 
 
+# Kliper: the logo next to the channel name follows where the stream is from (Kick / Twitch / YouTube),
+# or a fixed choice in Look -> "logo next to the name". Shapes in a 104-unit box, colours as ASS BGR.
+LOGOS = {
+    "twitch": [("FF4191", [(14, 0), (90, 0), (90, 56), (66, 80), (48, 80), (32, 96), (32, 80), (0, 80), (0, 14)]),
+               ("FFFFFF", [(10, 8), (82, 8), (82, 52), (62, 72), (44, 72), (32, 84), (32, 72), (10, 72)]),
+               ("FF4191", [(36, 22), (44, 22), (44, 46), (36, 46)]), ("FF4191", [(58, 22), (66, 22), (66, 46), (58, 46)])],
+    "kick": [("18FC53", [(10, 0), (80, 0), (90, 10), (90, 80), (80, 90), (10, 90), (0, 80), (0, 10)]),
+             ("000000", [(20, 16), (38, 16), (38, 36), (46, 36), (46, 26), (56, 26), (56, 16), (72, 16), (72, 34), (62, 34),
+                         (62, 42), (54, 42), (54, 48), (62, 48), (62, 56), (72, 56), (72, 74), (56, 74), (56, 64), (46, 64),
+                         (46, 54), (38, 54), (38, 74), (20, 74)])],
+    "youtube": [("0000FF", [(12, 10), (78, 10), (90, 22), (90, 68), (78, 80), (12, 80), (0, 68), (0, 22)]),
+                ("FFFFFF", [(34, 26), (34, 64), (64, 45)])],
+}
+
+
+def logo_platform(opts):
+    """Which logo goes next to the channel name: 'kick', 'twitch', 'youtube' or None (no logo)."""
+    p = (opts.get("watermark_platform") or "auto").lower()
+    if p == "auto":
+        p = (opts.get("_platform") or "kick").lower()   # a file on this PC: Kick (most Israeli streamers)
+    return p if p in LOGOS else None
+
+
 def _watermark_lines(name, opts, duration):
     """Twitch glitch logo + channel name, centred on the gameplay near the bottom."""
-    show_logo = opts.get("watermark_logo", True) is not False      # 2.22: logo can be hidden / resized / nudged
+    plat = logo_platform(opts)
+    show_logo = opts.get("watermark_logo", True) is not False and plat is not None   # 2.22: logo can be hidden / resized / nudged
     ls = max(0.2, min(3.0, float(opts.get("logo_size", 1.0) or 1.0)))
     # 2.35.4: the size slider scales logo AND name as one (the creator: "the sizing is all in 1")
     scale = float(opts.get("watermark_size", 1.0)) * ls
@@ -341,9 +365,8 @@ def _watermark_lines(name, opts, duration):
     base = r"{\an7\pos(%d,%d)\bord0\shad0\blur0.6" % (lx0, ly0) + alpha + r"\p1"
     t0, t1 = _ts(0), _ts(duration)
     out = [] if not show_logo else [
-        f"Dialogue: 0,{t0},{t1},Cap,,0,0,0,," + base + r"\1c&HFF4191&}" + path(outer) + r"{\p0}",
-        f"Dialogue: 0,{t0},{t1},Cap,,0,0,0,," + base + r"\1c&HFFFFFF&}" + path(inner) + r"{\p0}",
-        f"Dialogue: 0,{t0},{t1},Cap,,0,0,0,," + base + r"\1c&HFF4191&}" + path(eye1) + " " + path(eye2) + r"{\p0}",
+        f"Dialogue: 0,{t0},{t1},Cap,,0,0,0,," + base + r"\1c&H" + col + "&}" + path(pts) + r"{\p0}"
+        for col, pts in LOGOS[plat]
     ]
     out += [
         f"Dialogue: 0,{t0},{t1},Cap,,0,0,0,," +

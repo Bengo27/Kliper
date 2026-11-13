@@ -1131,6 +1131,7 @@ def preview(key, clip_id, style=None, cam_box=None, game_box=None, analysis_cach
     wc = pl.clip_webcam(a, c) or {}
     title = (opts.get("title_text") or "").strip() or lc.get("title") or c.get("title") or ""
     gb = [float(v) for v in game_box] if game_box else c.get("game_box")
+    opts = dict(opts, _platform=a.remote.platform if a.remote else "")
     return rd.preview_geometry(a.info, wc, opts, gb, title)
 
 

@@ -1183,7 +1183,9 @@ def preview_geometry(info, webcam, opts, game_box=None, title_text=""):
     out = {"layout": layout, "layers": L, "w": OW, "h": OH}
     wm = (opts.get("watermark") or "").strip()
     if wm:
-        show_logo = co.get("watermark_logo", True) is not False
+        from .captions import logo_platform
+        plat = logo_platform(co)
+        show_logo = co.get("watermark_logo", True) is not False and plat is not None
         ls = max(0.2, min(3.0, float(co.get("logo_size", 1.0) or 1.0)))
         scale = float(co.get("watermark_size", 1.0)) * ls             # 2.35.4: logo + name sized as one
         fs = int(58 * scale)
@@ -1198,7 +1200,7 @@ def preview_geometry(info, webcam, opts, game_box=None, title_text=""):
         op = co.get("watermark_opacity")
         out["name"] = {"text": wm, "fs": fs, "x": x0 + lw + gap, "y": cy_ - lh // 2 + int(lh * 0.42),
                        "alpha": max(0.0, min(1.0, float(100 if op is None else op) / 100.0)),
-                       "logo": [x0, cy_ - lh // 2, lh] if show_logo else None}
+                       "logo": [x0, cy_ - lh // 2, lh, plat] if show_logo else None}
     if co.get("title_bar") and (title_text or "").strip():
         ts = co.get("title_style") or "plain"
         boxed = ts in ("box", "banner")

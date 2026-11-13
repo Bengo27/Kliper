@@ -568,6 +568,7 @@ def preview(a, clip_id, edit, opts, out_dir):
     if opts.get("color_others", True):
         label_voices(a, c["start"], c["end"])
     video, info, c, words, ac, sil = _localize(a, c)
+    opts = dict(opts, _platform=a.remote.platform if a.remote else "")
     return rd.render_preview(video, info, c, words, clip_webcam(a, c), opts, out_dir, silences=sil)
 
 
@@ -645,6 +646,7 @@ def linger_end(a, c, edit, opts):
 
 def render_all(a, clip_ids, edits, opts, out_dir, progress):
     """edits: {clip_id: {"text": "...", "start": s, "end": e, "hook": "..."}}"""
+    opts = dict(opts, _platform=a.remote.platform if a.remote else "")   # Kliper: Kick / Twitch / YouTube logo
     chosen = [c for c in a.clips if c["id"] in clip_ids]
     try:
         hook_check(a, [c for c in chosen if not (edits or {}).get(c["id"])], opts)

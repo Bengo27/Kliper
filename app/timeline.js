@@ -275,6 +275,16 @@ window.CGTimeline = (function () {
     });
     ctx.textAlign = "center";
   }
+  // Kliper: the same logos as engine/clipgenie/captions.py LOGOS (Kick / Twitch / YouTube)
+  var PLOGOS = {
+    twitch: [["#9141ff", [[14, 0], [90, 0], [90, 56], [66, 80], [48, 80], [32, 96], [32, 80], [0, 80], [0, 14]]],
+             ["#fff", [[10, 8], [82, 8], [82, 52], [62, 72], [44, 72], [32, 84], [32, 72], [10, 72]]],
+             ["#9141ff", [[36, 22], [44, 22], [44, 46], [36, 46]]], ["#9141ff", [[58, 22], [66, 22], [66, 46], [58, 46]]]],
+    kick: [["#53fc18", [[10, 0], [80, 0], [90, 10], [90, 80], [80, 90], [10, 90], [0, 80], [0, 10]]],
+           ["#000", [[20, 16], [38, 16], [38, 36], [46, 36], [46, 26], [56, 26], [56, 16], [72, 16], [72, 34], [62, 34], [62, 42], [54, 42],
+                     [54, 48], [62, 48], [62, 56], [72, 56], [72, 74], [56, 74], [56, 64], [46, 64], [46, 54], [38, 54], [38, 74], [20, 74]]]],
+    youtube: [["#ff0000", [[12, 10], [78, 10], [90, 22], [90, 68], [78, 80], [12, 80], [0, 68], [0, 22]]], ["#fff", [[34, 26], [34, 64], [64, 45]]]]
+  };
   var LOGO = { outer: [[14, 0], [90, 0], [90, 56], [66, 80], [48, 80], [32, 96], [32, 80], [0, 80], [0, 14]],
     inner: [[10, 8], [82, 8], [82, 52], [62, 72], [44, 72], [32, 84], [32, 72], [10, 72]],
     e1: [[36, 22], [44, 22], [44, 46], [36, 46]], e2: [[58, 22], [66, 22], [66, 46], [58, 46]] };
@@ -318,8 +328,7 @@ window.CGTimeline = (function () {
       ctx.save(); ctx.globalAlpha = n.alpha == null ? 1 : n.alpha;   // 0.1: logo + name opacity
       if (n.logo) {
         var k = n.logo[2] / 104, lx = n.logo[0], ly = n.logo[1];
-        poly(ctx, LOGO.outer, lx, ly, k, "#9141ff"); poly(ctx, LOGO.inner, lx, ly, k, "#fff");
-        poly(ctx, LOGO.e1, lx, ly, k, "#9141ff"); poly(ctx, LOGO.e2, lx, ly, k, "#9141ff");
+        (PLOGOS[n.logo[3] || "twitch"] || []).forEach(function (p) { poly(ctx, p[1], lx, ly, k, p[0]); });
       }
       ctx.font = "800 " + n.fs + "px Montserrat, 'Segoe UI', sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
       strokeFill(ctx, n.text, n.x, n.y, 6, "#fff"); ctx.textAlign = "center";
