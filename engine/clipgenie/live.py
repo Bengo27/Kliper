@@ -22,7 +22,7 @@ POLL_OFF = 90       # seconds between "are you live?" checks
 POLL_LIVE = 60
 VOD_WAIT_MAX = 6 * 3600   # give up looking for the VOD after this long
 
-STATUS = {"enabled": False, "channel": "", "live": False, "title": "", "since": None, "chat": 0,
+STATUS = {"enabled": False, "channel": "", "live": False, "title": "", "since": None, "chat": 0, "chat_ok": True,
           "state": "off", "message": "", "checked_at": None}
 
 
@@ -102,6 +102,12 @@ class ChatRecorder(threading.Thread):
                                 continue
                             ev = json.loads(raw)
                             name = ev.get("event", "")
+                            if name == "pusher:error":
+                                # Kick moved its chat off this Pusher app (Nov 2026): stop instead of retrying forever
+                                log.warning("Live chat unavailable: %s", ev.get("data"))
+                                STATUS["chat_ok"] = False
+                                self.stop_ev.set()
+                                break
                             if name == "pusher_internal:subscription_succeeded":
                                 self.subscribed = True
                                 continue
