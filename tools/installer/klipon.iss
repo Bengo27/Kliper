@@ -1,12 +1,12 @@
-; Clip Genie Setup.exe (Inno Setup 6). Build:
-;   "K:\ClipGenieBuild\InnoSetup6\ISCC.exe" /DSrc="<staged ClipGenie folder>" /O"<out dir>" tools\installer\clipgenie.iss
-; <staged ClipGenie folder> = the "ClipGenie" folder tools/build_tester.py makes (app, engine, python, ffmpeg, README.md).
+; Klipon Setup.exe (Inno Setup 6). Build:
+;   "K:\KliponBuild\InnoSetup6\ISCC.exe" /DSrc="<staged Klipon folder>" /O"<out dir>" tools\installer\clipgenie.iss
+; <staged Klipon folder> = the "Klipon" folder tools/build_tester.py makes (app, engine, python, ffmpeg, README.md).
 ; Installs for this Windows user only (no admin), to the same place as before:
-; %LOCALAPPDATA%\GenieStudioFX\ClipGenie by default; the user can pick another folder (the launcher only stops the
+; %LOCALAPPDATA%\BengoGames\Klipon by default; the user can pick another folder (the launcher only stops the
 ; engine of its own folder, so any path works).
 
 #ifndef Src
-  #error Pass /DSrc="...\ClipGenie"
+  #error Pass /DSrc="...\Klipon"
 #endif
 ;   the version comes from PUBLIC_VERSION in engine\clipgenie\server.py (the one the app shows); /DAppVer=x.y.z overrides
 #ifndef AppVer
@@ -41,16 +41,16 @@
 #endif
 
 [Setup]
-AppId={{7C1F2B9A-4E3D-4C8B-9B2A-C11E6E9A3D57}
-AppName=Clip Genie
+AppId={{A3E5D1C2-6B7F-4E21-9C8D-5B1F0E2A7D44}
+AppName=Klipon
 AppVersion={#Label}
-AppVerName=Clip Genie {#Label}
-AppPublisher=GenieStudioFX
-AppCopyright=Copyright (C) 2026 GenieStudioFX
+AppVerName=Klipon {#Label}
+AppPublisher=BengoGames
+AppCopyright=Copyright (C) 2026 BengoGames
 VersionInfoVersion={#AppVer}
-VersionInfoCompany=GenieStudioFX
-VersionInfoDescription=Clip Genie {#Stage} Setup
-VersionInfoProductName=Clip Genie
+VersionInfoCompany=BengoGames
+VersionInfoDescription=Klipon {#Stage} Setup
+VersionInfoProductName=Klipon
 VersionInfoProductVersion={#AppVer}
 PrivilegesRequired=lowest
 DefaultDirName={code:DefDir}
@@ -63,10 +63,10 @@ AppendDefaultDirName=yes
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0
-OutputBaseFilename=Clip Genie Setup {#Label}
+OutputBaseFilename=Klipon Setup {#Label}
 SetupIconFile=..\..\app\icon.ico
 UninstallDisplayIcon={app}\app\icon.ico
-UninstallDisplayName={#Trim("Clip Genie " + Stage)}
+UninstallDisplayName={#Trim("Klipon " + Stage)}
 ; dark purple theme to match the app (the creator: "extra premium")
 WizardStyle=modern dark hidebevels includetitlebar
 WizardBackColor=#150b28
@@ -84,11 +84,11 @@ RestartApplications=no
 Name: "en"; MessagesFile: "compiler:Default.isl"
 
 [Messages]
-WelcomeLabel2=This will install Clip Genie {#Label} on your computer.%n%n{#BetaNote}Clip Genie turns your Twitch streams and clips into TikToks: webcam + gameplay, cuts, titles and subtitles.%n%nYou need about 5 GB of free space. An NVIDIA graphics card makes it much faster.
-FinishedLabel=Clip Genie is installed.%n%nThe first stream takes a bit longer: it downloads the speech model once (about 0.5 GB).
+WelcomeLabel2=This will install Klipon {#Label} on your computer.%n%n{#BetaNote}Klipon turns your Twitch streams and clips into TikToks: webcam + gameplay, cuts, titles and subtitles.%n%nYou need about 5 GB of free space. An NVIDIA graphics card makes it much faster.
+FinishedLabel=Klipon is installed.%n%nThe first stream takes a bit longer: it downloads the speech model once (about 0.5 GB).
 
 [Tasks]
-Name: "desktopicon"; Description: "Put Clip Genie on the Desktop"; GroupDescription: "Shortcuts:"
+Name: "desktopicon"; Description: "Put Klipon on the Desktop"; GroupDescription: "Shortcuts:"
 
 [Files]
 Source: "{#Src}\app\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -102,25 +102,25 @@ Source: "{#Src}\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Type: files; Name: "{app}\uninstall.ps1"
 
 [Icons]
-Name: "{autoprograms}\Clip Genie"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Clip Genie: Twitch streams to TikToks"; Check: not IsTest
-Name: "{autodesktop}\Clip Genie"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Clip Genie: Twitch streams to TikToks"; Tasks: desktopicon; Check: not IsTest
+Name: "{autoprograms}\Klipon"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Klipon: Twitch streams to TikToks"; Check: not IsTest
+Name: "{autodesktop}\Klipon"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Klipon: Twitch streams to TikToks"; Tasks: desktopicon; Check: not IsTest
 
 [Run]
-Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; Description: "Open Clip Genie now"; Flags: postinstall nowait skipifsilent; Check: not IsTest
+Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; Description: "Open Klipon now"; Flags: postinstall nowait skipifsilent; Check: not IsTest
 
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""{code:StopCmd}"""; Flags: runhidden waituntilterminated; RunOnceId: "StopEngine"
 
 [UninstallDelete]
-; app files + what Clip Genie downloads next to them (speech models, cache, window profile).
+; app files + what Klipon downloads next to them (speech models, cache, window profile).
 ; Settings / library in %APPDATA% and the finished videos are kept.
 Type: filesandordirs; Name: "{app}"
-; downloads Clip Genie keeps in AppData whatever folder it was installed to (speech models, stream cache, window)
-Type: filesandordirs; Name: "{localappdata}\GenieStudioFX\ClipGenie\models"; Check: not IsTest
-Type: filesandordirs; Name: "{localappdata}\GenieStudioFX\ClipGenie\cache"; Check: not IsTest
-Type: filesandordirs; Name: "{localappdata}\GenieStudioFX\ClipGenie\window"; Check: not IsTest
-Type: filesandordirs; Name: "{localappdata}\GenieStudioFX\ClipGenie\window2"; Check: not IsTest
-Type: dirifempty; Name: "{localappdata}\GenieStudioFX\ClipGenie"; Check: not IsTest
+; downloads Klipon keeps in AppData whatever folder it was installed to (speech models, stream cache, window)
+Type: filesandordirs; Name: "{localappdata}\BengoGames\Klipon\models"; Check: not IsTest
+Type: filesandordirs; Name: "{localappdata}\BengoGames\Klipon\cache"; Check: not IsTest
+Type: filesandordirs; Name: "{localappdata}\BengoGames\Klipon\window"; Check: not IsTest
+Type: filesandordirs; Name: "{localappdata}\BengoGames\Klipon\window2"; Check: not IsTest
+Type: dirifempty; Name: "{localappdata}\BengoGames\Klipon"; Check: not IsTest
 
 [Code]
 { /CGTEST on the command line: no shortcuts, no settings, no start (for checking a copy in another folder with /DIR=) }
@@ -133,12 +133,12 @@ end;
 function DefDir(Param: String): String;
 begin
   if IsTest then
-    Result := ExpandConstant('{%TEMP}\ClipGenieSetupTest\ClipGenie')
+    Result := ExpandConstant('{%TEMP}\KliponSetupTest\Klipon')
   else
-    Result := ExpandConstant('{localappdata}\GenieStudioFX\ClipGenie');
+    Result := ExpandConstant('{localappdata}\BengoGames\Klipon');
 end;
 
-{ stops only the Clip Genie running from THIS folder }
+{ stops only the Klipon running from THIS folder }
 function StopCmdFor(Dir: String): String;
 begin
   Result := 'Get-CimInstance Win32_Process -Filter ''Name=\"pythonw.exe\" OR Name=\"python.exe\"'' | ' +
@@ -155,7 +155,7 @@ function PrepareToInstall(var NeedsRestart: Boolean): String;
 var
   Code: Integer;
 begin
-  { stop a running Clip Genie so its files can be replaced (never in test mode) }
+  { stop a running Klipon so its files can be replaced (never in test mode) }
   if not IsTest then
     Exec('powershell.exe', '-NoProfile -ExecutionPolicy Bypass -Command "' + StopCmdFor(WizardDirValue) + '"', '',
        SW_HIDE, ewWaitUntilTerminated, Code);
@@ -169,7 +169,7 @@ begin
   if (CurStep = ssPostInstall) and not IsTest then
   begin
     { first run: empty name tag (the welcome screen asks for the Twitch name); plain ASCII, no BOM }
-    Dir := ExpandConstant('{userappdata}\GenieStudioFX\ClipGenie');
+    Dir := ExpandConstant('{userappdata}\BengoGames\Klipon');
     ForceDirectories(Dir);
     if not FileExists(Dir + '\settings.json') then
       SaveStringToFile(Dir + '\settings.json', '{ "style": { "watermark": "" } }', False);

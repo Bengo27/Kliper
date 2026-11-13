@@ -1,6 +1,6 @@
 """Game playbooks: what makes a good TikTok in the game being played.
 
-Clip Genie reads which game a stream (or each part of a stream) is on from Twitch, and gives the AI the
+Klipon reads which game a stream (or each part of a stream) is on from Twitch, and gives the AI the
 matching playbook so it knows what to look for. Add a game by adding an entry to PLAYBOOKS; anything
 without one gets the general rules. Your own notes from Settings ("Notes for the AI") are added on top.
 """

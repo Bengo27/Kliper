@@ -235,7 +235,7 @@ def analyze(a, opts, progress):
             except Exception as e:
                 log.warning("Gameplay check failed: %s", e)
 
-    try:  # how you usually trim/extend Clip Genie's picks
+    try:  # how you usually trim/extend Klipon's picks
         from . import taste
         ds, de = taste.edit_bias()
         rb = taste.reason_bias()

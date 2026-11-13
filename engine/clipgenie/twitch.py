@@ -25,7 +25,7 @@ _SECTION_LOCK = threading.Lock()
 
 
 CLIP_RX = re.compile(r"(?:clips\.twitch\.tv/(?:embed\?clip=)?|twitch\.tv/[\w-]+/clip/)([\w-]+)", re.I)
-# 0.1.2: YouTube and Kick too (yt-dlp reads both). Their ids get a "yt-" / "kick-" prefix inside Clip Genie.
+# 0.1.2: YouTube and Kick too (yt-dlp reads both). Their ids get a "yt-" / "kick-" prefix inside Klipon.
 YT_RX = re.compile(r"(?:youtube\.com/(?:watch\?(?:[^#]*&)?v=|live/|embed/|v/)|youtu\.be/)([\w-]{11})", re.I)
 YT_SHORT_RX = re.compile(r"youtube\.com/shorts/([\w-]{11})", re.I)
 KICK_VOD_RX = re.compile(r"kick\.com/[\w-]+/videos/([\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12})", re.I)
@@ -156,7 +156,7 @@ def vod_range(url):
 
 
 def _plain_link(url):
-    """A YouTube / Kick link without Clip Genie's range part."""
+    """A YouTube / Kick link without Klipon's range part."""
     u = re.sub(r"[?&]cg_from=[\d.]+&cg_to=[\d.]+", "", (url or "").strip())
     return u if u.startswith("http") else "https://" + u
 
@@ -171,7 +171,7 @@ def range_link(url, a, b):
 
 def cache_dir(vid, rng=None):
     local = os.environ.get("LOCALAPPDATA")
-    base = os.path.join(local, "GenieStudioFX", "ClipGenie", "cache") if local else os.path.join(data_dir(), "cache")
+    base = os.path.join(local, "BengoGames", "Klipon", "cache") if local else os.path.join(data_dir(), "cache")
     d = os.path.join(base, stream_name(vid) + (f"_r{int(rng[0])}_{int(rng[1])}" if rng else ""))
     os.makedirs(d, exist_ok=True)
     return d
@@ -182,7 +182,7 @@ class TwitchVod:
         self.id = vod_id(url)
         self.platform = platform(self.id)   # 0.1.2: twitch / youtube / kick
         self.url = f"https://www.twitch.tv/videos/{self.id}" if self.platform == "twitch" else _plain_link(url)
-        # 2.35.3: a time range = its own stream: every time inside Clip Genie is counted from `off` (the range's
+        # 2.35.3: a time range = its own stream: every time inside Klipon is counted from `off` (the range's
         # start); only the downloads below add it back
         self.range = vod_range(url)
         self.off = self.range[0] if self.range else 0.0

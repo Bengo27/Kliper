@@ -1,1 +1,1 @@
-"""Clip Genie engine — Genie Studio FX."""
+"""Klipon engine — BengoGames."""

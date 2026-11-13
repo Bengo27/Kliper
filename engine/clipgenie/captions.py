@@ -4,6 +4,13 @@ import re
 W, H = 1080, 1920
 
 FONTS = {
+    # Hebrew + Latin (Klipon's defaults): Rubik, Heebo, Secular One, Suez One (SIL OFL, engine/fonts)
+    "Rubik Black": {"size": 100, "spacing": 0},
+    "Rubik ExtraBold": {"size": 96, "spacing": 0},
+    "Heebo ExtraBold": {"size": 100, "spacing": 0},
+    "Secular One": {"size": 104, "spacing": 0},
+    "Suez One": {"size": 100, "spacing": 0},
+    # Latin only (no Hebrew letters: Hebrew words fall back to a system font)
     "Montserrat ExtraBold": {"size": 96, "spacing": 0},
     "Anton": {"size": 120, "spacing": 1},
     "Bebas Neue": {"size": 140, "spacing": 2},
@@ -337,7 +344,7 @@ def _watermark_lines(name, opts, duration):
     ]
     out += [
         f"Dialogue: 0,{t0},{t1},Cap,,0,0,0,," +
-        r"{\an4\pos(%d,%d)\fnMontserrat ExtraBold\fs%d\bord3\shad1\3c&H000000&\1c&HFFFFFF&%s}%s"
+        r"{\an4\pos(%d,%d)\fnRubik ExtraBold\fs%d\bord3\shad1\3c&H000000&\1c&HFFFFFF&%s}%s"
         % (x0 + lw + gap, ty, fs, alpha, _esc(name)),
     ]
     return out
@@ -377,7 +384,7 @@ def _title_lines(text, opts, duration):
     size = int((80 if boxed else 96) * float(opts.get("title_size", 1.0)))
     y = int(H * float(opts.get("title_y", 0.07)))
     if boxed:   # opaque white box behind the text (padding = the border)
-        tag = (r"{\an8\pos(%d,%d)\fnMontserrat ExtraBold\fs%d\bord14\shad0\3c&HFFFFFF&\1c" + base_c + r"&\q0}") % (W // 2, y, size)
+        tag = (r"{\an8\pos(%d,%d)\fnRubik ExtraBold\fs%d\bord14\shad0\3c&HFFFFFF&\1c" + base_c + r"&\q0}") % (W // 2, y, size)
         return [f"Dialogue: 2,{_ts(0)},{_ts(duration)},TitleBox,,90,90,0,," + tag + body]
     # 2.35: wrap the lines ourselves so they sit close together (the creator: "spacing too far"; the font's own line
     # height left a big gap between "NEW PHLOXIO" and "ALLEGATIONS"). Lines are balanced and each is drawn at
@@ -400,7 +407,7 @@ def _title_lines(text, opts, duration):
 
     def width(ws, sz):
         t = join_words([c for c, _ in ws])
-        return text_width(t, "Montserrat-ExtraBold.ttf", sz) or len(t) * sz * 0.62
+        return text_width(t, "Rubik-ExtraBold.ttf", sz) or len(t) * sz * 0.62
 
     # 2.35 (the creator): at most TWO lines (a 3rd line covered the webcam). One line if it fits; else the most even
     # 2-line split; if even that is too wide, the title gets smaller until it fits (down to 55 %).
@@ -423,7 +430,7 @@ def _title_lines(text, opts, duration):
     for i, ln in enumerate(lines):
         b = join_words([(r"{\1c" + hl + "&}" + _esc(c) + r"{\1c" + base_c + "&}") if hi else _esc(c)
                         for c, hi in ln])
-        tag = (r"{\an8\pos(%d,%d)\fnMontserrat ExtraBold\fs%d\bord6\shad2\3c&H000000&\1c&HFFFFFF&\q2}"
+        tag = (r"{\an8\pos(%d,%d)\fnRubik ExtraBold\fs%d\bord6\shad2\3c&H000000&\1c&HFFFFFF&\q2}"
                % (W // 2, y + int(i * step), size))
         out.append(f"Dialogue: 2,{_ts(0)},{_ts(duration)},Title,,70,70,0,," + tag + b)
     return out
@@ -472,14 +479,14 @@ def chat_lines_cards(pops, opts, duration, style, show=4.8):
         words, lines, cur = msg.split(" "), [], ""
         for wd in words:
             trial = (cur + " " + wd).strip()
-            if text_width(trial, "Inter-SemiBold.ttf", fs) <= maxw or not cur:
+            if text_width(trial, "Heebo-SemiBold.ttf", fs) <= maxw or not cur:
                 cur = trial
             else:
                 lines.append(cur); cur = wd
         lines.append(cur)
         lines = lines[:2]
-        lw = max(text_width(l, "Inter-SemiBold.ttf", fs) for l in lines)
-        nw = text_width(name, "Inter-ExtraBold.ttf", nfs) if name else 0
+        lw = max(text_width(l, "Heebo-SemiBold.ttf", fs) for l in lines)
+        nw = text_width(name, "Heebo-ExtraBold.ttf", nfs) if name else 0
         head = (nfs + 14) if (name and style != "banner") else 0
         if style == "stream":
             head = 56 + (nfs + 6 if name else 0)
@@ -524,26 +531,26 @@ def chat_lines_cards(pops, opts, duration, style, show=4.8):
         if style == "banner":
             out.append(shape(0, 0, 150, h, rad, "#9146ff", 0x00))
             out.append(shape(100, 0, 60, h, 1, "#9146ff", 0x00))   # squares off the tag's inner edge
-            text(18, h // 2, r"{\fnInter\b800\1c&HFFFFFF&}CHAT", 38)
+            text(18, h // 2, r"{\fnHeebo ExtraBold\b0\1c&HFFFFFF&}CHAT", 38)
         if style == "stream":
             out.append(shape(0, 0, w, 56, rad, "#26262c", 0x00))
             out.append(shape(0, 28, w, 28, 1, "#26262c", 0x00))
-            text(padx, 28, r"{\fnInter\b800\1c&HA0A0A8&}STREAM CHAT", 24, r"\fsp3")
+            text(padx, 28, r"{\fnHeebo ExtraBold\b0\1c&HA0A0A8&}STREAM CHAT", 24, r"\fsp3")
         if style == "sticker" and name:   # name tag sitting on the top-left corner of the sticker
             tw = int(nw + 36)
             out.append(shape(24, -26, tw, nfs + 18, (nfs + 18) // 2, col, 0x00, r"\bord5\3c&H111111&"))
-            text(24 + 18, -26 + (nfs + 18) // 2, r"{\fnInter\b800\1c&HFFFFFF&}" + _esc(name), nfs)
+            text(24 + 18, -26 + (nfs + 18) // 2, r"{\fnHeebo ExtraBold\b0\1c&HFFFFFF&}" + _esc(name), nfs)
         ty = head + pady + lh // 2
         lx = padx + (150 if full else 0)
         if name and style in ("grey", "bubble", "neon"):
-            text(lx, pady + nfs // 2 + 4, r"{\fnInter\b800\1c" + ass_c(col) + "&}" + _esc(name), nfs)
+            text(lx, pady + nfs // 2 + 4, r"{\fnHeebo ExtraBold\b0\1c" + ass_c(col) + "&}" + _esc(name), nfs)
         if name and style == "stream":
-            text(lx, 56 + 10 + nfs // 2, r"{\fnInter\b800\1c" + ass_c(col) + "&}" + _esc(name), nfs)
+            text(lx, 56 + 10 + nfs // 2, r"{\fnHeebo ExtraBold\b0\1c" + ass_c(col) + "&}" + _esc(name), nfs)
         body = [_esc(l) for l in lines]
         if style == "banner" and name:
-            body[0] = r"{\fnInter\b800\1c" + ass_c(col) + "&}" + _esc(name) + r"{\1c" + tcol + "&}: " + body[0]
+            body[0] = r"{\fnHeebo ExtraBold\b0\1c" + ass_c(col) + "&}" + _esc(name) + r"{\1c" + tcol + "&}: " + body[0]
         for i, l in enumerate(body):
-            text(lx, ty + i * lh, r"{\fnInter\b600\1c" + tcol + "&}" + l)
+            text(lx, ty + i * lh, r"{\fnHeebo SemiBold\b0\1c" + tcol + "&}" + l)
     return out
 
 
@@ -577,10 +584,10 @@ def chat_lines(pops, opts, duration, show=3.6, max_stack=3):
             continue
         pill = style == "pill" and name
         lead = (28 if accent else 0)
-        pill_w = int(text_width(name, "Inter-ExtraBold.ttf", fs - 4) + 30) if pill else 0
-        name_w = (pill_w + 14) if pill else (text_width(name + ": ", "Inter-ExtraBold.ttf", fs) if name else 0)
+        pill_w = int(text_width(name, "Heebo-ExtraBold.ttf", fs - 4) + 30) if pill else 0
+        name_w = (pill_w + 14) if pill else (text_width(name + ": ", "Heebo-ExtraBold.ttf", fs) if name else 0)
         room = maxw - 2 * pad_x - lead - name_w
-        mfont = "Inter-ExtraBold.ttf" if fill is None else "Inter-SemiBold.ttf"   # clean text is bolder
+        mfont = "Heebo-ExtraBold.ttf" if fill is None else "Heebo-SemiBold.ttf"   # clean text is bolder
         while msg and text_width(msg, mfont, fs) > room:
             msg = msg[:-2].rstrip() + "…" if len(msg) > 2 else ""
         if not msg:
@@ -636,12 +643,12 @@ def chat_lines(pops, opts, duration, show=3.6, max_stack=3):
             if pill:   # name in a Twitch-purple pill, message after it
                 ph = h - 20
                 out.append(shape(tx - 12, 10, pill_w, ph, ph // 2, "#9146ff", 0x00))
-                text(tx + 3, (r"{\fnInter\b800\fs%d\1c&HFFFFFF&}" % (fs - 4)) + _esc(name))
-                text(tx - 12 + pill_w + 14, r"{\fnInter\b600\1c&HEFEFF1&}" + _esc(msg))
+                text(tx + 3, (r"{\fnHeebo ExtraBold\b0\fs%d\1c&HFFFFFF&}" % (fs - 4)) + _esc(name))
+                text(tx - 12 + pill_w + 14, r"{\fnHeebo SemiBold\b0\1c&HEFEFF1&}" + _esc(msg))
             else:
                 white = "&HFFFFFF" if clean else "&HEFEFF1"
-                ntxt = (r"{\fnInter\b800\1a&H%02X&\1c" % name_a + col + "&}" + _esc(name) + r"{\1a&H00&\1c" + white + "&}: ") if name else ""
-                text(tx, ntxt + r"{\fnInter\b" + ("800" if clean else "600") + r"\1c" + white + "&}" + _esc(msg), centre_x=(tx + w - pad_x) // 2)
+                ntxt = (r"{\fnHeebo ExtraBold\b0\1a&H%02X&\1c" % name_a + col + "&}" + _esc(name) + r"{\1a&H00&\1c" + white + "&}: ") if name else ""
+                text(tx, ntxt + r"{\fn" + ("Heebo ExtraBold" if clean else "Heebo SemiBold") + r"\b0\1c" + white + "&}" + _esc(msg), centre_x=(tx + w - pad_x) // 2)
     return out
 
 
@@ -717,12 +724,12 @@ def chunk_events(chunks, opts, style, hl, uppercase):
 def build_ass(words, opts, duration, hook=None, hook_len=None):
     """words: [{start,end,text}] already on the clip's output timeline."""
     style = opts.get("style", "pop")
-    font = opts.get("font", "Anton")
+    font = opts.get("font", "Rubik Black")
     hl = opts.get("highlight", "#00e5ff")
     per_line = opts.get("words_per_line", 3)
     uppercase = opts.get("uppercase", True)
     ypos = float(opts.get("position", 0.62))  # fraction of frame height
-    fdef = FONTS.get(font, FONTS["Anton"])
+    fdef = FONTS.get(font, FONTS["Rubik Black"])
     size = int(fdef["size"] * float(opts.get("size", 1.0)))
     if style == "clean":
         size = int(size * 0.8)
@@ -741,12 +748,12 @@ def build_ass(words, opts, duration, hook=None, hook_len=None):
         "Alignment, MarginL, MarginR, MarginV, Encoding",
         f"Style: Cap,{font},{size},&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,"
         f"{fdef['spacing']},0,1,{outline},{shadow},5,60,60,0,-1",
-        "Style: ChatText,Inter,38,&H00F1EFEF,&H00F1EFEF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,-1",
-        "Style: ChatBox,Montserrat ExtraBold,42,&H00FFFFFF,&H00FFFFFF,&H40140F12,&H80000000,0,0,0,0,100,100,0,0,3,14,0,1,40,40,0,-1",
-        "Style: KF,Inter,34,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,-1",
-        "Style: TitleBox,Montserrat ExtraBold,80,&H00111111,&H00111111,&H00FFFFFF,&H00FFFFFF,0,0,0,0,100,100,0,0,3,14,0,8,90,90,0,-1",
-        "Style: Title,Montserrat ExtraBold,78,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,6,2,8,70,70,0,-1",
-        "Style: Hook,Archivo Black,58,&H00111111,&H00111111,&H00FFFFFF,&H00FFFFFF,0,0,0,0,100,100,0,0,3,18,0,8,80,80,170,-1",
+        "Style: ChatText,Heebo SemiBold,38,&H00F1EFEF,&H00F1EFEF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,-1",
+        "Style: ChatBox,Rubik ExtraBold,42,&H00FFFFFF,&H00FFFFFF,&H40140F12,&H80000000,0,0,0,0,100,100,0,0,3,14,0,1,40,40,0,-1",
+        "Style: KF,Heebo SemiBold,34,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,-1",
+        "Style: TitleBox,Rubik ExtraBold,80,&H00111111,&H00111111,&H00FFFFFF,&H00FFFFFF,0,0,0,0,100,100,0,0,3,14,0,8,90,90,0,-1",
+        "Style: Title,Rubik ExtraBold,78,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,6,2,8,70,70,0,-1",
+        "Style: Hook,Rubik Black,58,&H00111111,&H00111111,&H00FFFFFF,&H00FFFFFF,0,0,0,0,100,100,0,0,3,18,0,8,80,80,170,-1",
         "", "[Events]",
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
@@ -778,7 +785,7 @@ def build_ass(words, opts, duration, hook=None, hook_len=None):
         t0, word = opts["_end"]
         y = int(H * float(opts.get("end_word_y", 0.36)))
         lines.append(f"Dialogue: 3,{_ts(t0)},{_ts(duration)},Title,,0,0,0,,"
-                     + (r"{\an5\pos(%d,%d)\fnMontserrat ExtraBold\fs150\bord9\shad3\3c&H000000&\1c%s&"
+                     + (r"{\an5\pos(%d,%d)\fnRubik ExtraBold\fs150\bord9\shad3\3c&H000000&\1c%s&"
                         r"\fscx170\fscy170\t(0,120,\fscx96\fscy96)\t(120,200,\fscx100\fscy100)}%s")
                      % (W // 2, y, ass_c(opts.get("end_word_color") or "#ff2a3a"), _esc(word.upper())))
     # one caption on screen at a time: each line ends exactly when the next begins
@@ -870,7 +877,7 @@ def killfeed_lines(rows, opts, duration):
     sx = 90                                               # a little narrower, like the game's Stratum font
 
     def tw(t):
-        return text_width(t, "Inter-ExtraBold.ttf", fs) * sx / 100.0
+        return text_width(t, "Heebo-ExtraBold.ttf", fs) * sx / 100.0
 
     # lay out each kill once
     lay = {}
@@ -938,7 +945,7 @@ def killfeed_lines(rows, opts, duration):
                 else:
                     txt, team = val
                     out.append("Dialogue: 7," + ev + r"{\an4" + mv(int(cx), rh // 2) + fade
-                               + r"\fnInter\b800\fs%d\fscx%d\1c%s\bord0\shad%d\4c&H000000&\4a&H20&\q2}" % (fs, sx, KF_COL.get(team, KF_COL["T"]), max(1, round(K)))
+                               + r"\fnHeebo ExtraBold\b0\fs%d\fscx%d\1c%s\bord0\shad%d\4c&H000000&\4a&H20&\q2}" % (fs, sx, KF_COL.get(team, KF_COL["T"]), max(1, round(K)))
                                + _esc(txt))
                 cx += w + m
             slots[r["kid"]] = y

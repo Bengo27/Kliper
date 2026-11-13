@@ -1,4 +1,4 @@
-"""2.19: your own sound effects. Imported files are copied into %APPDATA%/GenieStudioFX/ClipGenie/sfx/ so they
+"""2.19: your own sound effects. Imported files are copied into %APPDATA%/BengoGames/Klipon/sfx/ so they
 keep working if the original moves. A sound is known by its file name without the extension."""
 import os
 import re
@@ -41,7 +41,7 @@ def import_sound(src):
     if not os.path.isfile(src):
         raise RuntimeError("Sound file not found.")
     if not src.lower().endswith(EXTS):
-        raise RuntimeError("That isn't a sound file Clip Genie can use (mp3, wav, ogg, m4a, aac, flac).")
+        raise RuntimeError("That isn't a sound file Klipon can use (mp3, wav, ogg, m4a, aac, flac).")
     if os.path.getsize(src) > MAX_MB * 1024 * 1024:
         raise RuntimeError(f"That sound is too big (over {MAX_MB} MB). Sound effects are usually a few seconds long.")
     base, ext = os.path.splitext(os.path.basename(src))

@@ -1,6 +1,6 @@
 """2.35: the real CS2 kill-feed icons (guns, knives, grenades, headshot, no-scope, wallbang, smoke, blind, in-air),
 read from the streamer's OWN CS2 install (Steam), so the kill feed can be drawn sharp like the kill-feed generator
-PNGs. Nothing is downloaded and no game art ships with Clip Genie: without CS2 installed this returns nothing and the
+PNGs. Nothing is downloaded and no game art ships with Klipon: without CS2 installed this returns nothing and the
 kill feed falls back to the re-traced rows.
 
 icons() -> {name: Icon}. Icon.polys = closed outlines in the icon's own units (viewBox), Icon.w / Icon.h = its size.

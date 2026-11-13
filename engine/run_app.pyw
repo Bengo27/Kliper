@@ -1,4 +1,4 @@
-"""Clip Genie launcher: starts the engine (if it isn't running) and opens the app window."""
+"""Klipon launcher: starts the engine (if it isn't running) and opens the app window."""
 import os
 import subprocess
 import sys
@@ -8,8 +8,8 @@ import webbrowser
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # 2.35.5: a second copy (e.g. a tester copy on another drive) can run beside the main one on its own port
-PORT = int(os.environ.get("CLIPGENIE_PORT") or 47860)
-TITLE = os.environ.get("CLIPGENIE_TITLE") or "Clip Genie"
+PORT = int(os.environ.get("KLIPON_PORT") or 47860)
+TITLE = os.environ.get("KLIPON_TITLE") or "Klipon"
 URL = f"http://127.0.0.1:{PORT}/app/"
 
 
@@ -69,9 +69,9 @@ def find_edge():
     return None
 
 
-APP_ID = "GenieStudioFX.ClipGenie" + ("" if PORT == 47860 else f".p{PORT}")
-DATA = os.path.join(os.environ.get("APPDATA", HERE), "GenieStudioFX", "ClipGenie")
-LOCAL = os.path.join(os.environ.get("LOCALAPPDATA", HERE), "GenieStudioFX", "ClipGenie")
+APP_ID = "BengoGames.Klipon" + ("" if PORT == 47860 else f".p{PORT}")
+DATA = os.path.join(os.environ.get("APPDATA", HERE), "BengoGames", "Klipon")
+LOCAL = os.path.join(os.environ.get("LOCALAPPDATA", HERE), "BengoGames", "Klipon")
 ICON = os.path.normpath(os.path.join(HERE, "..", "app", "icon.ico"))
 VENDOR = os.path.join(HERE, "vendor")
 
@@ -121,18 +121,18 @@ public static class CgAumid {
 
 
 def tag_shortcuts():
-    """Give the Desktop / Start menu shortcuts Clip Genie's own taskbar id, so a pinned
-    taskbar button opens Clip Genie (not Edge or Python). Runs once."""
+    """Give the Desktop / Start menu shortcuts Klipon's own taskbar id, so a pinned
+    taskbar button opens Klipon (not Edge or Python). Runs once."""
     mark = os.path.join(DATA, "shortcuts_tagged_v1")
     if os.name != "nt" or os.path.exists(mark):
         return
-    links = [os.path.join(os.path.expanduser("~"), "Desktop", "Clip Genie.lnk"),
-             os.path.join(os.environ.get("APPDATA", ""), "Microsoft", "Windows", "Start Menu", "Programs", "Clip Genie.lnk")]
+    links = [os.path.join(os.path.expanduser("~"), "Desktop", "Klipon.lnk"),
+             os.path.join(os.environ.get("APPDATA", ""), "Microsoft", "Windows", "Start Menu", "Programs", "Klipon.lnk")]
     try:
         import ctypes.wintypes
         buf = ctypes.create_unicode_buffer(260)
         if ctypes.windll.shell32.SHGetFolderPathW(None, 0x10, None, 0, buf) == 0:  # real Desktop (OneDrive-aware)
-            links.insert(0, os.path.join(buf.value, "Clip Genie.lnk"))
+            links.insert(0, os.path.join(buf.value, "Klipon.lnk"))
     except Exception:
         pass
     links = [l for l in dict.fromkeys(links) if os.path.isfile(l)]
@@ -166,7 +166,7 @@ def set_window_icon(window):
         except Exception:
             pass
         if not hwnd:
-            hwnd = u.FindWindowW(None, "Clip Genie")
+            hwnd = u.FindWindowW(None, "Klipon")
         if not hwnd or not os.path.isfile(ICON):
             return
         u.LoadImageW.restype = ctypes.c_void_p
@@ -182,7 +182,7 @@ def set_window_icon(window):
 
 
 def open_native():
-    """Clip Genie's own window (Windows' built-in WebView2), with its own taskbar button and icon."""
+    """Klipon's own window (Windows' built-in WebView2), with its own taskbar button and icon."""
     if os.name != "nt" or not os.path.isdir(VENDOR):
         return False
     try:
@@ -217,7 +217,7 @@ def open_window():
         return
     edge = find_edge()
     if edge:
-        profile = os.path.join(os.environ.get("LOCALAPPDATA", HERE), "GenieStudioFX", "ClipGenie", "window")
+        profile = os.path.join(os.environ.get("LOCALAPPDATA", HERE), "BengoGames", "Klipon", "window")
         os.makedirs(profile, exist_ok=True)
         subprocess.Popen([edge, f"--app={URL}", f"--user-data-dir={profile}", "--window-size=1340,880",
                           "--no-first-run", "--no-default-browser-check", "--autoplay-policy=no-user-gesture-required"])

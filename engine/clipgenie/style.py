@@ -6,7 +6,7 @@ EDITOR_STYLE = {
     # subtitles: lowercase 1-4 word phrases, white Montserrat ExtraBold with a dark
     # outline, hype words + sound effects (*laughs*) in green, swearing censored (sh*t)
     "style": "editor",
-    "font": "Montserrat ExtraBold",
+    "font": "Rubik Black",
     "highlight": "#3dff4a",
     "words_per_line": "4",
     "uppercase": False,
@@ -180,7 +180,7 @@ Editor's look (May 2026 reels):
   swearing censored (sh*t).
 - Rhythm: gameplay keeps running (about 1 hard cut per 10 s); full-screen webcam on big reactions.
   (The editor also punched the webcam in and out every ~1.5-2 s: the creator doesn't like those small
-  zooms, so Clip Genie doesn't do them since 2.9. Subtitles are off by default since 2.9 too.)
+  zooms, so Klipon doesn't do them since 2.9. Subtitles are off by default since 2.9 too.)
 
 What performs (views):
 - Chaos/panic in party games (How to Fish): median ~11k views vs ~660 for the rest.

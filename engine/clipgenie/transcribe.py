@@ -47,7 +47,7 @@ def transcribe(wav_path, cache_dir, model_name="small", device="auto",
 
     dev = _pick_device(device)
     local = os.environ.get("LOCALAPPDATA")
-    models_dir = os.path.join(local, "GenieStudioFX", "ClipGenie", "models") if local else os.path.join(data_dir(), "models")
+    models_dir = os.path.join(local, "BengoGames", "Klipon", "models") if local else os.path.join(data_dir(), "models")
     stop = _watch_download(models_dir, model_name, status)
     try:
         data = _run(WhisperModel, wav_path, model_name, dev, models_dir, language, progress, duration, stop, out)
@@ -360,7 +360,7 @@ def transcribe_part(wav_path, cache_dir, a, b, language, model_name="small", dev
     _add_cuda_dlls()
     from faster_whisper import WhisperModel
     local = os.environ.get("LOCALAPPDATA")
-    models_dir = os.path.join(local, "GenieStudioFX", "ClipGenie", "models") if local else os.path.join(data_dir(), "models")
+    models_dir = os.path.join(local, "BengoGames", "Klipon", "models") if local else os.path.join(data_dir(), "models")
 
     def go(dev):
         model = WhisperModel(model_name, device=dev, compute_type="float16" if dev == "cuda" else "int8",

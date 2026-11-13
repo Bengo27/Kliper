@@ -1,6 +1,6 @@
 """TikTok Content Posting API: login (desktop PKCE), send to drafts, direct post.
 
-Uses your own TikTok developer app (client key + secret in Clip Genie settings).
+Uses your own TikTok developer app (client key + secret in Klipon settings).
 - Send to drafts (inbox upload) works straight away.
 - Direct post publishes as private ("only me") until TikTok audits the app.
 """
@@ -34,7 +34,7 @@ def _keys():
     s = load_settings()
     ck, cs = s.get("tiktok_client_key"), s.get("tiktok_client_secret")
     if not ck or not cs:
-        raise RuntimeError("Add your TikTok client key and secret in Clip Genie settings first.")
+        raise RuntimeError("Add your TikTok client key and secret in Klipon settings first.")
     return ck, cs
 
 
@@ -211,7 +211,7 @@ def video_list(limit=100):
             d = _api("POST", "/video/list/?fields=" + fields, body)
         except RuntimeError as e:
             if "scope" in str(e).lower():
-                raise RuntimeError("TikTok hasn't given Clip Genie permission to read your views yet. "
+                raise RuntimeError("TikTok hasn't given Klipon permission to read your views yet. "
                                    "Add the 'video.list' scope to your TikTok developer app, then reconnect TikTok.")
             raise
         out += d.get("videos") or []

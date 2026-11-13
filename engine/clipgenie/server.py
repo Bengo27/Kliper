@@ -1,4 +1,4 @@
-"""Local HTTP API on 127.0.0.1: serves the Clip Genie app (and the older Premiere panel)."""
+"""Local HTTP API on 127.0.0.1: serves the Klipon app (and the older Premiere panel)."""
 import json
 import re
 import os
@@ -158,7 +158,7 @@ def _merged_opts(o):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "ClipGenie/" + VERSION
+    server_version = "Klipon/" + VERSION
 
     def log_message(self, fmt, *args):
         log.debug(fmt, *args)
@@ -170,7 +170,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         if cors:
             self.send_header("Access-Control-Allow-Origin", "*")
-            self.send_header("Access-Control-Allow-Headers", "Content-Type, X-ClipGenie-Token")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Klipon-Token")
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
@@ -179,7 +179,7 @@ class Handler(BaseHTTPRequestHandler):
         self._send(204, raw=b"")
 
     def _authed(self, q=None):
-        tok = self.headers.get("X-ClipGenie-Token", "") or (q or {}).get("t", "")
+        tok = self.headers.get("X-Klipon-Token", "") or (q or {}).get("t", "")
         return secrets.compare_digest(tok, TOKEN)
 
     PHONE = False  # set on the phone (Wi-Fi) server
@@ -223,7 +223,7 @@ class Handler(BaseHTTPRequestHandler):
         roots = [os.path.abspath(lb.output_root()), os.path.abspath(data_dir())]
         loc = os.environ.get("LOCALAPPDATA")
         if loc:
-            roots.append(os.path.abspath(os.path.join(loc, "GenieStudioFX")))
+            roots.append(os.path.abspath(os.path.join(loc, "BengoGames")))
         lib = lb.load()
         sources = set()
         for st in lib["streams"].values():
@@ -306,7 +306,7 @@ class Handler(BaseHTTPRequestHandler):
                     self.send_header("Location", "/app/" + ("#open=" + quote(op, safe="") if ok_open else ""))
                     self.end_headers()
                     return
-                return self._send(403, {"error": "This phone link is old. Scan the QR code in Clip Genie on your PC again."})
+                return self._send(403, {"error": "This phone link is old. Scan the QR code in Klipon on your PC again."})
             if u.path.startswith("/app/"):
                 rel = (u.path[5:].strip("/") or "index.html").lower()
                 if not self._phone_ok() and (rel.endswith(".html") or "." not in os.path.basename(rel)):
@@ -325,7 +325,7 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/tiktok/callback" and not self.PHONE:
                 try:
                     tt.handle_callback(q, PORT)
-                    msg = "TikTok connected. You can close this tab and go back to Clip Genie."
+                    msg = "TikTok connected. You can close this tab and go back to Klipon."
                 except Exception as e:
                     msg = "TikTok login failed: " + str(e)
                 html = (f"<html><body style='font-family:sans-serif;background:#1d1d1d;color:#eee;"
@@ -453,9 +453,9 @@ class Handler(BaseHTTPRequestHandler):
                     if a.remote:
                         vids = os.path.join(os.path.expanduser("~"), "Videos")
                         safe = "".join(ch for ch in a.info.get("title", a.remote.id) if ch.isalnum() or ch in " -_")[:50].strip()
-                        out_dir = os.path.join(vids, "Clip Genie Exports", safe or a.remote.id)
+                        out_dir = os.path.join(vids, "Klipon Exports", safe or a.remote.id)
                     else:
-                        out_dir = os.path.join(os.path.dirname(a.video), "Clip Genie Exports")
+                        out_dir = os.path.join(os.path.dirname(a.video), "Klipon Exports")
                 jid = _job(pl.render_all, a, b["clip_ids"], b.get("edits") or {}, opts, out_dir)
                 return self._send(200, {"job": jid})
             if u.path == "/library/add":
@@ -498,7 +498,7 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/pick_file":
                 return self._send(200, {"path": _pick_file(b.get("kind", "video"))})
             if u.path == "/music":
-                # copy the chosen track into Clip Genie's own folder so it keeps working if moved
+                # copy the chosen track into Klipon's own folder so it keeps working if moved
                 src = (b.get("path") or "").strip()
                 s2 = load_settings()
                 st = dict(s2.get("style") or {})
@@ -582,7 +582,7 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/open_update":   # 0.1.0: the admin dashboard's update link, in the normal browser
                 link = (_news().get("url") or "").strip()
                 if not re.match(r"^https://[^\s\"'<>]{3,500}$", link):
-                    raise RuntimeError("No download link yet. Ask the person who sent you Clip Genie.")
+                    raise RuntimeError("No download link yet. Ask the person who sent you Klipon.")
                 import webbrowser
                 webbrowser.open(link)
                 return self._send(200, {"ok": True})
@@ -691,7 +691,7 @@ def _taste_status(rules=None):
             "reason_labels": taste.REASONS, "ai_ready": bool(lb._ai_settings().get("api_key"))}
 
 
-PHONE_PORT = int(os.environ.get("CLIPGENIE_PHONE_PORT") or 47861)   # 2.36.1: a second copy (tester test) uses its own
+PHONE_PORT = int(os.environ.get("KLIPON_PHONE_PORT") or 47861)   # 2.36.1: a second copy (tester test) uses its own
 POST_PAGES = {"tiktok": "https://www.tiktok.com/tiktokstudio/upload",
               "youtube": "https://www.youtube.com/upload",
               "instagram": "https://www.instagram.com/"}
@@ -752,7 +752,7 @@ def _trial_use(key):
 PC_ONLY = {"/open_update", "/account/signin", "/account/guest", "/account/signout", "/sfx","/pick_file", "/library/open_folder", "/library/post_open", "/music", "/phone", "/tiktok/login", "/tiktok/sync_views"}
 PHONE_LOCKED = ("<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'>"
                 "<body style='font:16px system-ui;background:#161618;color:#eee;padding:32px'>"
-                "<h2>Clip Genie</h2><p>Open the phone link (or scan the QR code) from Clip Genie on your PC: "
+                "<h2>Klipon</h2><p>Open the phone link (or scan the QR code) from Klipon on your PC: "
                 "Settings &rarr; Use on your phone.</p></body>").encode()
 _PHONE_SRV = None
 
@@ -860,11 +860,11 @@ def main(port=PORT):
         shown = shown_version()
     except Exception:
         shown = PUBLIC_VERSION
-    header = "===== Clip Genie %s (engine build %s) session start %s, pid %d =====" % (
+    header = "===== Klipon %s (engine build %s) session start %s, pid %d =====" % (
         shown, VERSION, time.strftime("%Y-%m-%d %H:%M:%S"), os.getpid())
     for h in logging.getLogger().handlers:
         if hasattr(h, "header"):
             h.header = header
     log.info(header)
-    log.info("Clip Genie %s (engine build %s) on http://127.0.0.1:%d", shown, VERSION, port)
+    log.info("Klipon %s (engine build %s) on http://127.0.0.1:%d", shown, VERSION, port)
     srv.serve_forever()

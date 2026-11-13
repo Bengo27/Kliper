@@ -4,7 +4,7 @@
 <script>try { document.documentElement.dataset.theme = localStorage.getItem("cg_theme") || "midnight"; } catch (e) {}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clip Genie</title>
+<title>Klipon</title>
 <link rel="icon" href="icon.png">
 <link rel="stylesheet" href="style.css">
 <script>window.CG_TOKEN = "__CG_TOKEN__";</script>
@@ -16,7 +16,7 @@
 <header class="topbar">
   <div class="brand">
     <img class="brand-logo" src="icon.png" width="28" height="28" alt="">
-    <strong>Clip Genie <span class="beta-tag public-only">BETA</span> <span id="appVersion" class="ver"></span></strong>
+    <strong>Klipon <span class="beta-tag public-only">BETA</span> <span id="appVersion" class="ver"></span></strong>
   </div>
   <nav class="steps" id="steps" aria-label="Steps">
     <button class="step on" data-step="1"><i>1</i>Add stream</button>
@@ -24,7 +24,7 @@
     <button class="step" data-step="3"><i>3</i>Edit</button>
     <button class="step" data-step="4"><i>4</i>Export</button>
   </nav>
-  <button id="btnAccount" class="btn ghost sm acct hidden" title="Your Clip Genie account"></button>
+  <button id="btnAccount" class="btn ghost sm acct hidden" title="Your Klipon account"></button>
   <button id="btnSettings" class="btn ghost sm">⚙ Settings</button>
 </header>
 <!-- 0.1.0: update available / message from the admin dashboard -->
@@ -58,7 +58,7 @@
 <div id="proModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="proTitle">
   <div class="sheet acct-sheet">
     <img class="acct-logo" src="icon.png" width="56" height="56" alt="">
-    <h2 id="proTitle">Clip Genie <span class="pro-tag">PRO</span></h2>
+    <h2 id="proTitle">Klipon <span class="pro-tag">PRO</span></h2>
     <p id="proText" class="muted"></p>
     <ul class="pro-list small">
       <li>CS2 kill feed, redrawn sharp</li>
@@ -161,7 +161,7 @@
 
     <div id="empty" class="empty hidden">
       <h2>No TikToks yet</h2>
-      <p class="muted">Paste a Twitch, YouTube or Kick link on the left and press <strong>Make TikToks</strong>. Clip Genie finds the best moments, edits them in your style and they appear here. Paste a Twitch <strong>clip</strong> link (or pick a short video file) and it turns the whole clip into one TikTok.</p>
+      <p class="muted">Paste a Twitch, YouTube or Kick link on the left and press <strong>Make TikToks</strong>. Klipon finds the best moments, edits them in your style and they appear here. Paste a Twitch <strong>clip</strong> link (or pick a short video file) and it turns the whole clip into one TikTok.</p>
     </div>
   </main>
 </div>
@@ -173,7 +173,7 @@
     <h2 id="edTitle">TikTok</h2>
     <span id="edMeta" class="muted small"></span>
     <div class="ed-top-actions">
-      <span class="vote" id="edVote" title="Teach Clip Genie what a good clip is for you">
+      <span class="vote" id="edVote" title="Teach Klipon what a good clip is for you">
         <button class="btn ghost sm" data-vote="up" aria-pressed="false" aria-label="Good clip">👍</button>
         <button class="btn ghost sm" data-vote="down" aria-pressed="false" aria-label="Bad clip">👎</button>
       </span>
@@ -482,7 +482,7 @@
   <div class="sheet wc">
     <div class="wc-dots" id="wcDots" aria-hidden="true"></div>
     <section class="wc-step" data-step="0">
-      <h2 id="wcTitle">Welcome to Clip Genie 👋</h2>
+      <h2 id="wcTitle">Welcome to Klipon 👋</h2>
       <p class="muted">It turns your Twitch streams into TikToks. Three quick questions and you're ready. You can change any of it later in Settings.</p>
       <label class="field">Your Twitch channel
         <input id="wcChannel" type="text" placeholder="twitch.tv/yourname" autocomplete="off" spellcheck="false">
@@ -520,7 +520,7 @@
   <div class="sheet">
     <div class="row-between"><h2 id="setTitle">Settings</h2><button class="btn ghost sm" data-close aria-label="Close">✕</button></div>
     <div class="field pc-only phone-box">
-      <div class="toggle"><span><strong>📱 Use Clip Genie on your phone</strong><br><small class="muted">On your home Wi-Fi, while this PC is on</small></span><button class="switch pro-only" data-pro="phone" id="phoneSwitch" aria-label="Use on your phone"><span></span></button></div>
+      <div class="toggle"><span><strong>📱 Use Klipon on your phone</strong><br><small class="muted">On your home Wi-Fi, while this PC is on</small></span><button class="switch pro-only" data-pro="phone" id="phoneSwitch" aria-label="Use on your phone"><span></span></button></div>
       <div id="phonePanel" class="phone-panel hidden">
         <div id="phoneQR" class="phone-qr" aria-label="QR code for your phone"></div>
         <div class="small">Scan this with your phone camera (same Wi-Fi as this PC), then "Add to Home Screen" to keep it like an app.<br>
@@ -533,7 +533,7 @@
       <span class="tiny muted">Get one at console.anthropic.com → API keys. A few pence per stream.</span>
     </label>
     <div class="field learned" id="learnedBox">
-      <div class="row-between"><strong>🧠 What Clip Genie has learned about you</strong><button id="btnRules" class="btn ghost sm ai-only">Update now</button></div>
+      <div class="row-between"><strong>🧠 What Klipon has learned about you</strong><button id="btnRules" class="btn ghost sm ai-only">Update now</button></div>
       <span id="learnedStats" class="small muted"></span>
       <span id="learnedSummary" class="small"></span>
       <ol id="learnedRules" class="rules"></ol>
@@ -571,7 +571,7 @@
     </div>
     <label class="field">Music volume <input id="setMusicVol" type="range" min="0.03" max="0.5" step="0.01" value="0.16"></label>
     <label class="field">Save TikToks to
-      <input id="setOut" type="text" placeholder="Videos\Clip Genie">
+      <input id="setOut" type="text" placeholder="Videos\Klipon">
     </label>
     <div class="grid2">
       <label class="field">Speech model
