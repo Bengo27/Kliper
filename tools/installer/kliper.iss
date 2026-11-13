@@ -1,4 +1,4 @@
-; Kliper Setup.exe (Inno Setup 6). Build:
+﻿; Kliper Setup.exe (Inno Setup 6). Build:
 ;   "K:\KliperBuild\InnoSetup6\ISCC.exe" /DSrc="<staged Kliper folder>" /O"<out dir>" tools\installer\clipgenie.iss
 ; <staged Kliper folder> = the "Kliper" folder tools/build_tester.py makes (app, engine, python, ffmpeg, README.md).
 ; Installs for this Windows user only (no admin), to the same place as before:
@@ -37,7 +37,7 @@
   #define BetaNote ""
 #else
   #define Label AppVer + " " + Stage
-  #define BetaNote "This is a beta: things can still break. Please tell us when they do.%n%n"
+  #define BetaNote "זוהי גרסת בטא: דברים עוד יכולים להישבר. ספרו לנו כשזה קורה.%n%n"
 #endif
 
 [Setup]
@@ -45,8 +45,8 @@ AppId={{A3E5D1C2-6B7F-4E21-9C8D-5B1F0E2A7D44}
 AppName=Kliper
 AppVersion={#Label}
 AppVerName=Kliper {#Label}
-AppPublisher=BengoGames
-AppCopyright=Copyright (C) 2026 BengoGames
+AppPublisher=Bengo
+AppCopyright=Copyright (C) 2026 Bengo; based on Clip Genie (C) 2026 Genie Studio FX, GPL-3.0
 VersionInfoVersion={#AppVer}
 VersionInfoCompany=BengoGames
 VersionInfoDescription=Kliper {#Stage} Setup
@@ -81,14 +81,14 @@ CloseApplications=no
 RestartApplications=no
 
 [Languages]
-Name: "en"; MessagesFile: "compiler:Default.isl"
+Name: "he"; MessagesFile: "compiler:Languages\Hebrew.isl"
 
 [Messages]
-WelcomeLabel2=This will install Kliper {#Label} on your computer.%n%n{#BetaNote}Kliper turns your Twitch streams and clips into TikToks: webcam + gameplay, cuts, titles and subtitles.%n%nYou need about 5 GB of free space. An NVIDIA graphics card makes it much faster.
-FinishedLabel=Kliper is installed.%n%nThe first stream takes a bit longer: it downloads the speech model once (about 0.5 GB).
+WelcomeLabel2=ההתקנה תתקין את קליפר {#Label} במחשב שלך.%n%n{#BetaNote}קליפר הופך את הסטרימים שלך לקליפים לטיקטוק, שורטס ורילס: מצלמה + משחק, חיתוכים, כותרות וכתוביות בעברית.%n%nצריך בערך 6GB פנויים. כרטיס מסך של NVIDIA מאיץ מאוד.
+FinishedLabel=קליפר הותקן.%n%nהסטרים הראשון לוקח קצת יותר זמן: מודל התמלול העברי יורד פעם אחת (כ-1.6GB).
 
 [Tasks]
-Name: "desktopicon"; Description: "Put Kliper on the Desktop"; GroupDescription: "Shortcuts:"
+Name: "desktopicon"; Description: "קיצור דרך בשולחן העבודה"; GroupDescription: "קיצורי דרך:"
 
 [Files]
 Source: "{#Src}\app\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -102,11 +102,11 @@ Source: "{#Src}\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Type: files; Name: "{app}\uninstall.ps1"
 
 [Icons]
-Name: "{autoprograms}\Kliper"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Kliper: Twitch streams to TikToks"; Check: not IsTest
-Name: "{autodesktop}\Kliper"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "Kliper: Twitch streams to TikToks"; Tasks: desktopicon; Check: not IsTest
+Name: "{autoprograms}\Kliper"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "קליפר: מסטרים לקליפים"; Check: not IsTest
+Name: "{autodesktop}\Kliper"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; IconFilename: "{app}\app\icon.ico"; Comment: "קליפר: מסטרים לקליפים"; Tasks: desktopicon; Check: not IsTest
 
 [Run]
-Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; Description: "Open Kliper now"; Flags: postinstall nowait skipifsilent; Check: not IsTest
+Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\engine\run_app.pyw"""; WorkingDir: "{app}\engine"; Description: "לפתוח את קליפר עכשיו"; Flags: postinstall nowait skipifsilent; Check: not IsTest
 
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""{code:StopCmd}"""; Flags: runhidden waituntilterminated; RunOnceId: "StopEngine"

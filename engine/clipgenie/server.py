@@ -59,7 +59,7 @@ def _edit_job(key, progress):
             STREAM_LOCK.release()
 
 VERSION = "2.38.0"
-PUBLIC_VERSION = "0.1.2"   # public / tester builds count from 0.1 (the creator, 12 Nov: "0.1 Beta"; 1.0 = paid launch)
+PUBLIC_VERSION = "0.1.0"   # public / tester builds count from 0.1 (the creator, 12 Nov: "0.1 Beta"; 1.0 = paid launch)
 PORT = 47860
 JOBS = {}
 ANALYSES = {}
