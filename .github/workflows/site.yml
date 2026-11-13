@@ -1,4 +1,4 @@
-# The Kliper website (site/) on GitHub Pages: https://bengo27.github.io/Kliper/
+# The Kliper website (site/) on GitHub Pages: https://bengo27.github.io/Kliper/ (Settings -> Pages -> Source: GitHub Actions)
 name: Website
 on:
   push:
