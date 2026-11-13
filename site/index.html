@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>קליפר · הסטרים שלך, כבר חתוך לשורטס</title>
+<meta name="description" content="קליפר הופך את ה-VOD שלך מ-Kick, ‏YouTube או Twitch לקליפים לטיקטוק, שורטס ורילס, עם כתוביות בעברית. חינם, בלי חשבון, רץ על המחשב שלך.">
+<meta property="og:title" content="קליפר · הסטרים שלך, כבר חתוך לשורטס">
+<meta property="og:description" content="מדביקים קישור ל-VOD, וקליפר מוצא את הרגעים הכי טובים, חותך לפורמט אנכי ומוסיף כתוביות בעברית. חינם.">
+<meta property="og:image" content="og.png">
+<link rel="icon" href="favicon.png">
+<style>
+@font-face { font-family: "Secular One"; src: url("fonts/SecularOne-Regular.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Heebo"; font-weight: 400 600; src: url("fonts/Heebo-SemiBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Heebo"; font-weight: 700 900; src: url("fonts/Heebo-ExtraBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Rubik Black"; src: url("fonts/Rubik-Black.ttf") format("truetype"); font-display: swap; }
+
+:root {
+  --night: #1B0B33;      /* page */
+  --grape: #2A1150;      /* raised surfaces */
+  --violet: #8B3DFF;     /* logo purple */
+  --pink: #FF2E93;       /* logo pink */
+  --film: #FFD23F;       /* film-frame yellow: the one accent for actions */
+  --ink: #000;           /* sticker outlines, like the logo */
+  --text: #FFFFFF;
+  --soft: #CDBDF2;
+  --kick: #53FC18;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--night); color: var(--text); font: 500 18px/1.65 "Heebo", system-ui, sans-serif; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--film); outline-offset: 3px; border-radius: 6px; }
+.wrap { width: min(1120px, 100% - 40px); margin-inline: auto; }
+
+/* nav */
+nav.top { position: sticky; top: 0; z-index: 10; background: rgba(27, 11, 51, .88); backdrop-filter: blur(8px); border-bottom: 1px solid #ffffff14; }
+nav.top .wrap { display: flex; align-items: center; gap: 28px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; font: 30px/1 "Secular One"; text-decoration: none; }
+.brand img { width: 38px; height: 38px; }
+nav.top .links { display: flex; gap: 22px; margin-inline-start: auto; font-size: 16px; }
+nav.top .links a { text-decoration: none; color: var(--soft); }
+nav.top .links a:hover { color: var(--text); }
+nav.top .links a.dl { color: var(--ink); }
+@media (max-width: 720px) { nav.top .links a:not(.dl) { display: none; } }
+
+/* buttons: sticker style, like the logo */
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; border: 3px solid var(--ink); border-radius: 14px;
+  font: 22px/1 "Secular One"; text-decoration: none; cursor: pointer; transition: transform .12s, box-shadow .12s; }
+.btn.go { background: var(--film); color: var(--ink); box-shadow: 6px 6px 0 var(--ink); }
+.btn.go:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+.btn.go:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+.btn.plain { background: transparent; color: var(--text); border-color: #ffffff55; font-size: 19px; }
+.btn.plain:hover { border-color: var(--text); }
+.btn.sm { padding: 8px 16px; font-size: 17px; box-shadow: 4px 4px 0 var(--ink); }
+
+/* hero */
+.hero { position: relative; overflow: hidden; padding: 64px 0 40px;
+  background: radial-gradient(900px 520px at 85% 0%, #8B3DFF55, transparent 70%), radial-gradient(700px 500px at 0% 100%, #FF2E9340, transparent 70%); }
+.hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; }
+.hero .wrap > div:first-child { position: relative; z-index: 4; }
+.hero h1 { font: clamp(46px, 7.2vw, 92px)/1.02 "Secular One"; margin: 0 0 22px; letter-spacing: -.5px; }
+.hero h1 .cut { display: block; color: var(--film); -webkit-text-stroke: 2px var(--ink); paint-order: stroke fill; text-shadow: 5px 5px 0 var(--ink); }
+.hero p.lead { font-size: 21px; color: var(--soft); max-width: 30em; margin: 0 0 30px; }
+.hero .cta { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.hero .fine { margin-top: 18px; font-size: 15px; color: var(--soft); }
+@media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; } .hero { padding-top: 40px; } }
+
+/* the cut: a VOD film strip turns into three shorts */
+.cutstage { position: relative; height: 470px; direction: ltr; }
+.strip { position: absolute; left: -8%; right: 0; top: 36px; height: 92px; background: var(--ink); border-radius: 10px;
+  display: flex; gap: 10px; align-items: center; padding: 0 14px; transform: rotate(-6deg);
+  background-image: radial-gradient(circle, #fff 4px, transparent 4.5px), radial-gradient(circle, #fff 4px, transparent 4.5px);
+  background-size: 26px 92px; background-position: 0 -36px, 0 36px; background-repeat: repeat-x; }
+.strip i { flex: none; width: 92px; height: 52px; border-radius: 6px; background: var(--film); opacity: .95; }
+.strip i:nth-child(3n+2) { background: #ffbe2e; } .strip i:nth-child(3n) { background: #ffe27a; }
+.blade { position: absolute; top: 0; left: 46%; width: 92px; z-index: 3; filter: drop-shadow(5px 6px 0 #0008); }
+.shorts { position: absolute; inset: auto 0 0 0; height: 300px; display: flex; justify-content: center; gap: 18px; }
+.phone { width: 150px; height: 266px; border: 3px solid var(--ink); border-radius: 22px; box-shadow: 6px 6px 0 var(--ink); position: relative; overflow: hidden; }
+.phone:nth-child(1) { background: linear-gradient(160deg, #3a1466, #8B3DFF); transform: rotate(-5deg) translateY(14px); }
+.phone:nth-child(2) { background: linear-gradient(160deg, #8B3DFF, #FF2E93); z-index: 2; }
+.phone:nth-child(3) { background: linear-gradient(160deg, #FF2E93, #ff8a3d); transform: rotate(5deg) translateY(14px); }
+.phone .cam { position: absolute; inset: 0 0 52% 0; background: linear-gradient(#ffffff22, #ffffff08); border-bottom: 2px solid #0006; }
+.phone .cap { position: absolute; left: 6px; right: 6px; top: 50%; transform: translateY(-50%); text-align: center; direction: rtl;
+  font: 22px/1.05 "Rubik Black"; color: #fff; -webkit-text-stroke: 5px #000; paint-order: stroke fill; }
+.phone .cap b { color: #00e5ff; font-weight: inherit; }
+.phone .tag { position: absolute; bottom: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 5px; align-items: center;
+  font: 800 12px "Heebo"; -webkit-text-stroke: 3px #000; paint-order: stroke fill; }
+.phone .tag::before { content: ""; width: 14px; height: 14px; background: var(--kick); border: 1.5px solid #000; border-radius: 3px; }
+.phone .time { position: absolute; top: 8px; right: 10px; font: 700 11px "Heebo"; background: #0008; padding: 1px 6px; border-radius: 6px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .blade { animation: slice 1.1s cubic-bezier(.6, 0, .3, 1) .35s both; }
+  .phone { animation: pop .55s cubic-bezier(.2, 1.4, .4, 1) both; }
+  .phone:nth-child(1) { animation-delay: 1.15s; } .phone:nth-child(2) { animation-delay: 1.3s; } .phone:nth-child(3) { animation-delay: 1.45s; }
+  @keyframes slice { from { transform: translate(-260px, -40px) rotate(-30deg); opacity: 0; } 60% { opacity: 1; } to { transform: translate(0, 0) rotate(0); } }
+  @keyframes pop { from { opacity: 0; translate: 0 60px; scale: .7; } to { opacity: 1; translate: 0 0; scale: 1; } }
+}
+@media (max-width: 520px) { .cutstage { height: 400px; } .phone { width: 112px; height: 200px; } .phone .cap { font-size: 17px; } .shorts { gap: 10px; height: 240px; } }
+
+/* sections */
+section.block { padding: 88px 0; }
+section.block h2 { font: clamp(34px, 4.6vw, 54px)/1.1 "Secular One"; margin: 0 0 14px; }
+section.block .intro { color: var(--soft); max-width: 36em; margin: 0 0 44px; }
+
+/* steps: a real sequence, so they are numbered */
+.steps { display: grid; gap: 64px; }
+.step { display: grid; grid-template-columns: 1fr 1.25fr; gap: 44px; align-items: center; }
+.step:nth-child(even) { grid-template-columns: 1.25fr 1fr; }
+.step:nth-child(even) .txt { order: 2; }
+.step .n { width: 58px; height: 58px; display: grid; place-items: center; border: 3px solid var(--ink); border-radius: 50%;
+  background: var(--film); color: var(--ink); font: 30px/1 "Secular One"; box-shadow: 4px 4px 0 var(--ink); margin-bottom: 14px; }
+.step h3 { font: 32px/1.15 "Secular One"; margin: 0 0 10px; }
+.step p { margin: 0; color: var(--soft); max-width: 26em; }
+.shot { border: 3px solid var(--ink); border-radius: 16px; overflow: hidden; box-shadow: 8px 8px 0 var(--ink); background: var(--grape); }
+.shot.narrow { max-width: 300px; margin-inline: auto; }
+.vis { display: flex; justify-content: center; }
+.mini-phones { display: flex; gap: 14px; justify-content: center; }
+.mini-phones .phone { width: 128px; height: 228px; transform: none; animation: none; }
+.mini-phones .phone .cap { font-size: 19px; }
+.exportbox { width: 100%; max-width: 420px; border: 3px solid var(--ink); border-radius: 16px; box-shadow: 8px 8px 0 var(--ink); background: var(--grape); padding: 22px; display: grid; gap: 12px; }
+.exportbox .row { display: flex; justify-content: space-between; align-items: center; background: #ffffff10; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
+.exportbox .row span:last-child { font-size: 22px; }
+@media (max-width: 860px) { .step, .step:nth-child(even) { grid-template-columns: 1fr; } .step:nth-child(even) .txt { order: 0; } }
+
+/* what's different: grouped list, not a card grid */
+.made { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; }
+.made dl { margin: 0; }
+.made dt { font: 24px/1.2 "Secular One"; margin-top: 26px; display: flex; gap: 12px; align-items: baseline; }
+.made dt span { font-size: 22px; }
+.made dd { margin: 6px 0 0; color: var(--soft); padding-inline-start: 36px; max-width: 30em; }
+@media (max-width: 760px) { .made { grid-template-columns: 1fr; } }
+.hebrew-band { background: var(--violet); color: #fff; border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); overflow: hidden; }
+.hebrew-band .wrap { display: flex; gap: 34px; padding: 18px 0; font: 30px/1 "Rubik Black"; white-space: nowrap; justify-content: center; flex-wrap: wrap; }
+.hebrew-band span { -webkit-text-stroke: 5px #000; paint-order: stroke fill; }
+
+/* download */
+.dl-box { border: 3px solid var(--ink); border-radius: 24px; box-shadow: 10px 10px 0 var(--ink); padding: 44px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 44px;
+  background: linear-gradient(150deg, #8B3DFF, #FF2E93); }
+.dl-box h2 { margin-top: 0; }
+.dl-box .ver { font-size: 15px; margin-top: 14px; color: #ffffffd9; }
+.dl-box ol { margin: 0; padding-inline-start: 22px; } .dl-box li { margin-bottom: 10px; }
+.dl-box .need { margin-top: 22px; font-size: 16px; color: #fffffff0; }
+.dl-box code { background: #0004; padding: 1px 6px; border-radius: 5px; font-size: .92em; }
+@media (max-width: 860px) { .dl-box { grid-template-columns: 1fr; padding: 28px; } }
+.help { margin-top: 30px; color: var(--soft); font-size: 16px; }
+
+footer { padding: 40px 0 56px; border-top: 1px solid #ffffff14; color: var(--soft); font-size: 15px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 14px 32px; justify-content: space-between; align-items: center; }
+footer a { color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="ניווט">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="icon.png" alt="">קליפר</a>
+    <div class="links">
+      <a href="#how">איך זה עובד</a>
+      <a href="#what">מה הוא יודע</a>
+      <a href="https://github.com/Bengo27/Kliper">קוד מקור</a>
+      <a class="dl btn go sm" href="#download">הורדה</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <h1>הסטרים שלך,<span class="cut">כבר חתוך לשורטס</span></h1>
+      <p class="lead">מדביקים קישור ל-VOD מ-Kick, ‏YouTube או Twitch. קליפר מקשיב לסטרים בעברית, מוצא את הרגעים הכי טובים, חותך לפורמט אנכי ומוסיף כתוביות. אתם רק בוחרים מה לפרסם.</p>
+      <div class="cta">
+        <a class="btn go dl-link" href="#download">⬇ הורדה חינם ל-Windows</a>
+        <a class="btn plain" href="#how">איך זה עובד</a>
+      </div>
+      <p class="fine">חינם לגמרי, בלי חשבון ובלי מנוי. הכל רץ על המחשב שלכם.</p>
+    </div>
+    <div class="cutstage" aria-hidden="true">
+      <div class="strip"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <img class="blade" src="icon.png" alt="">
+      <div class="shorts">
+        <div class="phone"><span class="time">0:18</span><div class="cam"></div><div class="cap">אחי אין<br><b>מצב</b> 💀</div><div class="tag">bengo23</div></div>
+        <div class="phone"><span class="time">0:24</span><div class="cam"></div><div class="cap">מה זה<br><b>היה?!</b></div><div class="tag">bengo23</div></div>
+        <div class="phone"><span class="time">0:21</span><div class="cam"></div><div class="cap">קלפו<br><b>את זה</b></div><div class="tag">bengo23</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="hebrew-band" aria-hidden="true"><div class="wrap"><span>אין מצב</span><span>קלפו!</span><span>חחחחח</span><span>על אמא שלי</span><span>מה זה היה</span></div></div>
+
+<section class="block" id="how">
+  <div class="wrap">
+    <h2>מ-VOD לשורטס בארבעה צעדים</h2>
+    <p class="intro">אתם משדרים כמו תמיד. אחרי השידור, כמה דקות של עבודה ויש לכם שבוע של תוכן.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="txt"><div class="n">1</div><h3>מדביקים קישור</h3><p>קישור ל-VOD מ-Kick, ‏YouTube או Twitch, או קובץ וידאו מהמחשב. אפשר לבחור רק חלק מהשידור, נגיד שעה מתוך חמש.</p></div>
+        <div class="shot"><img src="shots/home.jpg" alt="המסך הראשי של קליפר, עם קישור ל-VOD מ-Kick בשדה ההדבקה" loading="lazy"></div>
+      </div>
+      <div class="step">
+        <div class="txt"><div class="n">2</div><h3>בוחרים רגעים</h3><p>קליפר מתמלל את כל הסטרים בעברית ומדרג רגעים לפי צעקות, צחוקים וסלנג ("אין מצב", "קלפו", "חחחח"). מסמנים את מה שאהבתם.</p></div>
+        <div class="shot narrow"><img src="shots/streams.jpg" alt="רשימת הסטרימים בצד: ערוץ, כותרת, תאריך וסטטוס לכל סטרים" loading="lazy"></div>
+      </div>
+      <div class="step">
+        <div class="txt"><div class="n">3</div><h3>מתקנים אם צריך</h3><p>מצלמה למעלה, משחק למטה, כתוביות בעברית מימין לשמאל ושם הערוץ עם הלוגו של Kick. בעורך אפשר לחתוך, להזיז ולתקן מילה בכתוביות.</p></div>
+        <div class="vis mini-phones" aria-hidden="true">
+          <div class="phone"><div class="cam"></div><div class="cap">רגע רגע<br><b>חכה</b></div><div class="tag">bengo23</div></div>
+          <div class="phone"><div class="cam"></div><div class="cap">אתה<br><b>רציני?!</b></div><div class="tag">bengo23</div></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="txt"><div class="n">4</div><h3>מעלים</h3><p>שומרים MP4 למחשב, או סורקים קוד QR ומקבלים את הקליפ ישר לטלפון. משם לטיקטוק, שורטס או רילס.</p></div>
+        <div class="vis"><div class="exportbox" aria-hidden="true">
+          <div class="row"><span>טיקטוק</span><span>✅</span></div>
+          <div class="row"><span>YouTube Shorts</span><span>✅</span></div>
+          <div class="row"><span>Instagram Reels</span><span>✅</span></div>
+          <div class="row"><span>ישר לטלפון בקוד QR</span><span>📱</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="what" style="background: var(--grape)">
+  <div class="wrap">
+    <h2>נבנה לסטרימרים ישראלים</h2>
+    <p class="intro">כלים כאלה קיימים באנגלית. קליפר נבנה מההתחלה לעברית, לסלנג שלנו ול-Kick.</p>
+    <div class="made">
+      <dl>
+        <dt><span>🎙️</span>מבין עברית באמת</dt>
+        <dd>התמלול רץ על מודל של ivrit.ai, שאומן על אלפי שעות של עברית מדוברת. הוא מבין סלנג, דיבור מהיר וחילופי שפה.</dd>
+        <dt><span>😂</span>מזהה מה מצחיק</dt>
+        <dd>צעקות, צחוקים, "אין מצב", "על אמא שלי", "אחי אתה רציני". הוא יודע איך נשמע רגע טוב אצלנו.</dd>
+        <dt><span>✍️</span>כתוביות בעברית, נכון</dt>
+        <dd>מימין לשמאל, בפונטים עבריים עבים שקריאים בטלפון, עם צבע על המילה החשובה.</dd>
+        <dt><span>🟩</span>Kick קודם כל</dt>
+        <dd>VOD-ים מ-Kick עובדים ישר מהקישור, והלוגו ליד השם מתאים לפלטפורמה. גם YouTube ו-Twitch נתמכים.</dd>
+      </dl>
+      <dl>
+        <dt><span>🔴</span>מעקב אחרי הלייב</dt>
+        <dd>מפעילים פעם אחת. כשאתם מסיימים שידור, קליפר מוצא את ה-VOD ומתחיל לעבוד לבד. בזמן השידור הוא לא מעמיס על המחשב.</dd>
+        <dt><span>✨</span>AI בעברית (לא חובה)</dt>
+        <dd>עם מפתח Claude משלכם, ה-AI קורא את כל הסטרים, מוצא רגעים מצחיקים וכותב כותרות ותיאורים בעברית. בערך 35 אגורות לסטרים.</dd>
+        <dt><span>💻</span>הכל אצלכם</dt>
+        <dd>התמלול והרינדור רצים על המחשב שלכם, מהר יותר עם כרטיס NVIDIA. הסטרימים שלכם לא עולים לשום שרת.</dd>
+        <dt><span>🔄</span>מתעדכן לבד</dt>
+        <dd>כשיוצאת גרסה חדשה, מופיע כפתור "עדכון עכשיו". ההגדרות והקליפים נשמרים.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="download">
+  <div class="wrap">
+    <div class="dl-box">
+      <div>
+        <h2>להוריד את קליפר</h2>
+        <p>חינם, בלי חשבון ובלי מנוי. קוד פתוח.</p>
+        <a class="btn go dl-link" id="dlBtn" href="https://github.com/Bengo27/Kliper/releases">⬇ הורדה ל-Windows</a>
+        <p class="ver" id="dlVer">גרסת בטא. אם משהו לא עובד, נשמח לשמוע.</p>
+        <p class="need">צריך Windows 10 או 11 (64-bit), בערך 6GB פנויים ואינטרנט. כרטיס מסך של NVIDIA מאיץ מאוד, אבל לא חובה.</p>
+      </div>
+      <div>
+        <h3 style="font: 28px 'Secular One'; margin: 0 0 14px">התקנה</h3>
+        <ol>
+          <li>מריצים את הקובץ שירד.</li>
+          <li>אם Windows מציג "Windows protected your PC", לוחצים <b>More info</b> ואז <b>Run anyway</b>. הקובץ עוד לא חתום דיגיטלית.</li>
+          <li>עונים על שלוש שאלות קצרות: שם הערוץ, מוזיקה וסאונד.</li>
+          <li>מדביקים קישור ל-VOD ולוחצים <b>צור קליפים</b>. בפעם הראשונה מודל התמלול העברי יורד (כ-1.6GB).</li>
+        </ol>
+      </div>
+    </div>
+    <p class="help">משהו לא עובד? <a href="https://github.com/Bengo27/Kliper/issues">פתחו דיווח ב-GitHub</a> ותצרפו את הקובץ <code dir="ltr">%APPDATA%\BengoGames\Kliper\engine.log</code>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>קליפר נבנה על ידי <a href="https://kick.com/bengo23">Bengo</a>. מבוסס על <a href="https://github.com/geniestudiofx/clip-genie-open">Clip Genie</a> בקוד פתוח (GPL-3.0).</span>
+    <span><a href="https://github.com/Bengo27/Kliper">קוד מקור</a></span>
+  </div>
+</footer>
+
+<script>
+// the download button points straight at the newest installer on GitHub Releases
+(function () {
+  fetch("https://api.github.com/repos/Bengo27/Kliper/releases?per_page=20").then(function (r) { return r.json(); }).then(function (rels) {
+    var best = null;
+    (rels || []).forEach(function (r) {
+      var m = /beta\.(\d+)$/.exec(r.tag_name || ""), exe = (r.assets || []).filter(function (a) { return /\.exe$/i.test(a.name); })[0];
+      var n = m ? +m[1] : 0;
+      if (exe && !r.draft && (!best || n > best.n)) best = { n: n, url: exe.browser_download_url, tag: r.tag_name, mb: Math.round(exe.size / 1e6) };
+    });
+    if (!best) return;
+    document.getElementById("dlBtn").href = best.url;
+    document.getElementById("dlVer").textContent = "גרסה " + best.tag.replace(/^v/, "") + ", כ-" + best.mb + "MB. גרסת בטא: אם משהו לא עובד, נשמח לשמוע.";
+  }).catch(function () {});
+})();
+</script>
+</body>
+</html>

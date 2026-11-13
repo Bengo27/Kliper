@@ -9,7 +9,7 @@ on:
   push:
     branches: [main]
     tags: ["v*"]
-    paths-ignore: ["tools/find_kick_pusher.py", ".github/workflows/kick-probe.yml"]
+    paths-ignore: ["tools/find_kick_pusher.py", ".github/workflows/kick-probe.yml", "site/**", ".github/workflows/site.yml"]
   workflow_dispatch:
 
 permissions:
@@ -114,4 +114,4 @@ jobs:
           target_commitish: ${{ github.sha }}
           files: out/*.exe
           generate_release_notes: true
-          prerelease: true
+          prerelease: false   # so github.com/Bengo27/Kliper/releases/latest always has the newest installer

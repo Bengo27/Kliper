@@ -14,6 +14,8 @@
 
 הכל רץ על המחשב שלך. כרטיס מסך של NVIDIA מאיץ מאוד, אבל לא חובה.
 
+האתר: **https://bengo27.github.io/Kliper/**
+
 ## התקנה (Windows 10/11, 64-bit)
 
 1. מורידים את `Kliper Setup <גרסה>.exe` מדף ה-[Releases](../../releases/latest).
