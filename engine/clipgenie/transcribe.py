@@ -131,9 +131,9 @@ def _watch_download(models_dir, model_name, status):
                 continue   # already downloaded: nothing to show
             gb = got / 1e9
             if total:
-                status("Downloading speech model: %.1f of %.1f GB (%d%%)" % (gb, total / 1e9, min(99, got * 100 / total)))
+                status("מוריד את מודל התמלול: %.1f מתוך %.1f GB (%d%%)" % (gb, total / 1e9, min(99, got * 100 / total)))
             else:
-                status("Downloading speech model: %.1f GB" % gb)
+                status("מוריד את מודל התמלול: %.1f GB" % gb)
     threading.Thread(target=watch, daemon=True).start()
     return done.set
 

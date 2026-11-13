@@ -3,13 +3,13 @@
   "use strict";
   var TOKEN = window.CG_TOKEN;
   var STYLES = [
-    { id: "editor", name: "My editor", css: "color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:17px;text-transform:lowercase;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000" },
-    { id: "pop", name: "Pop", css: "color:#00e5ff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;transform:scale(1.1)" },
-    { id: "bounce", name: "Bounce", css: "color:#00e5ff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;transform:translateY(-3px) scale(1.15)" },
-    { id: "karaoke", name: "Karaoke", css: "color:#fff;background:#7c4dff;padding:0 6px;border-radius:5px" },
-    { id: "shake", name: "Shake", css: "color:#ff5c8a;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;transform:rotate(-6deg)" },
-    { id: "glow", name: "Glow", css: "color:#fff;text-shadow:0 0 8px #a37bff,0 0 16px #a37bff" },
-    { id: "clean", name: "Clean", css: "color:#fff;font-family:'Segoe UI',sans-serif;font-weight:700;font-size:16px;text-decoration:underline" }
+    { id: "editor", name: "העורך שלי", css: "color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:17px;text-transform:lowercase;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000" },
+    { id: "pop", name: "פופ", css: "color:#00e5ff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;transform:scale(1.1)" },
+    { id: "bounce", name: "קפיצה", css: "color:#00e5ff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;transform:translateY(-3px) scale(1.15)" },
+    { id: "karaoke", name: "קריוקי", css: "color:#fff;background:#7c4dff;padding:0 6px;border-radius:5px" },
+    { id: "shake", name: "רעידה", css: "color:#ff5c8a;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;transform:rotate(-6deg)" },
+    { id: "glow", name: "זוהר", css: "color:#fff;text-shadow:0 0 8px #a37bff,0 0 16px #a37bff" },
+    { id: "clean", name: "נקי", css: "color:#fff;font-family:'Segoe UI',sans-serif;font-weight:700;font-size:16px;text-decoration:underline" }
   ];
   var SWATCHES = ["#3dff4a", "#00e5ff", "#ffd23f", "#ff5c8a", "#a37bff", "#ff8a3d", "#ffffff"];
 
@@ -38,7 +38,7 @@
       var j;
       // a check can fail for a moment while the PC is busy rendering: the job is still running, so keep waiting
       try { j = await api("GET", "/job?id=" + id); misses = 0; }
-      catch (e) { if (++misses > 30) throw new Error("Lost contact with Klipon's engine. Close Klipon and open it again."); await sleep(2000); continue; }
+      catch (e) { if (++misses > 30) throw new Error("הקשר עם המנוע של קליפון נותק. סגרו את קליפון ופתחו מחדש."); await sleep(2000); continue; }
       if (onp) onp(j.progress, j.message);
       if (j.status === "done") return j.result;
       if (j.status === "error") throw new Error(j.message);
@@ -56,7 +56,7 @@
   function renderNews() {
     var n = (state.lib && state.lib.news) || {}, bar = $("newsBar");
     var newer = !!(n.latest && verNum(n.latest) > verNum(state.lib.version));
-    var text = (newer ? "Klipon " + n.latest + " is out. " : "") + (n.notice || "");
+    var text = (newer ? "קליפון " + n.latest + " יצאה. " : "") + (n.notice || "");
     var hidden = "";
     try { hidden = localStorage.getItem("cg_news_hidden") || ""; } catch (e) {}
     bar.classList.toggle("hidden", !text.trim() || hidden === newsKey(n));
@@ -72,7 +72,7 @@
     document.body.classList.toggle("no-ai", !!state.lib.public && !state.lib.server_ai);
     document.body.classList.toggle("no-key", !!state.lib.public);
     document.body.classList.toggle("pro-locked", !!state.lib.public && !state.lib.pro);
-    if (state.lib.version) { $("appVersion").textContent = "v" + state.lib.version; $("setTitle").textContent = "Settings · Klipon v" + state.lib.version + (state.lib.public ? " Beta" : ""); }
+    if (state.lib.version) { $("appVersion").textContent = "v" + state.lib.version; $("setTitle").textContent = "הגדרות · קליפון v" + state.lib.version + (state.lib.public ? " בטא" : ""); }
     renderNews();
     renderSide(); renderMain(); renderAddLooks();
     var busy = state.lib.streams.some(function (s) { return s.status === "processing" || s.status === "queued"; });
@@ -96,16 +96,16 @@
     document.querySelector('.stream-item.all').classList.toggle("on", state.view === "__new");
     $("streamList").innerHTML = streams().map(function (s) {
       var n = (s.clips || []).filter(function (c) { return c.status !== "discarded"; }).length;
-      var sub = s.status === "ready" ? n + " TikToks" : (s.status === "error" ? "Failed" : (s.message || "Waiting"));
+      var sub = s.status === "ready" ? n + " קליפים" : (s.status === "error" ? "נכשל" : (s.message || "ממתין"));
       var bar = (s.status === "processing") ? '<span class="si-bar"><div style="width:' + Math.round((s.progress || 0) * 100) + '%"></div></span>' : "";
       return '<button class="stream-item' + (state.view === s.key ? " on" : "") + '" data-key="' + esc(s.key) + '">' +
-        '<span class="si-title">' + esc(s.title || "Twitch stream") + '</span>' +
+        '<span class="si-title">' + esc(s.title || "סטרים") + '</span>' +
         '<span class="si-sub"><span class="dot ' + esc(s.status) + '"></span>' + esc((s.date ? s.date + " · " : "") + sub) + '</span>' + bar + '</button>';
-    }).join("") || '<p class="muted small" style="padding:6px 10px">No streams yet.</p>';
+    }).join("") || '<p class="muted small" style="padding:6px 10px">עדיין אין סטרימים.</p>';
   }
 
   function card(x) {
-    var c = x.c, chip = c.status === "posted" ? '<span class="chip posted">Posted</span>' : c.status === "edited" ? '<span class="chip edited">Edited</span>' : c.status === "new" ? '<span class="chip">New</span>' : "";
+    var c = x.c, chip = c.status === "posted" ? '<span class="chip posted">פורסם</span>' : c.status === "edited" ? '<span class="chip edited">נערך</span>' : c.status === "new" ? '<span class="chip">חדש</span>' : "";
     return '<button class="card" data-key="' + esc(x.s.key) + '" data-id="' + esc(c.id) + '">' +
       '<div class="thumb">' + (c.thumb ? '<img alt="" loading="lazy" src="' + media(c.thumb, Math.round(c.rendered_at || 0)) + '">' : "") + chip +
       '<span class="dur">' + fmt(c.duration) + '</span>' + ((c.checks || []).length ? '<span class="warn" title="Self-check: something to look at">⚠ check</span>' : "") + '</div>' +
@@ -119,7 +119,7 @@
     var pb = $("progressBox");
     if (s && (s.status === "processing" || s.status === "queued")) {
       pb.classList.remove("hidden");
-      $("pbTitle").textContent = s.status === "queued" ? "Waiting to start" : (s.kind === "clip" ? "Making a TikTok from your clip" : "Making TikToks");
+      $("pbTitle").textContent = s.status === "queued" ? "ממתין להתחלה" : (s.kind === "clip" ? "יוצר קליפ מהקליפ שלך" : "יוצר קליפים");
       // 0.1.0: while the speech model downloads (first run) the bar shows the download itself
       var dl = /^Downloading speech model.*?\((\d+)%\)/.exec(s.message || "");
       var shown = dl ? Number(dl[1]) : Math.round((s.progress || 0) * 100);
@@ -131,9 +131,9 @@
     } else { pb.classList.add("hidden"); funStop(); }
     var items, html = "";
     if (!s) {
-      $("viewTitle").textContent = "New TikToks";
+      $("viewTitle").textContent = "קליפים חדשים";
       items = allClips(true);
-      $("viewSub").textContent = items.length ? "Ready to post. Click one to watch, tweak and upload." : "";
+      $("viewSub").textContent = items.length ? "מוכנים לפרסום. לחצו על קליפ כדי לצפות, לשפר ולהעלות." : "";
       var groups = {};
       items.forEach(function (x) { (groups[x.s.key] = groups[x.s.key] || []).push(x); });
       Object.keys(groups).forEach(function (k) {
@@ -143,8 +143,8 @@
       $("candidates").classList.add("hidden");
       $("findBox").classList.add("hidden");
     } else {
-      $("viewTitle").textContent = s.title || "Twitch stream";
-      $("viewSub").textContent = s.status === "error" ? "Failed: " + (s.message || "") : ((s.date || "") + (s.duration ? " · " + fmt(s.duration) + (s.kind === "clip" ? " clip" : " stream") : "") + (s.folder ? " · saved in " + s.folder : ""));
+      $("viewTitle").textContent = s.title || "סטרים";
+      $("viewSub").textContent = s.status === "error" ? "Failed: " + (s.message || "") : ((s.date || "") + (s.duration ? " · " + fmt(s.duration) + (s.kind === "clip" ? " קליפ" : " סטרים") : "") + (s.folder ? " · נשמר ב-" + s.folder : ""));
       items = (s.clips || []).filter(function (c) { return c.status !== "discarded"; }).map(function (c) { return { s: s, c: c }; });
       html = items.map(card).join("");
       var cands = s.extra_candidates || [];
@@ -153,11 +153,11 @@
       $("candidates").classList.toggle("hidden", !cands.length || s.status !== "ready");
       var sigs = s.signals || [];
       var aiOn = sigs.indexOf("ai") >= 0;
-      $("candSub").textContent = "Ranked by " + sigLabel(sigs) + ". Preview, tick the ones you want, then make them." +
-        (aiOn || state.lib.public ? "" : state.lib.ai_trial ? " The AI read isn't part of the free trial." : state.lib.ai_ready ? " The AI read wasn't run on this stream yet." : " The AI read (best at funny moments) is off: add your Claude API key to turn it on for every stream.");
+      $("candSub").textContent = "דורג לפי " + sigLabel(sigs) + ". צפו, סמנו את מה שאתם רוצים וצרו." +
+        (aiOn || state.lib.public ? "" : state.lib.ai_trial ? " ה-AI לא כלול בניסיון החינמי." : state.lib.ai_ready ? " ה-AI עוד לא עבר על הסטרים הזה." : " ה-AI (הכי טוב במציאת רגעים מצחיקים) כבוי: הוסיפו מפתח Claude API בהגדרות כדי להפעיל אותו.");
       var ab = $("btnAiRank");
       ab.classList.toggle("hidden", aiOn || !!state.lib.ai_trial);
-      ab.textContent = state.lib.ai_ready ? "✨ Re-rank with AI" : "✨ Turn on AI read";
+      ab.textContent = state.lib.ai_ready ? "✨ דירוג מחדש עם AI" : "✨ הפעלת AI";
       ab.dataset.mode = state.lib.ai_ready ? "rerank" : "settings";
       var sigKey = s.key + "|" + cands.map(function (c) { return c.id + ":" + c.score; }).join(",");
       if ($("candList").dataset.sig !== sigKey) {   // don't wipe ticks / open previews on a refresh
@@ -194,38 +194,38 @@
   var etaSamples = {};
   function fmtMins(sec) {
     var m = Math.round(sec / 60);
-    if (m < 1) return "under a minute";
-    if (m < 60) return m + " min";
-    return Math.floor(m / 60) + " h " + (m % 60 ? (m % 60) + " min" : "");
+    if (m < 1) return "פחות מדקה";
+    if (m < 60) return m + " דק'";
+    return Math.floor(m / 60) + " h " + (m % 60 ? (m % 60) + " דק'" : "");
   }
   var etaFrom = {};   // 0.1.0: time + progress where the estimate starts (after a speech model download)
   function etaText(s) {
     var now = Date.now() / 1000, p = Number(s.progress) || 0, key = s.key;
     if (/^Downloading speech model/.test(s.message || "")) {   // one-off download: don't let it skew the estimate
       etaSamples[key] = []; etaFrom[key] = { t: now, p: p };
-      return "Downloading the speech model once. It won't need this again";
+      return "מוריד את מודל התמלול פעם אחת. לא יהיה צורך שוב";
     }
     var list = etaSamples[key] = etaSamples[key] || [];
     if (!list.length || list[list.length - 1].p !== p) list.push({ t: now, p: p });
     while (list.length > 2 && now - list[1].t > 300) list.shift();   // keep about the last 5 minutes
     var started = Number(s.started) || (list.length ? list[0].t : now);
     var ran = Math.max(0, now - started);
-    var out = ran >= 60 ? "Running " + fmtMins(ran) : "";
+    var out = ran >= 60 ? "רץ " + fmtMins(ran) : "";
     var f = etaFrom[key] || { t: started, p: 0 }, fr = Math.max(0, now - f.t), fp = p - f.p;
-    if (p < 0.03 || fr < 45 || fp <= 0.005) return out + (out ? " · " : "") + "Working out how long this takes…";
+    if (p < 0.03 || fr < 45 || fp <= 0.005) return out + (out ? " · " : "") + "מחשב כמה זמן זה ייקח…";
     var est = fr * (1 - p) / fp, old = list[0];
     if (old && now - old.t >= 90 && p > old.p) {
       var recent = (1 - p) * (now - old.t) / (p - old.p);
       est = 0.6 * recent + 0.4 * est;
     }
-    if (p >= 0.97) return out + (out ? " · " : "") + "Almost done";
-    return out + (out ? " · " : "") + "About " + fmtMins(Math.max(30, est)) + " left";
+    if (p >= 0.97) return out + (out ? " · " : "") + "כמעט סיימנו";
+    return out + (out ? " · " : "") + "עוד בערך " + fmtMins(Math.max(30, est)) + "";
   }
 
   /* rotating messages while Klipon is hunting for TikToks */
-  var FUN = ["Finding TikToks…", "Listening for the loud bits…", "Reading chat for hype…", "Spotting the funny moments…",
-    "Hunting for clutches…", "Counting laughs and screams…", "Checking the gameplay…", "Lining up the best clips…",
-    "Trimming the boring parts…", "Picking your top moments…"];
+  var FUN = ["מחפש קליפים…", "מקשיב לקטעים הרועשים…", "קורא את הצ'אט…", "מחפש את הרגעים המצחיקים…",
+    "צד קלאצ'ים…", "סופר צחוקים וצעקות…", "בודק את המשחק…", "מסדר את הקליפים הכי טובים…",
+    "חותך את החלקים המשעממים…", "בוחר את הרגעים הכי טובים…"];
   var funT = null, funI = 0;
   function funStart() {
     if (funT) return;
@@ -234,11 +234,11 @@
   function funStop() { clearInterval(funT); funT = null; }
 
   /* ---------------- ranked moments ---------------- */
-  var SIG = [["chat", "Chat"], ["audio", "Audio"], ["visual", "Gameplay"], ["funny", "Funny"], ["text", "Hype words"], ["clips", "Viewer clips"], ["ai", "AI read"]];
-  var CAT = { funny: "Funny", banter: "Banter", hype: "Hype", story: "Story", found: "You asked for this" };
+  var SIG = [["chat", "צ'אט"], ["audio", "קול"], ["visual", "משחק"], ["funny", "מצחיק"], ["text", "מילות התלהבות"], ["clips", "קליפים של צופים"], ["ai", "קריאת AI"]];
+  var CAT = { funny: "מצחיק", banter: "באנטר", hype: "הייפ", story: "סיפור", found: "ביקשת את זה" };
   function sigLabel(sigs) {
     var names = SIG.filter(function (x) { return sigs.indexOf(x[0]) >= 0; }).map(function (x) { return x[1].toLowerCase(); });
-    return names.length ? names.join(", ") : "chat, audio and transcript";
+    return names.length ? names.join(", ") : "צ'אט, קול ותמלול";
   }
   function candRow(c, i) {
     var sig = c.signals || {};
@@ -251,14 +251,14 @@
       '<span class="rank">#' + (i + 1) + '</span><span class="score">' + c.score + '</span>' +
       '<span class="ct"><strong>' + esc(c.title) + (c.category ? '<span class="cat cat-' + esc(c.category) + '">' + esc(CAT[c.category] || c.category) + '</span>' : "") + '</strong>' +
       '<span class="small muted">' + esc(c.start_label) + ' · ' + Math.round(c.end - c.start) + 's' + (c.game ? ' · ' + esc(c.game) : '') + vc + ' · ' + esc(c.ai_why || c.why) + '</span>' +
-      (c.on_screen || c.lead_up ? '<span class="small onscreen">🎮 ' + esc(c.on_screen || "Starts on the play, then your reaction") + '</span>' : "") +
+      (c.on_screen || c.lead_up ? '<span class="small onscreen">🎮 ' + esc(c.on_screen || "מתחיל במהלך, ואז התגובה שלך") + '</span>' : "") +
       (c.quote ? '<span class="small muted quote">“' + esc(c.quote) + '…”</span>' : "") +
       '<span class="bars">' + bars + '</span></span>' +
       '<span class="acts"><span class="vote">' +
-        '<button class="btn ghost sm" data-vote="up" aria-pressed="' + (c.vote === "up") + '" aria-label="Good moment" title="Good moment: find more like this">👍</button>' +
-        '<button class="btn ghost sm" data-vote="down" aria-pressed="' + (c.vote === "down") + '" aria-label="Bad moment" title="Not funny: find fewer like this">👎</button></span>' +
+        '<button class="btn ghost sm" data-vote="up" aria-pressed="' + (c.vote === "up") + '" aria-label="רגע טוב" title="רגע טוב: תמצא עוד כאלה">👍</button>' +
+        '<button class="btn ghost sm" data-vote="down" aria-pressed="' + (c.vote === "down") + '" aria-label="רגע לא טוב" title="לא מצחיק: תמצא פחות כאלה">👎</button></span>' +
         '<button class="btn ghost sm" data-preview="' + esc(c.id) + '">▶ Preview</button>' +
-      '<button class="btn ghost sm" data-make="' + esc(c.id) + '">Make TikTok</button></span>' +
+      '<button class="btn ghost sm" data-make="' + esc(c.id) + '">צור קליפ</button></span>' +
       '<span class="why-row' + (c.vote === "down" ? "" : " hidden") + '">' + (c.vote === "down" ? whyRow(c.vote_reasons) : "") + '</span></div>';
   }
   function selectedMoments() {
@@ -266,17 +266,17 @@
   }
   function updateMakeSel() {
     var n = selectedMoments().length;
-    $("btnMakeSel").disabled = !n; $("btnMakeSel").textContent = "Make TikToks (" + n + ")";
+    $("btnMakeSel").disabled = !n; $("btnMakeSel").textContent = "צור קליפים (" + n + ")";
   }
-  var WHY = [["too_long", "Too long"], ["slow_start", "Slow start"], ["no_leadup", "Missing the lead-up"],
-    ["ends_early", "Ends too early"], ["not_funny", "Not funny"], ["wrong_moment", "Wrong moment"]];
+  var WHY = [["too_long", "ארוך מדי"], ["slow_start", "פתיחה איטית"], ["no_leadup", "חסר מה שהוביל לזה"],
+    ["ends_early", "נגמר מוקדם מדי"], ["not_funny", "לא מצחיק"], ["wrong_moment", "רגע לא נכון"]];
   function whyRow(reasons) {
     reasons = reasons || [];
-    return '<span class="why-label small muted">What was wrong? (helps the AI fix it)</span>' + WHY.map(function (w) {
+    return '<span class="why-label small muted">מה לא היה טוב? (עוזר ל-AI לתקן)</span>' + WHY.map(function (w) {
       return '<button class="chip-btn" data-why="' + w[0] + '" aria-pressed="' + (reasons.indexOf(w[0]) >= 0) + '">' + w[1] + '</button>';
     }).join("");
   }
-  /* host: the element the "what was wrong?" chips live in (a .why-row). */
+  /* host: the element the "מה לא היה טוב?" chips live in (a .why-row). */
   function showWhy(host, on, reasons) {
     if (!host) return;
     host.classList.toggle("hidden", !on);
@@ -292,7 +292,7 @@
     showWhy(whyHost(btn), v === "down", []);
     try {
       var r = await api("POST", "/library/feedback", { key: key, clip_id: id, vote: v });
-      if (v) toast((v === "up" ? "Got it: more like this. " : "Got it: fewer like this. Tap what was wrong so it knows why. ") + "Klipon has learned from " + (r.likes + r.dislikes) + " ratings.");
+      if (v) toast((v === "up" ? "הבנתי: עוד כאלה. " : "הבנתי: פחות כאלה. סמנו מה לא היה טוב כדי שיבין למה. ") + "קליפון למד מ-" + (r.likes + r.dislikes) + " דירוגים.");
     } catch (err) { toast(err.message, true); }
   }
   async function sendWhy(key, id, chip) {
@@ -307,42 +307,42 @@
     var key = state.view, text = $("findText").value.trim(), msg = $("findMsg"), btn = $("btnFind");
     if (!text) { $("findText").focus(); return; }
     if (state.lib.ai_trial) { acctError("TRIAL_USED: The AI isn't part of the free trial. Upgrade to use it."); return; }
-    if (!state.lib.ai_ready) { toast("Add your Claude API key in Settings to use this.", true); openSettings(); return; }
-    btn.disabled = true; btn.textContent = "Searching…"; msg.classList.remove("hidden"); msg.textContent = "The AI is reading through the stream…";
+    if (!state.lib.ai_ready) { toast("הוסיפו מפתח Claude API בהגדרות כדי להשתמש בזה.", true); openSettings(); return; }
+    btn.disabled = true; btn.textContent = "מחפש…"; msg.classList.remove("hidden"); msg.textContent = "ה-AI קורא את הסטרים…";
     try {
       var r = await api("POST", "/library/find", { key: key, text: text });
-      var res = await pollJob(r.job, function (p, m) { msg.textContent = (m || "Searching") + "…"; });
+      var res = await pollJob(r.job, function (p, m) { msg.textContent = (m || "מחפש") + "…"; });
       await refresh();
       if (state.view !== key) return;
       if (res.found.length) {
-        msg.textContent = "Found " + res.found.length + (res.found.length > 1 ? " possible matches" : " match") + ". " + (res.found.length > 1 ? "They're" : "It's") + " at the top of the list below: preview, then make it.";
+        msg.textContent = "נמצאו " + res.found.length + (res.found.length > 1 ? " התאמות אפשריות" : " התאמה") + ". " + (res.found.length > 1 ? "הן" : "היא") + " בראש הרשימה למטה: צפו וצרו.";
         var first = document.querySelector('#candList .cand[data-id="' + res.found[0].id + '"]');
         if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
       } else {
-        msg.textContent = "Couldn't find that in " + res.searched_minutes + " minutes of stream. Try saying what was said, or who was talking.";
+        msg.textContent = "לא מצאתי את זה ב-" + res.searched_minutes + " דקות של סטרים. נסו לכתוב מה נאמר, או מי דיבר.";
       }
     } catch (e) { msg.textContent = e.message; toast(e.message, true); }
-    finally { btn.disabled = false; btn.textContent = "Find it"; }
+    finally { btn.disabled = false; btn.textContent = "מצא"; }
   }
   async function makeMoments(ids) {
     var key = state.view;
     for (var k = 0; k < ids.length; k++) {
-      $("btnMakeSel").disabled = true; $("btnMakeSel").textContent = "Making " + (k + 1) + " of " + ids.length + "…";
+      $("btnMakeSel").disabled = true; $("btnMakeSel").textContent = "יוצר " + (k + 1) + " מתוך " + ids.length + "…";
       try { var r = await api("POST", "/library/rerender", { key: key, clip_id: ids[k], edits: {}, style: {} }); await pollJob(r.job); }
       catch (err) { toast(err.message, true); }
     }
-    toast(ids.length > 1 ? ids.length + " TikToks made." : "TikTok made.");
+    toast(ids.length > 1 ? ids.length + " קליפים נוצרו." : "הקליפ נוצר.");
     await refresh();
   }
   async function previewMoment(row, id, btn) {
     var box = row.querySelector(".pv");
-    if (box) { box.remove(); btn.textContent = "▶ Preview"; return; }
-    btn.disabled = true; btn.textContent = "Loading…";
+    if (box) { box.remove(); btn.textContent = "▶ תצוגה מקדימה"; return; }
+    btn.disabled = true; btn.textContent = "טוען…";
     try {
       var d = await api("GET", "/library/moment_preview?key=" + encodeURIComponent(state.view) + "&clip_id=" + encodeURIComponent(id));
       row.insertAdjacentHTML("beforeend", '<div class="pv"><video controls autoplay playsinline src="' + media(d.path) + '"></video></div>');
-      btn.textContent = "✕ Close";
-    } catch (err) { toast(err.message, true); btn.textContent = "▶ Preview"; }
+      btn.textContent = "✕ סגירה";
+    } catch (err) { toast(err.message, true); btn.textContent = "▶ תצוגה מקדימה"; }
     btn.disabled = false;
   }
 
@@ -351,12 +351,12 @@
   function addLook() { try { return localStorage.getItem("cg_add_look") || ""; } catch (e) { return ""; } }
   function renderAddLooks() {
     var box = $("addLook"); if (!box || !state.lib) return;
-    var cur = addLook(), list = [{ id: "", name: "Auto", about: "Your default style. CS2 streams get the CS2 + kill feed style." }].concat(lookList());
+    var cur = addLook(), list = [{ id: "", name: "אוטומטי", about: "סגנון ברירת המחדל שלך. סטרימים של CS2 מקבלים סגנון CS2 + קיל-פיד." }].concat(lookList());
     if (!list.some(function (l) { return l.id === cur; })) cur = "";
     box.innerHTML = list.map(function (l) {
       return '<button class="look-chip' + (l.id === cur ? " on" : "") + (l.mine ? " mine" : "") + (l.id === "cs2" ? ' pro-only" data-pro="killfeed' : "") + '" role="radio" aria-checked="' + (l.id === cur) +
         '" data-addlook="' + esc(l.id) + '" title="' + esc(l.about || "") + '">' + esc(l.name) + "</button>";
-    }).join("") + '<button class="look-chip" data-addother title="Make your own style">＋ Other</button>';
+    }).join("") + '<button class="look-chip" data-addother title="יצירת סגנון משלך">＋ אחר</button>';
   }
   /* 2.35.3: a VOD link first asks which part: the whole VOD, or From / To times. */
   var VOD_RX = /twitch\.tv\/(?:[\w-]+\/)?(?:videos?|v)\/\d+/i;
@@ -368,7 +368,7 @@
   }
   function addStream(src) {
     src = (src || $("addSrc").value).trim();
-    if (!src) { toast("Paste a Twitch, YouTube or Kick link first.", true); return; }
+    if (!src) { toast("קודם הדביקו קישור מ-Kick, ‏YouTube או Twitch.", true); return; }
     if (VOD_RX.test(src)) {
       state.rangeSrc = src;
       $("addRange").classList.remove("hidden");
@@ -383,8 +383,8 @@
     if (!whole) {
       var a = hmsToSec($("rangeFrom").value), b = hmsToSec($("rangeTo").value);
       if (a == null) a = 0;
-      if (b == null || isNaN(a) || isNaN(b)) { toast("Type the times like 1:30:00 (hours:minutes:seconds).", true); return; }
-      if (b - a < 60) { toast("\"To\" must be at least 1 minute after \"From\".", true); return; }
+      if (b == null || isNaN(a) || isNaN(b)) { toast("כתבו זמנים כמו 1:30:00 (שעות:דקות:שניות).", true); return; }
+      if (b - a < 60) { toast("\"עד\" חייב להיות לפחות דקה אחרי \"מ-\".", true); return; }
       rg = [a, b];
     }
     rangeClose();
@@ -399,7 +399,7 @@
       state.view = r.key;
       await refresh();
       if (window.CG_acctError) loadAccount(true);   // the trial count changed
-      pollJob(r.job).then(function () { toast(r.kind === "clip" ? "TikTok made from your clip. Click it to watch and tweak." : "Moments ranked. Preview and pick the ones to make."); refresh(); })
+      pollJob(r.job).then(function () { toast(r.kind === "clip" ? "נוצר קליפ מהקליפ שלך. לחצו עליו כדי לצפות ולשפר." : "הרגעים דורגו. צפו ובחרו מה ליצור."); refresh(); })
         .catch(function (e) { toast(e.message, true); refresh(); });
     } catch (e) { if (!acctError(e.message)) toast(e.message, true); }
   }
@@ -424,7 +424,7 @@
   function lookList(keep) {   // 2.26: hidden looks (Clean, Zelda, Fortnite) only show when a TikTok already uses one
     var L = looks(), out = L.presets.filter(function (p) { return !p.hidden || p.id === keep; })
       .map(function (p) { return { id: p.id, name: p.name, about: p.about, style: p.style }; });
-    Object.keys(L.mine || {}).sort().forEach(function (n) { out.push({ id: "mine:" + n, name: n, about: "Your own style", style: L.mine[n], mine: true }); });
+    Object.keys(L.mine || {}).sort().forEach(function (n) { out.push({ id: "mine:" + n, name: n, about: "הסגנון שלך", style: L.mine[n], mine: true }); });
     return out;
   }
   function renderLooks() {
@@ -432,8 +432,8 @@
     $("lookGrid").innerHTML = list.map(function (l) {
       return '<button class="look-card' + (l.id === cur ? " on" : "") + (l.mine ? " mine" : "") + (l.id === "cs2" ? ' pro-only" data-pro="killfeed' : "") + '" data-look="' + esc(l.id) + '" aria-pressed="' + (l.id === cur) + '">' +
         "<strong>" + esc(l.name) + "</strong><span>" + esc(l.about || "") + "</span></button>";
-    }).join("") + '<button class="look-card' + (on ? "" : " on") + '" data-look="__other" aria-pressed="' + !on + '"><strong>＋ Other</strong><span>Make your own style: change anything below, then save it.</span></button>';
-    $("lookAbout").textContent = on ? "" : "Your own style: change the title, layout and the rest below, then press \"Save as my style\" to use it again.";
+    }).join("") + '<button class="look-card' + (on ? "" : " on") + '" data-look="__other" aria-pressed="' + !on + '"><strong>＋ אחר</strong><span>יצירת סגנון משלך: שנו מה שרוצים למטה ושמרו.</span></button>';
+    $("lookAbout").textContent = on ? "" : "הסגנון שלך: שנו את הכותרת, הפריסה וכל השאר למטה, ואז לחצו \"שמירה כסגנון שלי\" כדי להשתמש בו שוב.";
     $("btnDelLook").classList.toggle("hidden", !(on && on.mine));
     var ov = o.overlays || [];
     $("hudParts").innerHTML = (looks().hud_parts || []).map(function (h) {
@@ -459,7 +459,7 @@
     var tsz = Math.round(Number(o.title_size == null || o.title_size === "" ? 1 : o.title_size) * 100);
     $("sTitleSize").value = tsz; $("sTitleSizeVal").textContent = tsz + "%";
     var lg = Number(o.end_linger == null || o.end_linger === "" ? 1.8 : o.end_linger);
-    $("sLinger").value = lg; $("sLingerVal").textContent = lg ? lg + " s after the last word" : "cut right away";
+    $("sLinger").value = lg; $("sLingerVal").textContent = lg ? lg + " שנ' אחרי המילה האחרונה" : "חיתוך מיד";
     $("sSubsMode").value = o.subs_mode === "key" ? "key" : "all";
     $("sSubsLang").value = o.subs_lang || (state.ed ? (streamByKey(state.ed.key) || {}).language : "") || "";
     if ($("sSubsLang").selectedIndex < 0) $("sSubsLang").value = "";
@@ -470,9 +470,9 @@
     $("sTitleText").value = o.title_text || "";
     $("sWmPos").value = o.watermark_pos || "bottom";
     var snd = looks().sounds || [], rs = o.react_sfx || "";
-    $("sReactSfx").innerHTML = '<option value="">Built-in bass hit</option><option value="none">No sound</option>' +
+    $("sReactSfx").innerHTML = '<option value="">באס מובנה</option><option value="none">בלי סאונד</option>' +
       snd.map(function (s) { return '<option value="' + esc(s.name) + '">♪ ' + esc(s.name) + "</option>"; }).join("") +
-      (rs && rs !== "none" && !snd.some(function (s) { return s.name === rs; }) ? '<option value="' + esc(rs) + '">' + esc(rs) + " (deleted)</option>" : "");
+      (rs && rs !== "none" && !snd.some(function (s) { return s.name === rs; }) ? '<option value="' + esc(rs) + '">' + esc(rs) + " (נמחק)</option>" : "");
     $("sReactSfx").value = rs;
     $("reactSfxField").classList.toggle("hidden", !o.sfx);
     $("titleOpts").classList.toggle("hidden", !o.title_bar);
@@ -494,7 +494,7 @@
     $("sfxList").innerHTML = snd.length ? snd.map(function (s) {
       return '<div class="sfx-row"><button class="btn ghost sm" data-play="' + esc(s.path) + '" aria-label="Play ' + esc(s.name) + '">▶</button><span>' + esc(s.name) +
         '</span><button class="btn ghost sm" data-del="' + esc(s.name) + '" aria-label="Remove ' + esc(s.name) + '">✕</button></div>';
-    }).join("") : '<span class="tiny muted">No sounds yet.</span>';
+    }).join("") : '<span class="tiny muted">עדיין אין סאונדים.</span>';
   }
   window.CGSounds = function () { return looks().sounds || []; };
   window.CGPlaySound = function (name) { var p = soundPath(name); if (p) playSound(p); };
@@ -510,7 +510,7 @@
     document.querySelectorAll("#edVote [data-vote]").forEach(function (b) { b.setAttribute("aria-pressed", String(c.vote === b.dataset.vote)); });
     $("edMeta").textContent = (s.title || "") + " · " + c.start_label;
     $("askText").value = "";
-    $("askReply").textContent = "Type it like you'd tell an editor: longer, shorter, add a moment, cut a part, subtitles, volume, title…";
+    $("askReply").textContent = "כתבו כמו לעורך: ארוך יותר, קצר יותר, להוסיף רגע, לחתוך חלק, כתוביות, עוצמה, כותרת…";
     showWhy($("edWhy"), c.vote === "down", c.vote_reasons);
     showViews(); showUndo(); showChecks(c);
     $("editor").classList.remove("hidden");
@@ -565,34 +565,34 @@
     var c = state.ed.clip, has = c.views != null;
     $("pViews").value = has ? c.views : "";
     $("edViews").classList.toggle("hidden", !has);
-    $("edViews").textContent = has ? "👁 " + nice(c.views) + " views" : "";
+    $("edViews").textContent = has ? "👁 " + nice(c.views) + " צפיות" : "";
   }
   async function saveViews() {
     var ed = state.ed; if (!ed) return;
     var raw = $("pViews").value.trim();
     try {
       ed.clip = await api("POST", "/library/views", { key: ed.key, clip_id: ed.id, views: raw === "" ? null : Math.max(0, Math.round(Number(raw))) });
-      showViews(); toast(raw === "" ? "Views removed." : "Saved. The AI now knows how this one did.");
+      showViews(); toast(raw === "" ? "הצפיות הוסרו." : "נשמר. ה-AI יודע עכשיו איך הקליפ הזה הצליח.");
     } catch (e) { toast(e.message, true); }
   }
   async function syncViews() {
-    var b = $("btnSyncViews"); b.disabled = true; b.textContent = "Checking TikTok…";
+    var b = $("btnSyncViews"); b.disabled = true; b.textContent = "בודק בטיקטוק…";
     try {
       var r = await api("POST", "/tiktok/sync_views", {});
-      toast(r.matched ? "Got views for " + r.matched + " TikTok" + (r.matched > 1 ? "s" : "") + "." : "Looked at " + r.videos + " TikTok posts but couldn't match any by title. Type the views in instead.");
+      toast(r.matched ? "התקבלו צפיות ל-" + r.matched + " קליפ" + (r.matched > 1 ? "s" : "") + "." : "נבדקו " + r.videos + " פוסטים בטיקטוק אבל אף אחד לא תאם לפי הכותרת. הקלידו את הצפיות ידנית.");
       await refresh();
       if (state.ed) { var s = streamByKey(state.ed.key); var c = (s.clips || []).filter(function (x) { return x.id === state.ed.id; })[0]; if (c) { state.ed.clip = c; showViews(); } }
     } catch (e) { toast(e.message, true); }
-    finally { b.disabled = false; b.textContent = "↻ Get views from TikTok"; }
+    finally { b.disabled = false; b.textContent = "↻ משיכת צפיות מטיקטוק"; }
   }
   /* ---------------- themes ---------------- */
   var THEMES = [
-    ["midnight", "Midnight", "#161618", "#1c1c1f", "#7c4dff"],
-    ["genie", "Genie Gold", "#0e1120", "#12162a", "#f5b942"],
-    ["neon", "Neon", "#050507", "#0a0a0e", "#00e5ff"],
-    ["ember", "Ember", "#17120f", "#1d1612", "#ff5a36"],
-    ["mint", "Mint", "#0f1615", "#131c1b", "#2dd4a3"],
-    ["daylight", "Daylight", "#f4f4f7", "#ffffff", "#5b3df5"]
+    ["midnight", "חצות", "#161618", "#1c1c1f", "#7c4dff"],
+    ["genie", "זהב", "#0e1120", "#12162a", "#f5b942"],
+    ["neon", "ניאון", "#050507", "#0a0a0e", "#00e5ff"],
+    ["ember", "גחלים", "#17120f", "#1d1612", "#ff5a36"],
+    ["mint", "מנטה", "#0f1615", "#131c1b", "#2dd4a3"],
+    ["daylight", "יום", "#f4f4f7", "#ffffff", "#5b3df5"]
   ];
   function setTheme(id, save) {
     document.documentElement.dataset.theme = id;
@@ -613,14 +613,14 @@
 
   function showLearned(t) {
     var n = t.likes + t.dislikes + t.edits + t.views;
-    $("learnedStats").textContent = n ? "From " + t.likes + " 👍, " + t.dislikes + " 👎, " + t.edits + " edits and " + t.views + " TikToks with views." : "Nothing yet. Rate moments with 👍 / 👎, edit TikToks and add their views: it learns from all of it.";
+    $("learnedStats").textContent = n ? "מתוך " + t.likes + " 👍, " + t.dislikes + " 👎, " + t.edits + " עריכות ו-" + t.views + " קליפים עם צפיות." : "עדיין כלום. דרגו רגעים עם 👍 / 👎, ערכו קליפים והוסיפו צפיות: הוא לומד מכל זה.";
     $("learnedSummary").textContent = t.summary || "";
     $("learnedRules").innerHTML = (t.rules || []).map(function (r) { return "<li>" + esc(r) + "</li>"; }).join("");
     $("btnRules").classList.toggle("hidden", !t.ai_ready || n < 3);
   }
 
   function closeEditor() {
-    if (state.ed && state.ed.dirty && !confirm("Leave without applying your changes?")) return;
+    if (state.ed && state.ed.dirty && !confirm("לצאת בלי להחיל את השינויים?")) return;
     toggleTimeline(false);
     $("edVideo").pause(); $("edVideo").removeAttribute("src"); $("edVideo").load();
     $("editor").classList.add("hidden"); state.ed = null; updateSteps(); refresh();
@@ -633,7 +633,7 @@
     var ed = state.ed; if (!ed) return;
     if (!window.CGTimeline.isOpen()) {
       if (fromUser && state.sec === "look" && $("tlWrap").classList.contains("hidden") && !ed.liveAsked) {
-        ed.liveAsked = true; toast("Opening the live preview: your changes show on the right as you make them.");
+        ed.liveAsked = true; toast("פותח תצוגה חיה: השינויים שלכם מופיעים בזמן אמת.");
         toggleTimeline(true);
       }
       return;
@@ -649,14 +649,14 @@
   }
   window.CGLivePreview = function () { livePreview(false); };
   var SECS = {
-    look: ["Look", "Layout, title, channel name and the Twitch logo", "pane-edit"],
-    subs: ["Subtitles", "Words on the video", "pane-subs"],
-    chat: ["Chat pop-up", "A real chat message from the moment", "pane-edit"],
-    kill: ["Kill feed", "Game parts and kills on screen", "pane-edit"],
-    sound: ["Sound", "Reaction sounds", "pane-edit"],
-    cut: ["Cutting", "Trim, jump cuts, zooms, cutaways", "pane-edit"],
-    ask: ["Ask the AI", "Type what you want changed", null],
-    post: ["Export", "Title, caption and saving the video", "pane-post"]   // 2.36.1: export only (the creator)
+    look: ["מראה", "פריסה, כותרת ושם הערוץ", "pane-edit"],
+    subs: ["Subtitles", "מילים על הווידאו", "pane-subs"],
+    chat: ["הודעת צ'אט קופצת", "הודעת צ'אט אמיתית מאותו רגע", "pane-edit"],
+    kill: ["קיל-פיד", "חלקי משחק והריגות על המסך", "pane-edit"],
+    sound: ["Sound", "סאונדים לתגובות", "pane-edit"],
+    cut: ["חיתוך", "קיצור, ג'אמפ-קאטים, זומים, קאטים", "pane-edit"],
+    ask: ["בקשו מה-AI", "כתבו מה לשנות", null],
+    post: ["ייצוא", "כותרת, תיאור ושמירת הווידאו", "pane-post"]   // 2.36.1: export only (the creator)
   };
   function switchTab(t) {
     if (!SECS[t]) t = "look";
@@ -694,20 +694,20 @@
   function trimInfo() {
     var c = state.ed.clip, e = state.ed.edits;
     var st = e.start != null ? e.start : c.start, en = e.end != null ? e.end : c.end;
-    $("trimInfo").textContent = "Clip runs " + fmt(st) + " → " + fmt(en) + " of the stream (" + Math.round(en - st) + "s before cuts)";
+    $("trimInfo").textContent = "הקליפ רץ " + fmt(st) + " → " + fmt(en) + " בסטרים (" + Math.round(en - st) + " שנ' לפני חיתוכים)";
   }
   /* 2.29: the loading screen shows the moment Apply is pressed, over the preview AND the timeline */
-  var BUSY_FUN = { apply: ["Cutting your clip…", "Placing your webcam…", "Framing the gameplay…", "Adding your Twitch name…",
-      "Writing the subtitles…", "Mixing the sound…", "Rendering your TikTok…", "Almost there…"],
-    ask: ["Reading what you asked…", "Working out the change…", "Re-cutting the clip…", "Rendering your TikTok…"] };
+  var BUSY_FUN = { apply: ["חותך את הקליפ…", "ממקם את המצלמה…", "ממסגר את המשחק…", "מוסיף את שם הערוץ…",
+      "כותב את הכתוביות…", "מערבב את הסאונד…", "מרנדר את הקליפ…", "כמעט שם…"],
+    ask: ["קורא מה ביקשת…", "מחשב את השינוי…", "חותך מחדש…", "מרנדר את הקליפ…"] };
   var busyT = null;
   function busyStart(kind) {
     var list = BUSY_FUN[kind] || BUSY_FUN.apply, i = 0;
-    $("edBusyFun").textContent = list[0]; $("edBusyMsg").textContent = "Starting…"; $("edBusyBar").style.width = "2%";
+    $("edBusyFun").textContent = list[0]; $("edBusyMsg").textContent = "מתחיל…"; $("edBusyBar").style.width = "2%";
     $("edBusy").classList.remove("hidden");
     clearInterval(busyT); busyT = setInterval(function () { i = Math.min(list.length - 1, i + 1); $("edBusyFun").textContent = list[i]; }, 2600);
   }
-  function busyStop() { clearInterval(busyT); $("edBusy").classList.add("hidden"); $("edBusyMsg").textContent = "Re-building…"; $("edBusyBar").style.width = "0"; }
+  function busyStop() { clearInterval(busyT); $("edBusy").classList.add("hidden"); $("edBusyMsg").textContent = "בונה מחדש…"; $("edBusyBar").style.width = "0"; }
   async function applyEdits() {
     var ed = state.ed; if (!ed) return;
     var txt = $("subText").value.trim();
@@ -730,7 +730,7 @@
     try {
       var r = await api("POST", "/library/rerender", { key: ed.key, clip_id: ed.id, edits: ed.edits, style: style });
       var c = await pollJob(r.job, function (p, m) { $("edBusyMsg").textContent = (m || "Re-building") + " · " + Math.round(p * 100) + "%"; $("edBusyBar").style.width = Math.round(p * 100) + "%"; });
-      ed.clip = c; ed.dirty = false; loadVideo(); showUndo(); showChecks(c); toast("TikTok updated.");
+      ed.clip = c; ed.dirty = false; loadVideo(); showUndo(); showChecks(c); toast("הקליפ עודכן.");
       loadWords();
       if (!$("tlWrap").classList.contains("hidden")) { toggleTimeline(false); toggleTimeline(true); }
     } catch (e) { toast(e.message, true); $("edApply").disabled = false; loadVideo(); }
@@ -761,7 +761,7 @@
     var ed = state.ed, names = (ed && ed.clip && ed.clip.kill_names) || [], fix = (ed && ed.style.kf_names) || {};
     $("kfNamesWrap").classList.toggle("hidden", !names.length);
     $("kfNames").innerHTML = names.map(function (n) {
-      return '<label class="field kf-name"><span class="tiny muted">Read as: ' + esc(n) + '</span>' +
+      return '<label class="field kf-name"><span class="tiny muted">נקרא כ: ' + esc(n) + '</span>' +
         '<input type="text" maxlength="40" data-kfname="' + esc(n) + '" value="' + esc(fix[n] != null ? fix[n] : n) + '"></label>';
     }).join("");
   }
@@ -775,51 +775,51 @@
     var h = (state.ed && state.ed.clip.history) || [], b = $("edUndo");
     $("edOriginal").classList.toggle("hidden", !Object.keys((state.ed && state.ed.clip.edits) || {}).length);
     b.classList.toggle("hidden", !h.length);
-    if (h.length) b.title = "Undo: " + (h[h.length - 1].note || "last change") + (h.length > 1 ? " (" + h.length + " steps back available)" : "");
+    if (h.length) b.title = "Undo: " + (h[h.length - 1].note || "השינוי האחרון") + (h.length > 1 ? " (" + h.length + " צעדים אחורה זמינים)" : "");
   }
   async function undoLast() {
     var ed = state.ed; if (!ed || !(ed.clip.history || []).length) return;
-    if (ed.dirty && !confirm("You have changes you haven't applied. Undo the last applied change anyway?")) return;
+    if (ed.dirty && !confirm("יש שינויים שלא הוחלו. לבטל בכל זאת את השינוי האחרון שהוחל?")) return;
     var b = $("edUndo"); b.disabled = true;
     unloadVideo();
     try {
       var c = await api("POST", "/library/undo", { key: ed.key, clip_id: ed.id });
       if (state.ed !== ed) return;
       adoptClip(c);
-      $("askReply").textContent = "Undone. This TikTok is back to how it was before: " + (c.undone || "the last change") + ".";
-      toast("Undone: " + (c.undone || "last change"));
+      $("askReply").textContent = "בוטל. הקליפ חזר למצב שלפני: " + (c.undone || "השינוי האחרון") + ".";
+      toast("Undone: " + (c.undone || "השינוי האחרון"));
       refresh();
     } catch (e) { toast(e.message, true); loadVideo(); }
     finally { b.disabled = false; }
   }
 
-  /* "Tell the AI what to change": type it, the AI edits this TikTok. */
+  /* "ספרו ל-AI מה לשנות": type it, the AI edits this TikTok. */
   async function askAI() {
     var ed = state.ed; if (!ed) return;
     var text = $("askText").value.trim();
     if (!text) { $("askText").focus(); return; }
     if (state.lib.ai_trial) { acctError("TRIAL_USED: The AI isn't part of the free trial. Upgrade to use it."); return; }
-    if (!state.lib.ai_ready) { toast("Add your Claude API key in Settings to use this.", true); openSettings(); return; }
+    if (!state.lib.ai_ready) { toast("הוסיפו מפתח Claude API בהגדרות כדי להשתמש בזה.", true); openSettings(); return; }
     var txt = $("subText").value.trim();
     if (txt && txt !== ed.original.trim()) ed.edits.text = txt;
     var style = {}; ED_OPTS.forEach(function (k) { if (ed.style[k] !== undefined) style[k] = ed.style[k]; });
-    var btn = $("btnAsk"); btn.disabled = true; btn.textContent = "Working…";
-    busyStart("ask"); $("edBusyMsg").textContent = "AI is reading your request…";
+    var btn = $("btnAsk"); btn.disabled = true; btn.textContent = "עובד…";
+    busyStart("ask"); $("edBusyMsg").textContent = "ה-AI קורא את הבקשה…";
     unloadVideo();
     var reloaded = false;
     try {
       var r = await api("POST", "/library/ask", { key: ed.key, clip_id: ed.id, text: text, edits: ed.edits, style: style });
-      var c = await pollJob(r.job, function (p, m) { $("edBusyMsg").textContent = (m || "Working") + " · " + Math.round(p * 100) + "%"; $("edBusyBar").style.width = Math.round(p * 100) + "%"; });
+      var c = await pollJob(r.job, function (p, m) { $("edBusyMsg").textContent = (m || "עובד") + " · " + Math.round(p * 100) + "%"; $("edBusyBar").style.width = Math.round(p * 100) + "%"; });
       if (state.ed !== ed) return;
       $("askReply").innerHTML = '<span class="said">' + esc(c.ai_reply || "") + '</span>' + (c.ai_cannot ? '<span class="cant">' + esc(c.ai_cannot) + '</span>' : "");
       if (c.ai_changed) {
-        $("askReply").innerHTML += ' <button class="link-btn" id="askUndo">Undo this</button>';
+        $("askReply").innerHTML += ' <button class="link-btn" id="askUndo">ביטול</button>';
         $("askText").value = "";
         adoptClip(c); reloaded = true;
-        toast("Done. Not right? Press Undo, or tell it what to fix.");
+        toast("בוצע. לא טוב? לחצו ביטול, או כתבו מה לתקן.");
       }
     } catch (e) { toast(e.message, true); }
-    finally { if (!reloaded && state.ed === ed) loadVideo(); btn.disabled = false; btn.textContent = "Do it"; busyStop(); }
+    finally { if (!reloaded && state.ed === ed) loadVideo(); btn.disabled = false; btn.textContent = "בצע"; busyStop(); }
   }
   async function saveField(fields) {
     var ed = state.ed; if (!ed) return;
@@ -828,14 +828,14 @@
   }
 
   /* ---------------- TikTok ---------------- */
-  // 2.35.4: no TikTok keys (testers / public) = export only: hide "Connect", "Send to TikTok drafts" and "Get views"
+  // 2.35.4: no TikTok keys (testers / public) = export only: hide "Connect", "שליחה לטיוטות בטיקטוק" and "משיכת צפיות"
   function ttMode(st) { document.body.classList.toggle("no-tiktok", !(st && st.tiktok_client_key)); }
   async function refreshAccount() {
     try {
       var a = await api("GET", "/tiktok/account"); state.account = a;
-      $("accName").textContent = a.connected ? (a.display_name || "TikTok connected") : "TikTok not connected";
-      $("accSub").textContent = a.connected ? "Connected" : (a.error || "Connect @hotgamerdude_");
-      $("btnConnect").textContent = a.connected ? "Disconnect" : "Connect";
+      $("accName").textContent = a.connected ? (a.display_name || "טיקטוק מחובר") : "טיקטוק לא מחובר";
+      $("accSub").textContent = a.connected ? "מחובר" : (a.error || "חיבור חשבון טיקטוק");
+      $("btnConnect").textContent = a.connected ? "ניתוק" : "חיבור";
       if (a.connected && a.avatar) document.querySelector("#account .avatar").innerHTML = '<img alt="" src="' + esc(a.avatar) + '">';
     } catch (e) {}
   }
@@ -844,23 +844,23 @@
       if (state.account && state.account.connected) { await api("POST", "/tiktok/logout"); return refreshAccount(); }
       var r = await api("GET", "/tiktok/login");
       window.open(r.url, "_blank");
-      $("accSub").textContent = "Finish logging in, in the window that opened…";
+      $("accSub").textContent = "סיימו להתחבר בחלון שנפתח…";
       for (var i = 0; i < 60; i++) { await sleep(3000); await refreshAccount(); if (state.account && state.account.connected) return; }
     } catch (e) { toast(e.message, true); if (/client key/i.test(e.message)) openSettings(); }
   }
   async function upload() {
     var ed = state.ed; if (!ed) return;
-    if (ed.dirty) { toast("Press Apply changes first, so the upload has your edits.", true); return; }
-    if (!(state.account && state.account.connected)) { toast("Connect your TikTok account first.", true); return; }
-    var btn = $("btnUpload"); btn.disabled = true; btn.textContent = "Uploading…";
+    if (ed.dirty) { toast("קודם לחצו החל שינויים, כדי שההעלאה תכלול את העריכות.", true); return; }
+    if (!(state.account && state.account.connected)) { toast("קודם חברו את חשבון הטיקטוק.", true); return; }
+    var btn = $("btnUpload"); btn.disabled = true; btn.textContent = "מעלה…";
     try {
       await saveField({ title: $("pTitle").value, caption: $("pCaption").value });
       var r = await api("POST", "/tiktok/upload", { items: [{ path: ed.clip.path, caption: ($("pTitle").value + " " + $("pCaption").value).trim() }], mode: "draft" });
       await pollJob(r.job);
       await saveField({ status: "posted" });
-      toast("Sent to your TikTok drafts. Open TikTok to post it.");
+      toast("נשלח לטיוטות בטיקטוק. פתחו את טיקטוק כדי לפרסם.");
     } catch (e) { toast(e.message, true); }
-    finally { btn.disabled = false; btn.textContent = "Send to TikTok drafts"; }
+    finally { btn.disabled = false; btn.textContent = "שליחה לטיוטות בטיקטוק"; }
   }
 
   /* ---------------- settings ---------------- */
@@ -875,7 +875,7 @@
       try { var qr = qrcode(0, "M"); qr.addData(st.url); qr.make(); $("phoneQR").innerHTML = qr.createImgTag(5, 0); }
       catch (e) { $("phoneQR").textContent = ""; }
     }
-    if (st.on && !st.url) toast("Couldn't find this PC's Wi-Fi address. Is it connected to your router?", true);
+    if (st.on && !st.url) toast("לא נמצאה כתובת ה-Wi-Fi של המחשב. הוא מחובר לראוטר?", true);
   }
   async function setPhone(on, newKey) {
     try { showPhone(await api("POST", "/phone", { on: on, new_key: !!newKey })); }
@@ -896,7 +896,7 @@
       $("setLen").value = String(lens.reduce(function (a, b) { return Math.abs(b - tl) < Math.abs(a - tl) ? b : a; }));
       $("setOut").value = s.out_dir || "";
       var mus = (st.bg_music || state.lib.style.bg_music || "");
-      $("musicName").textContent = mus ? mus.split(/[\\/]/).pop() : "None";
+      $("musicName").textContent = mus ? mus.split(/[\\/]/).pop() : "בלי";
       $("setMusicVol").value = st.bg_music_volume || state.lib.style.bg_music_volume || 0.16;
       $("setApiKey").value = s.api_key || "";
       $("setSubs").value = s.subs_default ? "1" : "0";
@@ -924,14 +924,14 @@
       await api("POST", "/library/style", { style: style });
       await api("POST", "/music", { volume: Number($("setMusicVol").value) });
       ttMode({ tiktok_client_key: $("setTtKey").value.trim() });
-      $("settings").classList.add("hidden"); toast("Settings saved."); refresh();
+      $("settings").classList.add("hidden"); toast("ההגדרות נשמרו."); refresh();
     } catch (e) { toast(e.message, true); }
   }
 
   /* ---------------- 2.25: first-time welcome ---------------- */
   var wc = null, WC_LAST = 2;   // 3 steps: channel, music, sound effects (kept simple on purpose)
   function channelName(v) {
-    v = (v || "").trim().replace(/^https?:\/\//i, "").replace(/^(www\.|m\.)?twitch\.tv\//i, "").replace(/^@/, "");
+    v = (v || "").trim().replace(/^https?:\/\//i, "").replace(/^(www\.|m\.)?(twitch\.tv|kick\.com|youtube\.com)\//i, "").replace(/^@/, "");
     return v.split(/[\/?#\s]/)[0].slice(0, 25);
   }
   async function openWelcome() {
@@ -949,7 +949,7 @@
     document.querySelectorAll("#welcome .wc-step").forEach(function (x) { x.classList.toggle("hidden", Number(x.dataset.step) !== n); });
     $("wcDots").innerHTML = [0, 1, 2].map(function (i) { return '<span class="' + (i === n ? "on" : i < n ? "done" : "") + '"></span>'; }).join("");
     $("wcBack").style.visibility = n ? "visible" : "hidden";
-    $("wcNext").textContent = n === WC_LAST ? "Done" : "Next";
+    $("wcNext").textContent = n === WC_LAST ? "סיום" : "הבא";
     renderWc();
   }
   function renderWc() {
@@ -963,10 +963,10 @@
     $("wcSfxOn").classList.toggle("on", wc.sfxOn); $("wcSfxOn").setAttribute("aria-pressed", String(wc.sfxOn));
     $("wcSfxBox").classList.toggle("dim", !wc.sfxOn);
     var snd = looks().sounds || [];
-    $("wcSfxList").innerHTML = '<button class="wc-snd' + (!wc.react ? " on" : "") + '" data-react=""><strong>💥 Built-in</strong><span>Bass hit</span></button>' +
+    $("wcSfxList").innerHTML = '<button class="wc-snd' + (!wc.react ? " on" : "") + '" data-react=""><strong>💥 מובנה</strong><span>באס</span></button>' +
       snd.map(function (s) {
         return '<button class="wc-snd' + (wc.react === s.name ? " on" : "") + '" data-react="' + esc(s.name) + '" data-path="' + esc(s.path) + '"><strong>' +
-          esc(s.name) + "</strong><span>Your sound</span></button>";
+          esc(s.name) + "</strong><span>הסאונד שלך</span></button>";
       }).join("");
   }
   async function finishWelcome(skip) {
@@ -983,7 +983,7 @@
       if (!skip && name) put.twitch_channel = name;
       await api("POST", "/settings", put);
       $("welcome").classList.add("hidden");
-      if (!skip) toast(name ? "All set, " + name + "! Paste a stream link to make your first TikToks." : "All set! Paste a stream link to start.");
+      if (!skip) toast(name ? "הכל מוכן, " + name + "! הדביקו קישור לסטרים כדי ליצור את הקליפים הראשונים." : "הכל מוכן! הדביקו קישור לסטרים כדי להתחיל.");
       refresh();
     } catch (e) { toast(e.message, true); }
   }
@@ -993,7 +993,7 @@
     $("wcBack").addEventListener("click", function () { if (wc.step) { wc.step--; showWcStep(); } });
     $("wcSkip").addEventListener("click", function () { finishWelcome(true); });
     $("wcNext").addEventListener("click", function () {
-      if (wc.step === 0 && !channelName($("wcChannel").value)) { toast("Type your Twitch channel (or press Skip for now).", true); return; }
+      if (wc.step === 0 && !channelName($("wcChannel").value)) { toast("כתבו את שם הערוץ שלכם (או לחצו דילוג).", true); return; }
       if (wc.step < WC_LAST) { wc.step++; showWcStep(); } else finishWelcome(false);
     });
     $("welcome").addEventListener("click", async function (e) {
@@ -1033,7 +1033,7 @@
     $("btnFile").addEventListener("click", pickFile);
     $("addLook").addEventListener("click", function (e) {
       if (e.target.closest("[data-addother]")) {   // 2.26: own styles are made in the editor, then show up here
-        toast("To make your own style: open any TikTok → Look → Other, change it how you like, then \"Save as my style\". It shows up here with a ★.");
+        toast("ליצירת סגנון משלכם: פתחו קליפ ← מראה ← אחר, שנו איך שאתם רוצים, ואז \"שמירה כסגנון שלי\". הוא יופיע כאן עם ★.");
         return;
       }
       var b = e.target.closest("[data-addlook]"); if (!b) return;
@@ -1053,9 +1053,9 @@
       var p = e.target.closest("[data-preview]");
       if (p) { previewMoment(p.closest(".cand"), p.dataset.preview, p); return; }
       var b = e.target.closest("[data-make]"); if (!b) return;
-      b.disabled = true; b.textContent = "Making…";
-      try { var r = await api("POST", "/library/rerender", { key: state.view, clip_id: b.dataset.make, edits: {}, style: {} }); await pollJob(r.job); toast("TikTok made."); refresh(); }
-      catch (err) { toast(err.message, true); b.disabled = false; b.textContent = "Make TikTok"; }
+      b.disabled = true; b.textContent = "יוצר…";
+      try { var r = await api("POST", "/library/rerender", { key: state.view, clip_id: b.dataset.make, edits: {}, style: {} }); await pollJob(r.job); toast("הקליפ נוצר."); refresh(); }
+      catch (err) { toast(err.message, true); b.disabled = false; b.textContent = "צור קליפ"; }
     });
     $("candList").addEventListener("change", function (e) { if (e.target.classList.contains("pick")) updateMakeSel(); });
     $("phoneSwitch").addEventListener("click", function () { setPhone(this.getAttribute("aria-pressed") !== "true"); });
@@ -1066,14 +1066,14 @@
       try {
         var r = await api("POST", "/library/add", { source: st.source });
         await refresh();
-        pollJob(r.job).then(function () { toast("Re-ranked with the AI read."); refresh(); })
+        pollJob(r.job).then(function () { toast("דורג מחדש עם ה-AI."); refresh(); })
           .catch(function (e) { toast(e.message, true); refresh(); });
       } catch (e) { toast(e.message, true); }
     });
     $("btnMakeSel").addEventListener("click", function () { var ids = selectedMoments(); if (ids.length) makeMoments(ids); });
     $("btnFolder").addEventListener("click", function () { api("POST", "/library/open_folder", { key: state.view }).catch(function (e) { toast(e.message, true); }); });
     $("btnRemoveStream").addEventListener("click", async function () {
-      if (!confirm("Remove this stream from the list? The video files stay in your folder.")) return;
+      if (!confirm("להסיר את הסטרים מהרשימה? קבצי הווידאו נשארים בתיקייה.")) return;
       await api("POST", "/library/remove_stream", { key: state.view }); state.view = "__new"; refresh();
     });
     $("btnSettings").addEventListener("click", openSettings);
@@ -1084,7 +1084,7 @@
         if (!r.path) return;
         var m = await api("POST", "/music", { path: r.path });
         $("musicName").textContent = m.bg_music.split(/[\\/]/).pop();
-        toast("Background music set. It plays under every new TikTok.");
+        toast("מוזיקת הרקע נקבעה. היא תתנגן מתחת לכל קליפ חדש.");
       } catch (e) { toast(e.message, true); }
     });
     $("btnMusicClear").addEventListener("click", async function () {
@@ -1109,7 +1109,7 @@
     });
     $("tlSubsOff").addEventListener("click", function () {
       if (!state.ed) return;
-      state.ed.style.captions = true; syncEdControls(); setDirty(); toast("Subtitles will be added when you apply your changes.");
+      state.ed.style.captions = true; syncEdControls(); setDirty(); toast("הכתוביות יתווספו כשתחילו את השינויים.");
     });
     $("btnAddSubs").addEventListener("click", function () {
       if (!state.ed) return;
@@ -1118,7 +1118,7 @@
     $("edUndo").addEventListener("click", undoLast);
     $("edOriginal").addEventListener("click", function () {
       var ed = state.ed; if (!ed) return;
-      if (!confirm("Re-make this TikTok the way it was first made? Every trim, cut and AI change on it is removed. (You can undo this.)")) return;
+      if (!confirm("ליצור מחדש את הקליפ כמו שנוצר במקור? כל הקיצורים, החיתוכים ושינויי ה-AI יימחקו. (אפשר לבטל.)")) return;
       if (!$("tlWrap").classList.contains("hidden")) toggleTimeline(false);
       ed.edits = {}; $("subText").value = ed.original = (ed.clip.words || []).join(" ");
       applyEdits().then(function () { if (state.ed === ed) adoptClip(ed.clip); });
@@ -1132,13 +1132,13 @@
     $("pViews").addEventListener("keydown", function (e) { if (e.key === "Enter") saveViews(); });
     $("btnSyncViews").addEventListener("click", syncViews);
     $("btnRules").addEventListener("click", async function () {
-      var b = this; b.disabled = true; b.textContent = "Thinking…";
-      try { showLearned(await api("POST", "/taste/rules", {})); toast("Updated what Klipon knows about your taste."); }
+      var b = this; b.disabled = true; b.textContent = "חושב…";
+      try { showLearned(await api("POST", "/taste/rules", {})); toast("עודכן מה שקליפון יודע על הטעם שלך."); }
       catch (e) { toast(e.message, true); }
-      finally { b.disabled = false; b.textContent = "Update now"; }
+      finally { b.disabled = false; b.textContent = "עדכון עכשיו"; }
     });
     $("edDiscard").addEventListener("click", async function () {
-      if (!confirm("Discard this TikTok? The file stays in your folder.")) return;
+      if (!confirm("למחוק את הקליפ? הקובץ נשאר בתיקייה.")) return;
       await saveField({ status: "discarded" }); state.ed.dirty = false; closeEditor();
     });
     document.querySelectorAll(".tab[data-tab]").forEach(function (b) { b.addEventListener("click", function () { switchTab(b.dataset.tab); }); });
@@ -1219,18 +1219,18 @@
         var d = await api("POST", "/sfx", { path: r.path });
         state.lib.looks.sounds = d.sounds; renderSfx();
         if (state.ed) syncEdControls();
-        toast("Added \"" + d.added + "\". Use it on big reactions (Edit tab) or place it in the Timeline.");
+        toast("נוסף \"" + d.added + "\". השתמשו בו בתגובות גדולות (לשונית עריכה) או מקמו אותו בציר הזמן.");
       } catch (e) { toast(e.message, true); }
     });
     $("sfxList").addEventListener("click", async function (e) {
       var pb = e.target.closest("[data-play]"); if (pb) { playSound(pb.dataset.play); return; }
       var db = e.target.closest("[data-del]"); if (!db) return;
-      if (!confirm("Remove the sound \"" + db.dataset.del + "\"? TikToks already made keep it; new ones won't use it.")) return;
+      if (!confirm("להסיר את הסאונד \"" + db.dataset.del + "\"? קליפים שכבר נוצרו ישמרו אותו; חדשים לא ישתמשו בו.")) return;
       try { var d = await api("POST", "/sfx", { name: db.dataset.del, delete: true }); state.lib.looks.sounds = d.sounds; renderSfx(); }
       catch (err) { toast(err.message, true); }
     });
     $("sTitleText").addEventListener("input", function () { state.ed.style.title_text = this.value.trim(); setDirty(); });
-    $("sLinger").addEventListener("input", function () { var v = Number(this.value); $("sLingerVal").textContent = v ? v + " s after the last word" : "cut right away"; });
+    $("sLinger").addEventListener("input", function () { var v = Number(this.value); $("sLingerVal").textContent = v ? v + " שנ' אחרי המילה האחרונה" : "חיתוך מיד"; });
     $("sLinger").addEventListener("change", function () { state.ed.style.end_linger = Number(this.value); setDirty(); });
     $("sTitleSize").addEventListener("input", function () { $("sTitleSizeVal").textContent = this.value + "%"; if (state.ed) { state.ed.style.title_size = Number(this.value) / 100; livePreview(true); } });
     $("sTitleSize").addEventListener("change", function () { state.ed.style.title_size = Number(this.value) / 100; lookChanged("title_size"); setDirty(); });
@@ -1241,26 +1241,26 @@
       ed.style.subs_lang = this.value;
       delete ed.edits.text; delete ed.edits.captions;   // fixed words were in the old language
       setDirty();
-      if (ed.style.captions) toast("Press Apply to re-make the subtitles in this language.");
+      if (ed.style.captions) toast("לחצו החל כדי ליצור את הכתוביות מחדש בשפה הזו.");
     });
     $("sEndWord").addEventListener("input", function () { state.ed.style.end_word = this.value.trim(); setDirty(); });
     $("btnSaveLook").addEventListener("click", async function () {
       if (!state.ed) return;
       var cur = lookList().filter(function (l) { return l.id === state.ed.style.look && l.mine; })[0];
-      var name = prompt("Name your style (it'll be in the Look list for every TikTok):", cur ? cur.name : "");
+      var name = prompt("תנו שם לסגנון (הוא יופיע ברשימת המראה לכל קליפ):", cur ? cur.name : "");
       if (!name || !name.trim()) return;
       var style = {}; ED_OPTS.forEach(function (k) { if (k !== "captions" && k !== "title_text" && k !== "look" && k !== "kf_names" && k !== "subs_lang" && state.ed.style[k] !== undefined) style[k] = state.ed.style[k]; });
       try {
         state.lib.looks = await api("POST", "/styles", { name: name.trim(), style: style });
         state.ed.style.look = "mine:" + name.trim().slice(0, 40); syncEdControls();
-        toast("Saved \"" + name.trim() + "\". Pick it for any TikTok. Use \"Use these settings for all new TikToks\" to make it your default.");
+        toast("נשמר \"" + name.trim() + "\". אפשר לבחור בו לכל קליפ. השתמשו ב-\"להשתמש בהגדרות האלה לכל הקליפים החדשים\" כדי שיהיה ברירת מחדל.");
       } catch (e) { toast(e.message, true); }
     });
     $("btnDelLook").addEventListener("click", async function () {
       var id = state.ed && state.ed.style.look; if (!id || id.indexOf("mine:") !== 0) return;
       var name = id.slice(5);
-      if (!confirm("Delete your style \"" + name + "\"? TikToks already made with it don't change.")) return;
-      try { state.lib.looks = await api("POST", "/styles", { name: name, delete: true }); state.ed.style.look = "custom"; syncEdControls(); toast("Style deleted."); }
+      if (!confirm("למחוק את הסגנון \"" + name + "\"? קליפים שכבר נוצרו איתו לא ישתנו.")) return;
+      try { state.lib.looks = await api("POST", "/styles", { name: name, delete: true }); state.ed.style.look = "custom"; syncEdControls(); toast("הסגנון נמחק."); }
       catch (e) { toast(e.message, true); }
     });
     document.querySelectorAll("[data-trim]").forEach(function (b) {
@@ -1270,7 +1270,7 @@
         e[k] = Math.max(0, cur + d);
         delete e.segs; delete e.captions;
         var st = e.start != null ? e.start : c.start, en = e.end != null ? e.end : c.end;
-        if (en - st < 6) { e[k] = cur; toast("A TikTok needs at least 6 seconds.", true); return; }
+        if (en - st < 6) { e[k] = cur; toast("קליפ צריך לפחות 6 שניות.", true); return; }
         trimInfo(); setDirty();
       });
     });
@@ -1278,7 +1278,7 @@
       var cur = await api("GET", "/settings");
       var style = Object.assign({}, cur.style || {});
       ED_OPTS.forEach(function (k) { if (k !== "captions" && k !== "title_text" && k !== "kf_names" && k !== "subs_lang" && state.ed.style[k] !== undefined) style[k] = state.ed.style[k]; });
-      await api("POST", "/library/style", { style: style }); toast("New TikToks will use these settings.");
+      await api("POST", "/library/style", { style: style }); toast("קליפים חדשים ישתמשו בהגדרות האלה.");
       state.lib.style = Object.assign({}, state.lib.style, style);
     });
     $("btnConnect").addEventListener("click", connect);
@@ -1288,7 +1288,7 @@
     $("btnPostAll").addEventListener("click", async function () {
       var ed = state.ed; if (!ed) return;
       var pick = Array.prototype.filter.call(plats, function (i) { return i.checked; }).map(function (i) { return i.dataset.plat; });
-      if (!pick.length) { toast("Tick at least one app.", true); return; }
+      if (!pick.length) { toast("סמנו לפחות אפליקציה אחת.", true); return; }
       try { localStorage.setItem("cg_post_plats", JSON.stringify(pick)); } catch (e) {}
       await saveField({ title: $("pTitle").value, caption: $("pCaption").value });
       var cap = $("pCaption").value.trim() || $("pTitle").value.trim(), copied = false;
@@ -1296,7 +1296,7 @@
       catch (e) { try { $("pCaption").select(); copied = document.execCommand("copy"); } catch (e2) {} }
       try {
         await api("POST", "/library/post_open", { key: ed.key, clip_id: ed.id, platforms: pick });
-        toast((copied ? "Caption copied. " : "") + "Drag the highlighted clip into each upload page" + (copied ? ", paste the caption (Ctrl+V)" : "") + " and post. Then press Mark as posted.");
+        toast((copied ? "התיאור הועתק. " : "") + "גררו את הקליפ המסומן לכל דף העלאה" + (copied ? ", הדביקו את התיאור (Ctrl+V)" : "") + " ופרסמו. אחר כך לחצו סמן כפורסם.");
       } catch (e) { toast(e.message, true); }
     });
     // 2.36.1: Export to phone = a QR code that pairs the phone AND opens this TikTok there (the creator)
@@ -1305,14 +1305,14 @@
       try {
         var st = await api("GET", "/phone"), turned = false;
         if (!st.on) { st = await api("POST", "/phone", { on: true }); turned = true; showPhone(st); }
-        if (!st.url) { toast("Couldn't start phone access. Is this PC on your home Wi-Fi?", true); return; }
+        if (!st.url) { toast("לא הצלחתי להפעיל גישה מהטלפון. המחשב מחובר ל-Wi-Fi של הבית?", true); return; }
         var url = st.url + "?open=" + encodeURIComponent(ed.key + "|" + ed.id);
         var qr = qrcode(0, "M"); qr.addData(url); qr.make(); $("exportQRImg").innerHTML = qr.createImgTag(5, 0);
         $("exportQR").classList.remove("hidden");
-        if (turned) toast("Phone access is on (Settings → Use Klipon on your phone).");
+        if (turned) toast("הגישה מהטלפון פועלת (הגדרות ← קליפון בטלפון).");
       } catch (e) { toast(e.message, true); }
     });
-    $("btnMarkPosted").addEventListener("click", async function () { await saveField({ status: "posted" }); toast("Marked as posted."); });
+    $("btnMarkPosted").addEventListener("click", async function () { await saveField({ status: "posted" }); toast("סומן כפורסם."); });
     $("pTitle").addEventListener("change", function () { saveField({ title: this.value }); $("edTitle").textContent = this.value; });
     $("pCaption").addEventListener("change", function () { saveField({ caption: this.value }); });
   }
@@ -1321,7 +1321,7 @@
   wireWelcome();
   api("GET", "/settings").then(function (st) { ttMode(st); if (st.theme && st.theme !== document.documentElement.dataset.theme) setTheme(st.theme, false); }).catch(function () {});
   refresh().then(function () {
-    // 2.36.1: opened from an "Export to phone" QR code: go straight to that TikTok's Export panel
+    // 2.36.1: opened from an "ייצוא לטלפון" QR code: go straight to that TikTok's Export panel
     var m = /^#open=(.+)$/.exec(location.hash || "");
     if (m) {
       var parts = decodeURIComponent(m[1]).split("|");
@@ -1347,11 +1347,11 @@
   var acct = null, acctAfter = null, acctPolling = false;
   function acctLabel(a) {
     if (!a || !a.enforced) return "";
-    if (!a.signed_in) return a.free ? "Get started" : "Start free trial";
+    if (!a.signed_in) return a.free ? "בואו נתחיל" : "Start free trial";
     if (a.banned) return "Account blocked";
     if (a.closed) return "Beta ended";
     if (a.free) return "Free · " + ((a.user && a.user.name) || "Account");
-    if (a.plan === "trial") return "Free trial · " + a.left + " of " + a.limit + " left";
+    if (a.plan === "trial") return "Free trial · " + a.left + " מתוך " + a.limit + "";
     return (a.user && a.user.name) || "Account";
   }
   function showAccount(a) {
@@ -1370,8 +1370,8 @@
     var a = acct || {}, inn = !!a.signed_in, plan = $("acctPlan");
     if (a.free && !a.banned && !a.closed) usedUp = false;
     var tr = a.plan === "trial" && !a.free;   // a counted trial (not the free version)
-    $("acctTitle").textContent = a.free && !inn ? "Welcome to Klipon"
-      : a.free ? "Klipon is free"
+    $("acctTitle").textContent = a.free && !inn ? "ברוכים הבאים לקליפון"
+      : a.free ? "קליפון חינמי"
       : !inn ? "Start your free trial"
       : usedUp || (a.plan === "trial" && a.left <= 0) ? "Your free trial is used up"
       : a.plan === "trial" ? "Free trial" : "Your account";
@@ -1379,7 +1379,7 @@
     if (inn && a.closed) $("acctTitle").textContent = "The beta has ended";
     $("acctText").textContent = inn && a.banned ? "This account is blocked from Klipon."
       : inn && a.closed ? "Thanks for testing Klipon! The beta is over. Your videos are still in your Videos folder."
-      : a.free && !inn ? "Klipon is free. No limits, every feature. Sign in with Twitch, or carry on without it."
+      : a.free && !inn ? "קליפון חינמי. בלי הגבלות, כל הפיצ'רים."
       : a.free ? "Unlimited streams and TikToks, every feature. Enjoy!"
       : !inn
       ? "Your first " + (a.limit || 3) + " streams or clips are free. Sign in with Twitch, or carry on without it (the trial is then kept for this PC)."
@@ -1388,7 +1388,7 @@
         : tr ? "Each new stream or clip you add uses one. Making and re-making TikToks from it is free."
         : "Unlimited streams. Thanks for supporting Klipon!";
     plan.classList.toggle("hidden", !inn);
-    plan.textContent = inn ? (a.user && a.user.guest ? "No Twitch login" + (a.user.name && a.user.name !== "Guest" ? " · " + a.user.name : "") : "Signed in as " + ((a.user && a.user.name) || "")) + (tr ? " · " + a.left + " of " + a.limit + " free left" : "") : "";
+    plan.textContent = inn ? (a.user && a.user.guest ? "No Twitch login" + (a.user.name && a.user.name !== "Guest" ? " · " + a.user.name : "") : "Signed in as " + ((a.user && a.user.name) || "")) + (tr ? " · " + a.left + " מתוך " + a.limit + " free left" : "") : "";
     $("acctSignIn").classList.toggle("hidden", inn);
     $("acctGuest").classList.toggle("hidden", inn || IS_PHONE || acctPolling);
     $("acctGuestBox").classList.add("hidden");
@@ -1454,7 +1454,7 @@
     var m = /^(SIGNIN|TRIAL_USED|UPDATE|PRO):\s*(.*)$/.exec(msg || "");
     if (!m) return false;
     if (m[1] === "PRO") { proBox(m[2]); return true; }
-    if (m[1] === "SIGNIN") { toast("Couldn't reach the Klipon server. Check your internet and try again."); return true; }
+    if (m[1] === "SIGNIN") { toast("אין חיבור לשרת של קליפון. בדקו את האינטרנט ונסו שוב."); return true; }
     loadAccount(true).then(function () {
       if (m[1] === "SIGNIN") openAcct(); else openAcct(true);
       if (m[1] !== "SIGNIN") { $("acctTitle").textContent = m[1] === "UPDATE" ? "Update Klipon" : $("acctTitle").textContent; $("acctText").textContent = m[2]; }
@@ -1465,8 +1465,8 @@
   }
   window.CG_acctError = acctError;
   /* Free trial: Pro features show as previews with a PRO tag; using one explains it instead. */
-  var PRO_NAMES = { killfeed: "The CS2 kill feed", styles: "Saving your own styles", music: "Background music",
-    sfx: "Your own sound effects", range: "Picking part of a VOD", phone: "Export to phone" };
+  var PRO_NAMES = { killfeed: "The CS2 kill feed", styles: "Saving your own styles", music: "מוזיקת רקע",
+    sfx: "Your own sound effects", range: "Picking part of a VOD", phone: "ייצוא לטלפון" };
   function proBox(text) {
     $("proText").textContent = text;
     $("proModal").classList.remove("hidden");

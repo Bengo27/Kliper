@@ -31,7 +31,7 @@ window.CGTimeline = (function () {
     v.src = mediaUrl;
     v.onloadeddata = function () { $("tlLoading").classList.add("hidden"); seek(T.segs.length ? T.segs[0][0] : 0); };
     v.onseeked = function () { if (T) T.phoneDirty = true; };
-    v.onerror = function () { var sp = $("tlLoading").querySelector(".spinner"); if (sp) sp.remove(); $("tlLoading").querySelector("span").textContent = "Couldn't play the footage preview, but you can still edit."; };
+    v.onerror = function () { var sp = $("tlLoading").querySelector(".spinner"); if (sp) sp.remove(); $("tlLoading").querySelector("span").textContent = "לא הצלחתי לנגן את התצוגה המקדימה, אבל אפשר עדיין לערוך."; };
     T.aspect = (data.width || 16) / (data.height || 9);
     fitBox();
     var ma = $("tlMusicAudio");
@@ -39,7 +39,7 @@ window.CGTimeline = (function () {
     $("tlMusicBox").classList.toggle("hidden", !T.music);
     var snd = window.CGSounds ? window.CGSounds() : [];
     $("tlSfxPick").innerHTML = snd.length ? snd.map(function (s) { return '<option value="' + esc(s.name) + '">♪ ' + esc(s.name) + "</option>"; }).join("")
-      : '<option value="">No sounds yet (Settings)</option>';
+      : '<option value="">עדיין אין סאונדים (בהגדרות)</option>';
     $("tlAddSfx").disabled = !snd.length;
     $("tlVol").value = T.vol; $("tlVolVal").textContent = (T.vol > 0 ? "+" : "") + T.vol + " dB";
     $("tlMusic").value = Math.round(T.mvol * 100); $("tlMusicVal").textContent = Math.round(T.mvol * 100) + "%";
@@ -132,7 +132,7 @@ window.CGTimeline = (function () {
       var lab = (t < 0 ? "-" : "") + fmt(Math.abs(t)).replace(/\.0$/, "");
       html += '<i style="left:' + x(t) + 'px"></i><span style="left:' + x(t) + 'px">' + lab + "</span>";
     }
-    if (T.d.peak != null) html += '<b class="tl-peak" style="left:' + x(T.d.peak) + 'px" title="Best moment"></b>';
+    if (T.d.peak != null) html += '<b class="tl-peak" style="left:' + x(T.d.peak) + 'px" title="הרגע הכי טוב"></b>';
     $("tlRuler").innerHTML = html;
     // segments
     var selItem = T.sel && T.sel.type !== "sfx" ? itemOf(T.sel.type, T.sel.i) : null;   // sorting moves blocks: keep the same one selected
@@ -200,13 +200,13 @@ window.CGTimeline = (function () {
     $("tlSegEdit").classList.toggle("hidden", !sg);
     $("tlHint").classList.toggle("hidden", !many && (!!c || !!sg));
     var sx = T.sel && T.sel.type === "sfx" ? T.sfx[T.sel.i] : null;
-    $("tlHint").textContent = sx ? "Sound \"" + sx.name + "\" at " + fmt(sx.t) + ". Drag it to move it, Delete removes it."
+    $("tlHint").textContent = sx ? "סאונד \"" + sx.name + "\" ב-" + fmt(sx.t) + ". גררו כדי להזיז, Delete מוחק."
       : many
-      ? T.pick.length + " selected (" + mSegs.length + " video, " + (T.pick.length - mSegs.length) + " subtitles). Drag one to move them all, Delete removes them, Esc clears."
-      : "Click a block to select it. Drag across empty space to select several (or Ctrl+click). Drag edges to trim. Grey parts are cut out.";
+      ? T.pick.length + " נבחרו (" + mSegs.length + " וידאו, " + (T.pick.length - mSegs.length) + " כתוביות). גררו אחד כדי להזיז את כולם, Delete מוחק, Esc מנקה בחירה."
+      : "לחצו על קטע כדי לבחור. גררו על שטח ריק לבחירת כמה (או Ctrl+קליק). גררו קצוות לקיצור. חלקים אפורים נחתכים.";
     if (sg) {
       var muted = sg[2] === "mute", db = muted ? 0 : Number(sg[2]) || 0;
-      $("tlSegTimes").textContent = many ? mSegs.length + " video pieces" : fmt(sg[0]) + " → " + fmt(sg[1]);
+      $("tlSegTimes").textContent = many ? mSegs.length + " קטעי וידאו" : fmt(sg[0]) + " → " + fmt(sg[1]);
       if (document.activeElement !== $("tlSegVol")) $("tlSegVol").value = db;
       $("tlSegVolVal").textContent = muted ? "muted" : (db > 0 ? "+" : "") + db + " dB";
       $("tlSegVol").disabled = muted;
@@ -286,7 +286,7 @@ window.CGTimeline = (function () {
     var cv = $("tlPhone"), ctx = cv.getContext("2d"), v = $("tlVideo"), g = T && T.geo;
     var K = cv.width / 1080;
     ctx.save(); ctx.fillStyle = "#000"; ctx.fillRect(0, 0, cv.width, cv.height);
-    if (!g) { ctx.fillStyle = "#888"; ctx.font = "13px sans-serif"; ctx.textAlign = "center"; ctx.fillText("Loading preview…", cv.width / 2, cv.height / 2); ctx.restore(); return; }
+    if (!g) { ctx.fillStyle = "#888"; ctx.font = "13px sans-serif"; ctx.textAlign = "center"; ctx.fillText("טוען תצוגה מקדימה…", cv.width / 2, cv.height / 2); ctx.restore(); return; }
     ctx.scale(K, K);
     var vw = v.videoWidth, vh = v.videoHeight;
     if (vw && vh) g.layers.forEach(function (l) {
@@ -568,7 +568,7 @@ window.CGTimeline = (function () {
     var nxt = T.caps.filter(function (c) { return c.s > s; })[0];
     if (nxt) e = Math.min(e, nxt.s);
     if (e - s < MIN) e = s + MIN;
-    T.caps.push({ s: s, e: e, text: "new subtitle", other: false });
+    T.caps.push({ s: s, e: e, text: "כתובית חדשה", other: false });
     T.caps.sort(function (a, b) { return a.s - b.s; });
     T.sel = { type: "cap", i: T.caps.findIndex(function (c) { return c.s === s; }) };
     changed(); render(); setTimeout(function () { $("tlCapText").focus(); $("tlCapText").select(); }, 0);
@@ -614,7 +614,7 @@ window.CGTimeline = (function () {
     $("tlReset").addEventListener("click", function () { if (T) reset(); });
     $("tlRegen").addEventListener("click", function () {
       if (!T) return;
-      if (T.caps.length && !confirm("Make all subtitles again from what's said? Your subtitle edits in this TikTok will be replaced.")) return;
+      if (T.caps.length && !confirm("ליצור את כל הכתוביות מחדש ממה שנאמר? העריכות שלכם לכתוביות בקליפ הזה יוחלפו.")) return;
       var btn = $("tlRegen"); btn.disabled = true;
       var done = function () { btn.disabled = false; changed(); render(); };
       if (!T.d.key) { T.caps = []; T.sel = null; autoCaps(); done(); return; }

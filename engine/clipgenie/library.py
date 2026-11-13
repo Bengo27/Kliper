@@ -370,11 +370,11 @@ def import_clip(source, progress, analysis_cache=None):
     try:
         meta = {}
         if tw.clip_slug(source):
-            prog(0.02, "Downloading the clip from " + tw.platform(tw.clip_slug(source)).title())
+            prog(0.02, "מוריד את הקליפ מ-" + tw.platform(tw.clip_slug(source)).title())
             local = os.environ.get("LOCALAPPDATA")
             base = os.path.join(local, "BengoGames", "Klipon", "cache") if local else os.path.join(data_dir(), "cache")
             video, meta = tw.download_clip(source, os.path.join(base, key),
-                                           lambda f: prog(0.02 + 0.18 * f, f"Downloading the clip ({int(f * 100)}%)"))
+                                           lambda f: prog(0.02 + 0.18 * f, f"מוריד את הקליפ ({int(f * 100)}%)"))
             if meta.get("channel"):
                 update_stream(key, channel=meta["channel"])   # 2.35: the clip's streamer, for the name tag
         else:
@@ -386,17 +386,17 @@ def import_clip(source, progress, analysis_cache=None):
         opts = style_opts()
         title = meta.get("title") or os.path.splitext(os.path.basename(video))[0]
         if a.info.get("has_audio"):
-            prog(0.22, "Reading the clip's audio")
+            prog(0.22, "קורא את האודיו של הקליפ")
             wav = au.extract_wav(a.video, a.cache, opts.get("audio_track"))
             a.wav_path = wav
             a.audio_curve = au.excitement_curve(wav)
             a.silences = au.silences(a.audio_curve["db"])
-            prog(0.3, "Writing down what's said")
+            prog(0.3, "מתמלל מה שנאמר")
             from .transcribe import transcribe, speech_lang
             a.transcript = sc.strip_music(transcribe(
                 wav, a.cache, model_name=opts.get("whisper_model") or None, device=opts.get("device", "auto"),
                 language=speech_lang(opts), duration=dur,
-                progress=lambda f: prog(0.3 + 0.4 * f, f"Writing down what's said ({int(f * 100)}%)"),
+                progress=lambda f: prog(0.3 + 0.4 * f, f"מתמלל מה שנאמר ({int(f * 100)}%)"),
                 status=lambda m: prog(0.3, m)))
             if a.transcript.get("language"):
                 update_stream(key, language=a.transcript["language"])
@@ -407,7 +407,7 @@ def import_clip(source, progress, analysis_cache=None):
                                          cache_path=os.path.join(a.cache, "voice_me.json"))
                 except Exception as e:
                     log.warning("Voice learning failed: %s", e)
-        prog(0.72, "Finding your webcam")
+        prog(0.72, "מאתר את המצלמה")
         try:
             a.webcam = wc.detect_webcam(a.video, a.info, a.cache, count=12)
         except Exception as e:
@@ -632,7 +632,7 @@ def rerender(key, clip_id, edits, style, progress, analysis_cache=None, new_from
         if p:
             style = dict(p["style"], **style, look=p["id"])
     opts = style_opts(channel_style(key, style))
-    progress(0.05, "Re-building TikTok")
+    progress(0.05, "בונה מחדש את הקליפ")
     if opts.get("title_bar") and not opts.get("title_text") and existing:
         opts["title_text"] = existing.get("title") or ""   # the title on screen = this TikTok's title (renames too)
     game = next((c.get("game") for c in a.clips if c["id"] == clip_id), "") or ""
@@ -715,7 +715,7 @@ def _subs_words(a, clip_id, opts, edits=None, progress=None, make=True):
     if os.path.isfile(wav):
         from . import transcribe as tsc
         if make and progress:
-            progress(0.04, "Writing the subtitles in " + LANG_NAMES.get(lang, lang))
+            progress(0.04, "כותב את הכתוביות ב " + LANG_NAMES.get(lang, lang))
         cached = os.path.join(a.cache, f"subs_{opts.get('whisper_model') or 'ivrit-turbo'}_{lang}_{int(s0 * 10)}_{int(s1 * 10)}.json")
         if make or os.path.isfile(cached):
             new = tsc.transcribe_part(wav, a.cache, s0, s1, lang, model_name=opts.get("whisper_model") or None,
@@ -829,7 +829,7 @@ def ask(key, clip_id, text, edits, style, progress, analysis_cache=None):
     dur = float(a.info.get("duration") or 0)
     c0 = float(edits.get("start", lc["start"]))
     c1 = float(edits.get("end", lc["end"]))
-    progress(0.05, "AI is reading your request")
+    progress(0.05, "ה-AI קורא את הבקשה")
     w0, w1 = max(0.0, c0 - 90), min(dur or c1 + 240, c1 + 240)
     pl.label_voices(a, w0, w1)
     words_all = a.transcript.get("speech_words") or a.transcript.get("words", [])
@@ -970,7 +970,7 @@ def find_moment(key, text, progress, analysis_cache=None):
     if not words_all:
         raise RuntimeError("This stream hasn't been read yet. Rank it first, then search.")
     dur = float(a.info.get("duration") or words_all[-1]["end"])
-    progress(0.05, "AI is searching the stream")
+    progress(0.05, "ה-AI מחפש בסטרים")
     # sections of about 20 minutes of talking, overlapping a little so nothing falls in a gap
     phrases = _phrases(words_all, gap=0.8, max_words=16)
     sections, cur, size = [], [], 0
@@ -986,7 +986,7 @@ def find_moment(key, text, progress, analysis_cache=None):
     secs = [(c[0][0], c[-1][1], "\n".join(x[2] for x in c)) for c in sections]
     try:
         found = ai.search_moment(text, secs, st["api_key"], st.get("ai_model"),
-                                 progress=lambda f: progress(0.05 + 0.85 * f, f"AI is searching the stream ({int(f * 100)}%)"))
+                                 progress=lambda f: progress(0.05 + 0.85 * f, f"ה-AI מחפש בסטרים ({int(f * 100)}%)"))
     except Exception as e:
         raise RuntimeError(f"The AI couldn't be reached: {e}")
     rows = []

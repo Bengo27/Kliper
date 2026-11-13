@@ -71,14 +71,14 @@ def analyze(a, opts, progress):
     if a.remote:
         site = a.remote.platform.title()   # 0.1.2: Twitch / Youtube / Kick
         site = "YouTube" if site == "Youtube" else site
-        progress(0.01, f"Downloading audio from {site}")
-        wav = a.remote.audio_wav(lambda f: progress(0.01 + 0.12 * f, f"Downloading audio from {site} ({int(f * 100)}%)"))
+        progress(0.01, f"מוריד אודיו מ-{site}")
+        wav = a.remote.audio_wav(lambda f: progress(0.01 + 0.12 * f, f"מוריד אודיו מ-{site} ({int(f * 100)}%)"))
     elif info["has_audio"]:
-        progress(0.01, "Extracting audio")
+        progress(0.01, "מחלץ אודיו")
         wav = au.extract_wav(a.video, a.cache, opts.get("audio_track"))
     if info["has_audio"]:
         with HEAVY:   # 2.27.3: loudness, speech and voice are heavy: a TikTok being made waits for them (and vice versa)
-            progress(0.14 if a.remote else 0.05, "Measuring loudness")
+            progress(0.14 if a.remote else 0.05, "מודד עוצמת קול")
             a.audio_curve = au.excitement_curve(wav)
             a.silences = au.silences(a.audio_curve["db"])
             if opts.get("use_audio", True):
@@ -89,8 +89,8 @@ def analyze(a, opts, progress):
                 span = 0.55 if a.remote else 0.62
 
                 def tp(f):
-                    progress(t0 + span * f, f"Transcribing speech ({int(f * 100)}%)")
-                progress(t0, "Loading speech model (first run downloads it)")
+                    progress(t0 + span * f, f"מתמלל דיבור ({int(f * 100)}%)")
+                progress(t0, "טוען את מודל התמלול (בפעם הראשונה הוא יורד)")
                 from .transcribe import transcribe, speech_lang
                 a.transcript = transcribe(
                     wav, a.cache, model_name=opts.get("whisper_model") or None,
@@ -99,7 +99,7 @@ def analyze(a, opts, progress):
                 a.transcript = sc.strip_music(a.transcript)
                 a.wav_path = wav
                 if opts.get("color_others", True):
-                    progress(0.72 if a.remote else 0.73, "Learning your voice")
+                    progress(0.72 if a.remote else 0.73, "לומד את הקול שלך")
                     try:
                         from . import voice
                         voice.learn_my_voice(wav, a.transcript.get("speech_words") or a.transcript.get("words", []),
@@ -110,15 +110,15 @@ def analyze(a, opts, progress):
     chat_z = None
     msgs = []
     if opts.get("use_chat", True) and opts.get("chat_path"):
-        progress(0.72, "Reading chat replay")
+        progress(0.72, "קורא את הצ'אט")
         try:
             msgs = ch.load_chat(opts["chat_path"])
         except Exception as e:
             log.warning("Chat file could not be read: %s", e)
     elif opts.get("use_chat", True) and a.remote:
-        progress(0.70, "Downloading chat replay")
+        progress(0.70, "מוריד את הצ'אט")
         try:
-            msgs = a.remote.chat(lambda f: progress(0.70 + 0.08 * f, f"Downloading chat replay ({int(f * 100)}%)"))
+            msgs = a.remote.chat(lambda f: progress(0.70 + 0.08 * f, f"מוריד את הצ'אט ({int(f * 100)}%)"))
         except Exception as e:
             log.warning("Chat download failed: %s", e)
             a.chat_error = str(e)
@@ -132,7 +132,7 @@ def analyze(a, opts, progress):
     # viewer-made Twitch clips of this VOD
     viewer_clips = []
     if a.remote and opts.get("use_viewer_clips", True):
-        progress(0.76, "Checking clips your viewers made")
+        progress(0.76, "בודק קליפים שהצופים עשו")
         try:
             viewer_clips = a.remote.viewer_clips()
         except Exception as e:
@@ -141,7 +141,7 @@ def analyze(a, opts, progress):
     # AI reads the whole transcript (needs a Claude API key in Settings)
     ai_moments = []
     if opts.get("api_key") and opts.get("use_ai_finder", True) and a.transcript.get("segments"):
-        progress(0.77, "AI reading the stream for funny moments")
+        progress(0.77, "ה-AI מחפש רגעים מצחיקים בסטרים")
         from . import ai
         try:
             cache_path = os.path.join(a.cache, f"ai_moments_{opts.get('ai_model') or ai.DEFAULT_MODEL}.json")
@@ -164,7 +164,7 @@ def analyze(a, opts, progress):
             ai_moments = ai.find_moments(
                 a.transcript, msgs_clean, dur, opts["api_key"], model=opts.get("ai_model"),
                 cache_path=cache_path, games=games,
-                progress=lambda f: progress(0.77 + 0.04 * f, f"AI reading the stream ({int(f * 100)}%)"))
+                progress=lambda f: progress(0.77 + 0.04 * f, f"ה-AI קורא את הסטרים ({int(f * 100)}%)"))
             if ai_moments:
                 with open(stamp_path, "w") as f:
                     f.write(stamp)
@@ -174,7 +174,7 @@ def analyze(a, opts, progress):
             log.warning("AI moment finder failed: %s", e)
     ai_moments = ai_moments or load_ai_moments(a.cache)
 
-    progress(0.81, "Scoring moments")
+    progress(0.81, "מדרג רגעים")
     use_text = opts.get("use_text", True)
     text_c = sc.text_curve(a.transcript, dur, hop) if use_text else None
     funny_c = sc.funny_curve(a.transcript, dur, hop) if use_text else None
@@ -217,7 +217,7 @@ def analyze(a, opts, progress):
     a.viewer_clip_count = len(viewer_clips)
 
     with HEAVY:   # 2.27.3
-        progress(0.82, "Finding your webcam")
+        progress(0.82, "מאתר את המצלמה")
         try:
             if a.remote:
                 a.webcam = wc.detect_webcam(a.remote.meta["low_url"], a.remote.low_info(), a.cache, count=20,
@@ -229,9 +229,9 @@ def analyze(a, opts, progress):
             a.webcam = {"found": False, "reason": str(e)}
 
         if a.clips and opts.get("look_at_gameplay", True):
-            progress(0.86, "Watching the gameplay")
+            progress(0.86, "צופה במשחק")
             try:
-                look_at_gameplay(a, opts, lambda f: progress(0.86 + 0.04 * f, f"Watching the gameplay ({int(f * 100)}%)"))
+                look_at_gameplay(a, opts, lambda f: progress(0.86 + 0.04 * f, f"צופה במשחק ({int(f * 100)}%)"))
             except Exception as e:
                 log.warning("Gameplay check failed: %s", e)
 
@@ -258,7 +258,7 @@ def analyze(a, opts, progress):
         log.warning("Couldn't apply learned edits: %s", e)
 
     if opts.get("api_key") and a.clips:
-        progress(0.9, "AI editor reviewing clips")
+        progress(0.9, "עורך ה-AI עובר על הקליפים")
         from . import ai
         samples = {}
         for c in a.clips:
@@ -298,7 +298,7 @@ def analyze(a, opts, progress):
     note = ""
     if a.remote and getattr(a, "chat_error", None):
         note = " (chat replay unavailable)"
-    progress(1.0, f"Found {len(a.clips)} clips{note}")
+    progress(1.0, f"נמצאו {len(a.clips)} קליפים{note}")
     out = a.to_json()
     out["chat_messages"] = len(msgs)
     return out
@@ -666,15 +666,15 @@ def render_all(a, clip_ids, edits, opts, out_dir, progress):
                 log.warning("Chat pop-ups skipped: %s", e)
         c["shots"] = clip_shots(a, c)   # 2.35.1: gunshots in quiet stretches are kept by the pause cuts
         if a.remote:
-            progress(k / n, f"Downloading clip {k + 1} of {len(chosen)}")
-            dl = lambda f, k=k: progress((k + 0.5 * f) / n, f"Downloading clip {k + 1} of {len(chosen)} ({int(f * 100)}%)")
+            progress(k / n, f"מוריד קליפ {k + 1} מתוך {len(chosen)}")
+            dl = lambda f, k=k: progress((k + 0.5 * f) / n, f"מוריד קליפ {k + 1} מתוך {len(chosen)} ({int(f * 100)}%)")
         else:
             dl = None
         video, info, cl, words, ac, sil = _localize(a, c, dl)
-        progress((k + (0.5 if a.remote else 0)) / n, f"Rendering clip {k + 1} of {len(chosen)}")
+        progress((k + (0.5 if a.remote else 0)) / n, f"מרנדר קליפ {k + 1} מתוך {len(chosen)}")
         r = rd.render_clip(video, info, cl, words, clip_webcam(a, c), opts, out_dir,
                            audio_curve=ac, silences=sil, index=k + 1)
         r.update({"id": c["id"], "title": c["title"], "caption": c.get("caption", "")})
         results.append(r)
-    progress(1.0, f"Built {len(results)} TikToks")
+    progress(1.0, f"נוצרו {len(results)} קליפים")
     return results

@@ -38,15 +38,15 @@ def _edit_job(key, progress):
     s = lb.get_stream(key) or {}
     same = s.get("status") in ("processing", "queued")
     if same:
-        progress(0.0, "Waiting: this stream is still being worked on")
+        progress(0.0, "ממתין: עוד עובדים על הסטרים הזה")
         STREAM_LOCK.acquire()
     try:
         if not EDIT_LOCK.acquire(blocking=False):
-            progress(0.0, "Waiting for the TikTok before this one")
+            progress(0.0, "ממתין לקליפ הקודם")
             EDIT_LOCK.acquire()
         try:
             if not HEAVY.acquire(blocking=False):
-                progress(0.0, "Waiting a moment: another stream is using your graphics card")
+                progress(0.0, "רגע: סטרים אחר משתמש בכרטיס המסך")
                 HEAVY.acquire()
             try:
                 yield
@@ -651,7 +651,7 @@ class Handler(BaseHTTPRequestHandler):
                 def up(progress):
                     done = []
                     for i, it in enumerate(items):
-                        progress(i / len(items), f"Uploading {i + 1} of {len(items)}")
+                        progress(i / len(items), f"מעלה {i + 1} מתוך {len(items)}")
                         if mode == "direct":
                             pid = tt.direct_post(it["path"], it.get("caption", ""), b.get("privacy", "SELF_ONLY"),
                                                  b.get("allow_comment", True), b.get("allow_duet", True),
